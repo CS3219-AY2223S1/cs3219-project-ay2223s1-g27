@@ -33,4 +33,14 @@ kubectl get ingress -l app=cs3219g27 -o wide --context kind-kind-1
 sleep 10 # sneaky sleep, instantly curling has issues
 
 echo testing curl
-curl localhost/login
+curl localhost/signup
+
+# create hpa metrics
+echo starting up metrics server...
+kubectl apply -f ./metrics-server.yaml --context kind-kind-1
+kubectl wait -nkube-system --for=condition=ready pod --selector=k8s-app=metrics-server --timeout=180s --context kind-kind-1
+kubectl -nkube-system --selector=k8s-app=metrics-server get deploy --context kind-kind-1
+
+echo starting auto scaling hpa...
+kubectl apply -f ./hpa.yaml --context kind-kind-1
+kubectl describe hpa --context kind-kind-1
