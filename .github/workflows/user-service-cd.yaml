@@ -6,6 +6,9 @@ on:
       - 'main'
     paths:
       - user-service/**
+  pull_request:
+    branches:
+      - 'main'
 
 jobs:
   build:

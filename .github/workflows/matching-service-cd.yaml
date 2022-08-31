@@ -6,6 +6,9 @@ on:
       - 'main'
     paths:
       - matching-service/**
+  pull_request:
+    branches:
+      - 'main'
 
 jobs:
   build:
