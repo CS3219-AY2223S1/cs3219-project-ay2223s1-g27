@@ -3,13 +3,13 @@ kind: Service
 metadata:
   labels:
     app: cs3219g27
-  name: frontend-service
+  name: matching-service-service
 spec:
   selector:
     app: cs3219g27
   type: ClusterIP
   ports:
-    - name: frontend-http
-      port: 3000
+    - name: matching-service-http
+      port: 8001
       protocol: TCP
-      targetPort: frontend-http
+      targetPort: matching-service-http

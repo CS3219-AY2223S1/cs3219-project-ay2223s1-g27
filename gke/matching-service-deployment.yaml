@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend-deployment
+  name: matching-service-deployment
   labels:
     app: cs3219g27
 spec:
@@ -15,11 +15,11 @@ spec:
         app: cs3219g27
     spec:
       containers:
-        - name: frontend-deployment
-          image: cs3219g27/frontend:latest
+        - name: matching-service-deployment
+          image: cs3219g27/matching-service:latest
           ports:
-            - name: frontend-http
-              containerPort: 3000
+            - name: matching-service-http
+              containerPort: 8001
           resources:
             limits:
               cpu: 40m
