@@ -1,8 +1,6 @@
 import { ormCreateMatch as _createMatch } from '../model/match-orm.js'
 import { sendMatch, sendMatchFail, sendMatchSuccess } from '../services/index.js'
 
-const matchFail = 'matchFail'
-
 export function registerHandlers (io, socket) {  
   async function createMatch(username, difficulty) {
     try {
