@@ -9,7 +9,7 @@ spec:
     app: cs3219g27
   type: ClusterIP
   ports:
-    - name: matching-service-http
+    - name: ms-http
       port: 8001
       protocol: TCP
-      targetPort: matching-service-http
+      targetPort: ms-http

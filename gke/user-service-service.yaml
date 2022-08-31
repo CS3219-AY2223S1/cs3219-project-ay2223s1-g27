@@ -9,7 +9,7 @@ spec:
     app: cs3219g27
   type: ClusterIP
   ports:
-    - name: user-service-http
+    - name: us-http
       port: 8000
       protocol: TCP
-      targetPort: user-service-http
+      targetPort: us-http

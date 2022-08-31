@@ -18,7 +18,7 @@ spec:
         - name: user-service-deployment
           image: cs3219g27/user-service:latest
           ports:
-            - name: user-service-http
+            - name: us-http
               containerPort: 8000
           resources:
             limits:

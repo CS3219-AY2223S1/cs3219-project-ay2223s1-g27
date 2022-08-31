@@ -18,7 +18,7 @@ spec:
         - name: matching-service-deployment
           image: cs3219g27/matching-service:latest
           ports:
-            - name: matching-service-http
+            - name: ms-http
               containerPort: 8001
           resources:
             limits:

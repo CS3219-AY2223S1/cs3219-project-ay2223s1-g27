@@ -18,7 +18,7 @@ spec:
         - name: frontend-deployment
           image: cs3219g27/frontend:latest
           ports:
-            - name: frontend-http
+            - name: fe-http
               containerPort: 3000
           resources:
             limits:

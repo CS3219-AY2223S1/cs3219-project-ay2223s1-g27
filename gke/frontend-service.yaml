@@ -9,7 +9,7 @@ spec:
     app: cs3219g27
   type: ClusterIP
   ports:
-    - name: frontend-http
+    - name: fe-http
       port: 3000
       protocol: TCP
-      targetPort: frontend-http
+      targetPort: fe-http
