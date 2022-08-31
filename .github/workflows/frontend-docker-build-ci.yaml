@@ -6,6 +6,9 @@ on:
       - 'main'
     paths:
       - frontend/**
+  pull_request:
+    branches:
+      - 'main'
 
 jobs:
   build:
@@ -34,3 +37,18 @@ jobs:
           file: ./frontend/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/frontend:latest
+
+  Deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: kubectl - Google Cloud GKE cluster.
+      uses: ameydev/gke-kubectl-action@master
+      env:
+        PROJECT_ID: cs3219g27
+        APPLICATION_CREDENTIALS: ${{ secrets.GKE_SA_KEY }}
+        CLUSTER_NAME: cs3219g27
+        ZONE_NAME: asia-southeast1-a
+      with:
+        args: apply -f gke/
