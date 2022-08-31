@@ -1,8 +1,8 @@
 import { createMatch } from './repository.js';
 
-export async function ormCreateMatch (params) {
+export async function ormCreateMatch (username, difficulty) {
   try {
-    await createMatch(params);
+    await createMatch({username: username, difficulty: difficulty});
     return true;
   } catch (err) {
     console.log('ERROR: Could not create new match');
