@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+  labels:
+    app: cs3219g27
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: cs3219g27
+  template:
+    metadata:
+      labels:
+        app: cs3219g27
+    spec:
+      containers:
+        - name: frontend-deployment
+          image: cs3219g27/frontend:latest
+          ports:
+            - name: http
+              containerPort: 3000
+          resources:
+            limits:
+              cpu: 40m
+              memory: 100Mi
