@@ -1,9 +1,15 @@
 import { ormCreateUser as _createUser } from '../model/user-orm.js'
+import { ormGetUser as _getUser } from '../model/user-orm.js'
 
 export async function createUser(req, res) {
     try {
         const { username, password } = req.body;
         if (username && password) {
+            const existing_user = await _getUser(username)
+            console.log(existing_user)
+            if (existing_user !== null) {
+                return res.status(400).json({message: 'Could not create a new user, already exists!'});
+            }
             const resp = await _createUser(username, password);
             console.log(resp);
             if (resp.err) {
