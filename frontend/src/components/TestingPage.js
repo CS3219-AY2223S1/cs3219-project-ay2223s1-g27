@@ -2,8 +2,8 @@ import { useState } from "react";
 import axios from "axios";
 
 function TestingPage() {
-  const URI_USER_SVC = process.env.REACT_APP_URI_USER_SVC || "http://localhost:8000";
-  const URI_MATCHING_SVC = process.env.REACT_APP_URI_MATCHING_SVC || "http://localhost:8001";
+  const URI_USER_SVC = "http://user-service-service:8000";
+  const URI_MATCHING_SVC = "http://matching-service-service:8001";
   const [a, setA] = useState("");
   const [b, setB] = useState("");
 
