@@ -7,17 +7,21 @@ WORKDIR /usr/src/app
 COPY . .
 
 # Run yarn install
-RUN npm install && npm run build
+RUN npm install
 
-FROM node:alpine as main
-
-COPY --from=build /usr/src/app/build /
-
-# Install serve command for yarn package manager
-RUN npm install -g serve@13.0.4
-
-# Export port
 EXPOSE 3000
 
-# Build and serve the project
-CMD serve -p 3000 -s .
+CMD npm start
+
+# FROM node:alpine as main
+
+# COPY --from=build /usr/src/app/build /
+
+# # Install serve command for yarn package manager
+# RUN npm install -g serve@13.0.4
+
+# # Export port
+# EXPOSE 3000
+
+# # Build and serve the project
+# CMD serve -p 3000 -s .
