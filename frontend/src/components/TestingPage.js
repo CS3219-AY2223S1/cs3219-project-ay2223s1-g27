@@ -9,9 +9,10 @@ function TestingPage() {
 
   axios.get(URI_USER_SVC).then((res) => setA(res.data));
   axios.get(URI_MATCHING_SVC).then((res) => setB(res.data));
+  axios.get("http://NONSENSE:8080").then((res) => console.log(res));
   return (
     <>
-      <p>Testing page</p>
+      <p>New Testing page</p>
       <p>{a}</p>
       <p>{b}</p>
       <p>{URI_USER_SVC}</p>

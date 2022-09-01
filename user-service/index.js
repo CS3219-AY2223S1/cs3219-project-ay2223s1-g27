@@ -4,11 +4,15 @@ import cors from 'cors';
 const app = express();
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
-var corsOptions = {
-  origin: '*',
-  optionsSuccessStatus: 200
-}
-app.use(cors(corsOptions))
+app.use(cors()) // config cors so that front-end can use
+app.options('*', cors())
+
+app.all('/*', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    next();
+});
+
 import { createUser } from './controller/user-controller.js';
 
 const router = express.Router()
