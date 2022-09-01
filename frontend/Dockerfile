@@ -7,7 +7,7 @@ WORKDIR /usr/src/app
 COPY . .
 
 # Run yarn install
-RUN npm install && npm build
+RUN npm install && npm run build
 
 FROM node:alpine as main
 
