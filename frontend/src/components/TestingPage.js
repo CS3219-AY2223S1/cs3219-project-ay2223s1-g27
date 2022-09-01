@@ -13,6 +13,8 @@ function TestingPage() {
     <>
       <p>{a}</p>
       <p>{b}</p>
+      <p>{URI_USER_SVC}</p>
+      <p>{URI_MATCHING_SVC}</p>
     </>
   );
 }
