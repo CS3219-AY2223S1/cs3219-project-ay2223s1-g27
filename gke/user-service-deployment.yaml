@@ -25,5 +25,7 @@ spec:
               cpu: 40m
               memory: 100Mi
           env:
-          - name: DB_CLOUD_URI
-            value: mongodb+srv://yongxiangng:p6F9nkFmMDtgkGgF@cluster0.ivtwevt.mongodb.net/user-service
+            - name: DB_CLOUD_URI
+              value: mongodb+srv://yongxiangng:p6F9nkFmMDtgkGgF@cluster0.ivtwevt.mongodb.net/user-service
+            - name: ENV
+              value: PROD

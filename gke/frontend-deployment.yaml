@@ -24,3 +24,8 @@ spec:
             limits:
               cpu: 40m
               memory: 100Mi
+          env:
+            - name: URI_USER_SVC
+              value: http://user-service-service:8000
+            - name: URI_MATCHING_SVC
+              value: http://matching-service-service:8001
