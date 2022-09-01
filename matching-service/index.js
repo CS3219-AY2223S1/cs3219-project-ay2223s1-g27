@@ -5,8 +5,11 @@ import { createServer } from 'http';
 const app = express();
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
-app.use(cors()) // config cors so that front-end can use
-app.options('*', cors())
+var corsOptions = {
+  origin: '*',
+  optionsSuccessStatus: 200
+}
+app.use(cors(corsOptions))
 
 app.get('/', (req, res) => {
     res.send('Hello World from matching-service');
