@@ -11,6 +11,7 @@ function TestingPage() {
   axios.get(URI_MATCHING_SVC).then((res) => setB(res.data));
   return (
     <>
+      <p>Testing page</p>
       <p>{a}</p>
       <p>{b}</p>
       <p>{URI_USER_SVC}</p>
