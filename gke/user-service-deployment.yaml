@@ -3,16 +3,16 @@ kind: Deployment
 metadata:
   name: user-service-deployment
   labels:
-    app: cs3219g27
+    app: user-service
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: cs3219g27
+      app: user-service
   template:
     metadata:
       labels:
-        app: cs3219g27
+        app: user-service
     spec:
       containers:
         - name: user-service-deployment
