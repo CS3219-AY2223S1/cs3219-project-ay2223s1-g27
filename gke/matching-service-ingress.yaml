@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: ingress
   labels:
-    app: cs3219g27
+    app: matching-service
 spec:
   rules:
     - http:
@@ -12,6 +12,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: frontend-service
+                name: matching-service-service
                 port:
-                  name: fe-http
+                  name: ms-http

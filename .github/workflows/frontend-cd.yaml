@@ -48,3 +48,15 @@ jobs:
           ZONE_NAME: asia-southeast1-a
         with:
           args: rollout restart -f gke/frontend-deployment.yaml
+
+    steps:
+      - uses: actions/checkout@master
+      - name: kubectl - Google Cloud GKE cluster
+        uses: ameydev/gke-kubectl-action@master
+        env:
+          PROJECT_ID: cs3219g27
+          APPLICATION_CREDENTIALS: ${{ secrets.GKE_SA_KEY }}
+          CLUSTER_NAME: cs3219g27
+          ZONE_NAME: asia-southeast1-a
+        with:
+          args: apply -f gke/

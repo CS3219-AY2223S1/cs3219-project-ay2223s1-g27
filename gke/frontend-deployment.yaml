@@ -25,7 +25,5 @@ spec:
               cpu: 40m
               memory: 150Mi
           env:
-            - name: REACT_APP_URI_USER_SVC
-              value: http://user-service-service:8000
             - name: REACT_APP_URI_MATCHING_SVC
               value: http://matching-service-service:8001
