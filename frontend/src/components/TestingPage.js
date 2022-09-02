@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 
 function TestingPage() {
-  const URI_MATCHING_SVC = REACT_APP_URI_MATCHING_SVC || "http://localhost:8001";
+  const URI_MATCHING_SVC = process.env.REACT_APP_URI_MATCHING_SVC || "http://localhost:8001";
   const [a, setA] = useState("");
   axios.get(URI_MATCHING_SVC).then((res) => setA(res.data)).catch(function(error){
     console.log(error);
