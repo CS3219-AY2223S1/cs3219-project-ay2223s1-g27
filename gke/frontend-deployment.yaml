@@ -26,4 +26,4 @@ spec:
               memory: 150Mi
           env:
             - name: REACT_APP_URI_MATCHING_SVC
-              value: http://matching-service-service:8001
+              value: http://34.160.41.4/
