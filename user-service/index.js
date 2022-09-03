@@ -6,13 +6,22 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(cors()) // config cors so that front-end can use
 app.options('*', cors())
-import { createUser } from './controller/user-controller.js';
+import { createUser, loginUser } from './controller/user-controller.js';
+import { validateAccessToken, renewAccessAndRefreshTokens, invalidateRefreshToken } from './controller/user-token-handler.js';
 
 const router = express.Router()
 
 // Controller will contain all the User-defined Routes
 router.get('/', (_, res) => res.send('Hello World from user-service'))
+// to create a new user: post request body: {"username":"<username>", "password":"<password>"}
 router.post('/', createUser)
+// to obtain the access and refresh tokens: post request body: {"username":"<username>", "password":"<password>"}
+router.post('/login', loginUser)
+// get request body: {"token":"<token>"}
+router.post('/validateuser', validateAccessToken)
+router.post('/refreshaccesstoken', renewAccessAndRefreshTokens)
+router.post('/logout', invalidateRefreshToken)
+
 
 app.use('/api/user', router).all((_, res) => {
     res.setHeader('content-type', 'application/json')

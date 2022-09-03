@@ -19,6 +19,7 @@ export async function getUser(username) {
 }
 
 export async function createUser(params) {
+  console.log(params)
   let userModelDocument = new UserModel(params)
   return userModelDocument
 }
