@@ -85,7 +85,8 @@ export function invalidateRefreshToken(req, res) {
             return res.status(401).json({message: "JWT refresh Token invalid.", success:false})
         }
         refreshTokens.filter((token) => token != refreshToken)
-        return res.status(200).json({message: "Successfully logged out", success:true})
+        const decodedPayload = jwt.verify(refreshToken, jwtRefreshSecretKey)
+        return res.status(200).json({username: decodedPayload.username, message: "Successfully logged out", success:true})
     } catch (err) {
         return res.status(400).json({message: "Problem invalidating refresh token.", success:false})
     }

@@ -18,8 +18,8 @@ router.post('/', createUser)
 // to obtain the access and refresh tokens: post request body: {"username":"<username>", "password":"<password>"}
 router.post('/login', loginUser)
 // get request body: {"token":"<token>"}
-router.post('/validateuser', validateAccessToken)
-router.post('/refreshaccesstoken', renewAccessAndRefreshTokens)
+router.post('/validateaccesstoken', validateAccessToken)
+router.post('/renewtokens', renewAccessAndRefreshTokens)
 router.post('/logout', invalidateRefreshToken)
 
 

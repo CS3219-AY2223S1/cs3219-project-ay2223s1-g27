@@ -14,12 +14,10 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 // Returns the user document, if username does not exist, throws an error
 export async function getUser(username) {
   let user = await UserModel.findOne({username: username}).exec()
-  console.log("Hello" + user)
   return user
 }
 
 export async function createUser(params) {
-  console.log(params)
   let userModelDocument = new UserModel(params)
   return userModelDocument
 }

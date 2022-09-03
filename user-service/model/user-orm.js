@@ -17,7 +17,6 @@ export async function ormCreateUser(username, password) {
 
 export async function ormGetUser(username) {
     let user = await getUser(username)
-    console.log(user)
     return user
 }
 
