@@ -25,5 +25,5 @@ spec:
               cpu: 40m
               memory: 150Mi
           env:
-            - name: REACT_APP_URI_MATCHING_SVC
+            - name: REACT_APP_URI_MATCHING_SVC # Inject in Dockerfile if using build ver
               value: http://34.160.41.4/
