@@ -11,7 +11,7 @@ import { createUser } from './controller/user-controller.js';
 const router = express.Router()
 
 // Controller will contain all the User-defined Routes
-app.get('/', (_, res) => res.send('Hello World from user-service'))
+router.get('/', (_, res) => res.send('Hello World from user-service'))
 router.post('/', createUser)
 
 app.use('/api/user', router).all((_, res) => {
