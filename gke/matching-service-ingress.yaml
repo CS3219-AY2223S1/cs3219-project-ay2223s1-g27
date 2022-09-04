@@ -1,9 +1,9 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ingress
+  name: matching-service-ingress
   labels:
-    app: cs3219g27
+    app: matching-service
 spec:
   rules:
     - http:
@@ -12,6 +12,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: frontend-service
+                name: matching-service-service
                 port:
-                  name: http
+                  name: ms-http

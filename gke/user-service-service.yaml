@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: user-service
+  name: user-service-service
+spec:
+  selector:
+    app: user-service
+  type: ClusterIP
+  ports:
+    - name: us-http
+      port: 8000
+      protocol: TCP
+      targetPort: us-http
