@@ -32,6 +32,7 @@ export function generateRefreshToken(username) {
 }
 
 export function validateAccessToken(req, res) {
+    const username = req.body.username
     const token = req.body.token
     if (token == undefined) {
         // bad request syntax
@@ -39,7 +40,11 @@ export function validateAccessToken(req, res) {
     }
     try {
         const decodedPayload = jwt.verify(token, jwtAccessSecretKey)
-        return res.status(200).json({username: decodedPayload.username, success:true})
+        const decodedUsername = decodedPayload.username
+        if (decodedUsername != username) {
+            return res.status(400).json({message: "Username and JWT token do not match.", success:false})
+        }
+        return res.status(200).json({username: decodedUsername, success:true})
     } catch (err) {
         if (err instanceof jwt.TokenExpiredError) {
             return res.status(401).json({message: "JWT Token has Expired.", success:false})
@@ -50,6 +55,7 @@ export function validateAccessToken(req, res) {
 }
 
 export function renewAccessAndRefreshTokens(req, res) {
+    const username = req.body.username
     const refreshToken = req.body.token
     if (refreshToken == undefined) {
         // bad request syntax
@@ -58,6 +64,10 @@ export function renewAccessAndRefreshTokens(req, res) {
     // verify that refreshToken is valid
     try {
         const decodedPayload = jwt.verify(refreshToken, jwtRefreshSecretKey)
+        const decodedUsername = decodedPayload.username
+        if (decodedUsername != username) {
+            return res.status(400).json({message: "Username and JWT token do not match.", success:false})
+        }
         if (!refreshTokens.includes(refreshToken)) {
             return res.status(401).json({message: "JWT refresh Token invalid.", success:false})
         }
@@ -75,17 +85,23 @@ export function renewAccessAndRefreshTokens(req, res) {
 }
 
 export function invalidateRefreshToken(req, res) {
+    const username = req.body.username
     const refreshToken = req.body.token
     if (refreshToken == undefined) {
         // bad request syntax
         return res.status(400).json({message: "Incorrect request body format, please specify a key value pair 'token':'<token>'", success:false})
     }
     try {
+        const decodedPayload = jwt.verify(refreshToken, jwtRefreshSecretKey)
+        const decodedUsername = decodedPayload.username
+        if (decodedUsername != username) {
+            return res.status(400).json({message: "Username and JWT token do not match.", success:false})
+        }
         if (!refreshTokens.includes(refreshToken)) {
             return res.status(401).json({message: "JWT refresh Token invalid.", success:false})
         }
         refreshTokens.filter((token) => token != refreshToken)
-        const decodedPayload = jwt.verify(refreshToken, jwtRefreshSecretKey)
+        
         return res.status(200).json({username: decodedPayload.username, message: "Successfully logged out", success:true})
     } catch (err) {
         return res.status(400).json({message: "Problem invalidating refresh token.", success:false})

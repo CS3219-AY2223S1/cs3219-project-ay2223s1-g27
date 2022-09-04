@@ -1,11 +1,17 @@
-import { createUser, getUser } from './repository.js';
-import bcrypt from 'bcrypt'
+import { createUser, getUser, deleteUser, updatePassword } from './repository.js';
+import bcrypt, { hash } from 'bcrypt'
 
 //need to separate orm functions from repository to decouple business logic from persistence
+
+async function hashPassword(password) {
+    // Hash password using bcrypt module
+    const hashedPassword = await bcrypt.hash(password, 10)
+    return hashedPassword
+}
+
 export async function ormCreateUser(username, password) {
     try {
-        // Hash password using bcrypt module
-        const hashedPassword = await bcrypt.hash(password, 10)
+        const hashedPassword = await hashPassword(password)
         const newUser = await createUser({username: username, password: hashedPassword});
         newUser.save();
         return true;
@@ -20,3 +26,13 @@ export async function ormGetUser(username) {
     return user
 }
 
+export async function ormDeleteUser(username, password) {
+    let deleteSuccess = await deleteUser(username)
+    return deleteSuccess
+}
+
+export async function ormUpdatePassword(username, newPassword) {
+    const hashedNewPassword = await hashPassword(newPassword)
+    let updatedUser = await updatePassword(username, hashedNewPassword)
+    return updatedUser
+}

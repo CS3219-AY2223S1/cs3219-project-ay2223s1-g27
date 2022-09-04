@@ -17,8 +17,20 @@ export async function getUser(username) {
   return user
 }
 
+export async function deleteUser(username) {
+  let deletedCountObject = await UserModel.deleteOne({username: username})
+  const deletedCount = deletedCountObject.deletedCount
+  return deletedCount == 1
+}
+
+export async function updatePassword(username, newPassword) {
+  let updatedUser = await UserModel.findOneAndUpdate({username:username}, {password:newPassword})
+  return updatedUser
+}
+
+
 export async function createUser(params) {
+  //UserModel schema defines username to be unique, hence no duplicate usernames will exist.
   let userModelDocument = new UserModel(params)
   return userModelDocument
 }
-
