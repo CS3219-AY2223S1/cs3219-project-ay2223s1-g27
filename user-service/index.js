@@ -21,8 +21,8 @@ router.post('/login', loginUser)
 router.post('/validateaccesstoken', validateAccessToken)
 router.post('/renewtokens', renewAccessAndRefreshTokens)
 router.post('/logout', invalidateRefreshToken)
-router.post('/deleteuser', deleteUser)
-router.post('/updatepassword', updatePassword)
+router.delete('/deleteuser', deleteUser)
+router.put('/updatepassword', updatePassword)
 
 
 app.use('/api/user', router).all((_, res) => {
