@@ -2,8 +2,8 @@ import jwt from "jsonwebtoken"
 
 // bad practice but for the initial phases we shall leave the jwt secret key as a variable here
 // these will be ported to environment variables when being deployed.
-const jwtAccessSecretKey = "grp27access"
-const jwtRefreshSecretKey = "grp27refresh"
+const jwtAccessSecretKey = process.env.JWT_ACCESS_SECRET
+const jwtRefreshSecretKey = process.env.JWT_REFRESH_SECRET
 
 let refreshTokens = []
 // Cleanup happens every 20 minutes

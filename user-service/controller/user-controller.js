@@ -6,7 +6,7 @@ import { generateRefreshToken, generateAccessToken } from './user-token-handler.
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
-const jwtAccessSecretKey = "grp27access"
+const jwtAccessSecretKey = process.env.JWT_ACCESS_SECRET
 
 export async function createUser(req, res) {
     try {
