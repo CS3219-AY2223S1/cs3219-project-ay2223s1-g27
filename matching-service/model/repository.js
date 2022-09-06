@@ -10,6 +10,22 @@ const sequelize = new Sequelize(sqliteDB, {
 
 const Match = MatchModel(sequelize);
 sequelize.sync();
-export async function createMatch(params) {
+
+async function createMatch(params) {
   return Match.create(params);
+}
+
+async function findOneMatch(condition) {
+  return Match.findOne(condition);
+}
+
+async function deleteMatch(condition) {
+  return Match.destroy(condition);
+}
+
+export {
+  Match,
+  createMatch,
+  deleteMatch,
+  findOneMatch
 }
