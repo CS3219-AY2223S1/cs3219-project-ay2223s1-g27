@@ -14,8 +14,10 @@ import axios from "axios";
 import {URL_USER_SVC} from "../configs";
 import {STATUS_CODE_CONFLICT, STATUS_CODE_CREATED} from "../constants";
 import {Link} from "react-router-dom";
+import NavigationBar from "./NavigationBar";  
 
 function SignupPage() {
+    const [email, setEmail] = useState("")
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [isDialogOpen, setIsDialogOpen] = useState(false)
@@ -54,8 +56,18 @@ function SignupPage() {
     }
 
     return (
-        <Box display={"flex"} flexDirection={"column"} width={"30%"}>
+        <>
+        <NavigationBar isAuthenticated={false}/>
+        <Box display={"flex"} flexDirection={"column"} width={"30%"} style={{marginTop: "3%", marginLeft: "3%"}}>
             <Typography variant={"h3"} marginBottom={"2rem"}>Sign Up</Typography>
+            <TextField
+                label="Email"
+                variant="standard"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                sx={{marginBottom: "1rem"}}
+                autoFocus
+            />
             <TextField
                 label="Username"
                 variant="standard"
@@ -72,6 +84,10 @@ function SignupPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 sx={{marginBottom: "2rem"}}
             />
+            <div>
+            Already have an account? Log in {' '}
+            <Link to="/login">here! </Link>
+        </div>
             <Box display={"flex"} flexDirection={"row"} justifyContent={"flex-end"}>
                 <Button variant={"outlined"} onClick={handleSignup}>Sign up</Button>
             </Box>
@@ -92,6 +108,7 @@ function SignupPage() {
                 </DialogActions>
             </Dialog>
         </Box>
+        </> 
     )
 }
 
