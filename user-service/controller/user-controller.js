@@ -8,6 +8,25 @@ import jwt from 'jsonwebtoken'
 
 const jwtAccessSecretKey = process.env.JWT_ACCESS_SECRET
 
+function verifyAuthHeaderFormat(authHeaderSplit) {
+    if (authHeaderSplit.length != 2) {
+        throw "Error, HTTP Authorization header has less than 2 elements"
+    }
+    if (authHeaderSplit[0] != "Bearer") {
+        throw "Error, HTTP Authorization header does not have the 'Bearer' type"
+    }
+    return true
+}
+
+export function getJWTTokenFromAuthHeader(authHeader) {
+    const authHeaderSplit = authHeader.split(" ")
+    const authHeaderVerified = verifyAuthHeaderFormat(authHeaderSplit)
+    if (!authHeaderVerified) {
+        throw "Error, HTTP Authorization header format incorrect"
+    }
+    return authHeaderSplit[1]
+}
+
 export async function createUser(req, res) {
     try {
         const { username, password } = req.body;
@@ -60,7 +79,8 @@ export async function loginUser(req, res) {
 export async function deleteUser(req, res) {
     try {
         const username = req.body.username
-        const accessToken = req.body.token
+        const accessToken = getJWTTokenFromAuthHeader(req.headers.authorization)
+        console.log(accessToken)
         if (accessToken && username) {
             const decodedPayload = jwt.verify(accessToken, jwtAccessSecretKey)
             const decodedUsername = decodedPayload.username
@@ -89,8 +109,8 @@ export async function deleteUser(req, res) {
 export async function updatePassword(req, res) {
     try {
         const username = req.body.username
-        const newPassword = req.body.newpassword
-        const accessToken = req.body.token
+        const newPassword = req.body.newPassword
+        const accessToken = getJWTTokenFromAuthHeader(req.headers.authorization)
         if (username && accessToken && newPassword) {
             const decodedPayload = jwt.verify(accessToken, jwtAccessSecretKey)
             const updatedUser = await _updatePassword(username, newPassword)

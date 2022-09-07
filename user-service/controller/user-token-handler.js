@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken"
+import { getJWTTokenFromAuthHeader } from './user-controller.js'
 
 // bad practice but for the initial phases we shall leave the jwt secret key as a variable here
 // these will be ported to environment variables when being deployed.
@@ -33,7 +34,7 @@ export function generateRefreshToken(username) {
 
 export function validateAccessToken(req, res) {
     const username = req.body.username
-    const token = req.body.token
+    const token = getJWTTokenFromAuthHeader(req.headers.authorization)
     if (token == undefined) {
         // bad request syntax
         return res.status(400).json({message: "Incorrect request body format, please specify a key value pair 'token':'<token>'", success:false})
@@ -49,14 +50,14 @@ export function validateAccessToken(req, res) {
         if (err instanceof jwt.TokenExpiredError) {
             return res.status(401).json({message: "JWT Token has Expired.", success:false})
         } else {
-            return res.status(400).json({message: "Problem verifying JWT token.", success:false})
+            return res.status(400).json({message: "Problem verifying JWT token, make sure you passed the access token.", success:false})
         }
     }
 }
 
 export function renewAccessAndRefreshTokens(req, res) {
     const username = req.body.username
-    const refreshToken = req.body.token
+    const refreshToken = getJWTTokenFromAuthHeader(req.headers.authorization)
     if (refreshToken == undefined) {
         // bad request syntax
         return res.status(400).json({message: "Incorrect request body format, please specify a key value pair 'token':'<token>'", success:false})
@@ -79,14 +80,14 @@ export function renewAccessAndRefreshTokens(req, res) {
         if (err instanceof jwt.TokenExpiredError) {
             return res.status(401).json({message: "JWT refresh Token has Expired.", success:false})
         } else {
-            return res.status(400).json({message: "Problem verifying JWT refresh token.", success:false})
+            return res.status(400).json({message: "Problem verifying JWT refresh token, , make sure you passed the refresh token.", success:false})
         }
     }
 }
 
 export function invalidateRefreshToken(req, res) {
     const username = req.body.username
-    const refreshToken = req.body.token
+    const refreshToken = getJWTTokenFromAuthHeader(req.headers.authorization)
     if (refreshToken == undefined) {
         // bad request syntax
         return res.status(400).json({message: "Incorrect request body format, please specify a key value pair 'token':'<token>'", success:false})
@@ -104,7 +105,7 @@ export function invalidateRefreshToken(req, res) {
         
         return res.status(200).json({username: decodedPayload.username, message: "Successfully logged out", success:true})
     } catch (err) {
-        return res.status(400).json({message: "Problem invalidating refresh token.", success:false})
+        return res.status(400).json({message: "Problem invalidating refresh token, make sure you passed the refresh token.", success:false})
     }
 }
 
