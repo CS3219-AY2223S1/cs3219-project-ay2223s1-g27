@@ -6,11 +6,9 @@ FROM node:alpine as build
 WORKDIR /usr/src/app
 COPY . .
 
-# Run yarn install
 RUN touch .env && \
     echo REACT_APP_URI_MATCHING_SVC=http://34.160.41.4/ >> .env && \
     echo REACT_APP_URI_USER_SVC=http://34.160.255.45/ >> .env && \
-    npm install && \
     npm run build
 
 FROM node:alpine as main
