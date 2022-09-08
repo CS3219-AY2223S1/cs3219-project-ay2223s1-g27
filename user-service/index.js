@@ -11,6 +11,7 @@ import {
   loginUser,
   deleteUser,
   updatePassword,
+  resetPassword,
 } from "./controller/user-controller.js";
 import {
   validateAccessToken,
@@ -24,13 +25,14 @@ const router = express.Router();
 
 // Controller will contain all the User-defined Routes
 router.get("/", (_, res) => res.send("Hello World from user-service"));
-router.post("/", createUser);
+router.post("/createuser", createUser);
 router.post("/login", loginUser);
 router.post("/validateaccesstoken", validateAccessToken);
 router.post("/renewtokens", renewAccessAndRefreshTokens);
 router.post("/logout", invalidateRefreshToken);
 router.delete("/delete", deleteUser);
 router.put("/updatepassword", updatePassword);
+router.put("/resetpassword", resetPassword);
 
 app.use("/api/user", router).all((_, res) => {
   res.setHeader("content-type", "application/json");
