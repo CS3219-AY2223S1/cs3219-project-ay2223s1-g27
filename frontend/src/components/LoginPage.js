@@ -53,7 +53,7 @@ function LoginPage() {
     const [email, setEmail] = useState("")
     const [isDialogOpen, setIsDialogOpen] = useState(false);  
     const [isEmailValid, setIsEmailValid] = useState(null); 
-    const [_, setCookie] = useCookies(['access_token', 'refresh_token']);
+    const [, setCookie] = useCookies(['access_token', 'refresh_token']);
 
     /** Reset Password Logic */
     const handleDialog = () => {  
