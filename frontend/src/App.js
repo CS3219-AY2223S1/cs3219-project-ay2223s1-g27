@@ -2,7 +2,7 @@ import {BrowserRouter as Router, Routes, Route, Navigate} from "react-router-dom
 import SignupPage from './components/SignupPage'; 
 import LoginPage from './components/LoginPage';
 import LandingPage from './components/LandingPage';
-import NavigationBar from "./components/NavigationBar"; 
+// import NavigationBar from "./components/NavigationBar"; 
 import {Box} from "@mui/material"; 
  
 function App() {  

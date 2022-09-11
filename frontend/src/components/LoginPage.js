@@ -17,7 +17,7 @@ import {
     STATUS_CODE_INVALID_USERNAME, 
     STATUS_CODE_INVALID_PASSWORD,
     STATUS_CODE_MISSING,
-    STATUS_DATABASE_FAILURE
+    // STATUS_DATABASE_FAILURE
 } from "../constants";
 import {Link} from "react-router-dom";
 import NavigationBar from "./NavigationBar"; 
@@ -53,7 +53,7 @@ function LoginPage() {
     const [email, setEmail] = useState("")
     const [isDialogOpen, setIsDialogOpen] = useState(false);  
     const [isEmailValid, setIsEmailValid] = useState(null); 
-    const [cookies, setCookie] = useCookies(['access_token', 'refresh_token']);
+    const [_, setCookie] = useCookies(['access_token', 'refresh_token']);
 
     /** Reset Password Logic */
     const handleDialog = () => {  
@@ -96,7 +96,7 @@ function LoginPage() {
                 }
             })
         
-        if (res && res.status == STATUS_CODE_LOGIN) {
+        if (res && res.status === STATUS_CODE_LOGIN) {
             setIsLoggedIn(true);
             const accessToken = res.data.accessToken;
             const refreshToken = res.data.refreshToken;
@@ -108,7 +108,7 @@ function LoginPage() {
         }
 
         // To be deleted: temporary checks for testing UI
-        if (username == "" || password == "") {
+        if (username === "" || password === "") {
             setErrorMessages({ name: "missing", message: errors.missing});
         } else {
             const userData = database.find((user) => user.username === username);  
@@ -175,7 +175,7 @@ function LoginPage() {
                         sx={{ marginBottom: "2rem" }} />
                     <div>
                         {isEmailValid ? <div style={{ color: "blue" }}> A link to reset your password has been sent to your email! </div>
-                            : isEmailValid == false ? <div style={{ color: "red" }}>{errors.invalidEmail}</div>
+                            : isEmailValid === false ? <div style={{ color: "red" }}>{errors.invalidEmail}</div>
                                 : <div></div>}
                     </div>
                 </DialogContent>
