@@ -6,6 +6,9 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(cors()) // config cors so that front-end can use
 app.options('*', cors())
+
+app.get("/", (req, res) => res.send("Hello World from user-service"))
+
 import { createUser, loginUser, deleteUser, updatePassword, resetPassword } from './controller/user-controller.js';
 import { validateAccessToken, renewAccessAndRefreshTokens, invalidateRefreshToken } from './controller/user-token-handler.js';
 
