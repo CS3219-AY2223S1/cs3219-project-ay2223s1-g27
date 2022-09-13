@@ -11,7 +11,7 @@ import {
 import {useCookies} from 'react-cookie'
 import {useState} from "react";
 import axios from "axios";
-import {URL_USER_SVC} from "../configs";
+import {URL_USER_SVC_LOGIN} from "../configs";
 import {
     STATUS_CODE_LOGIN, 
     STATUS_CODE_INVALID_USERNAME, 
@@ -83,7 +83,7 @@ function LoginPage() {
         event.preventDefault(); 
         setIsLoggedIn(false); 
 
-        const res = await axios.get(URL_USER_SVC, { username, password })
+        const res = await axios.post(URL_USER_SVC_LOGIN, { username, password })
             .catch((err) => {
                 if (err.response.status === STATUS_CODE_INVALID_USERNAME) {
                     setErrorMessages({ name: "username", message: errors.username});
