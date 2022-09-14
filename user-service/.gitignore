@@ -102,3 +102,6 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Kubernetes Secret txt file
+user-svc-secrets.txt
