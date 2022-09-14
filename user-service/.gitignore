@@ -104,4 +104,4 @@ dist
 .tern-port
 
 # Kubernetes Secret txt file
-user-svc-secrets.txt
+user-service-secret.txt

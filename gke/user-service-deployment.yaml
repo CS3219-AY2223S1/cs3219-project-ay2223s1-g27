@@ -25,7 +25,17 @@ spec:
               cpu: 40m
               memory: 100Mi
           env:
-            - name: DB_CLOUD_URI
-              value: mongodb+srv://yongxiangng:p6F9nkFmMDtgkGgF@cluster0.ivtwevt.mongodb.net/user-service
             - name: ENV
               value: PROD
+            - name: DB_CLOUD_URI
+              secretKeyRef:
+                name: user-service-secret
+                key: DB_CLOUD_URI
+            - name: JWT_ACCESS_SECRET
+              secretKeyRef:
+                name: user-service-secret
+                key: JWT_ACCESS_SECRET
+            - name: JWT_REFRESH_SECRET
+              secretKeyRef:
+                name: user-service-secret
+                key: JWT_REFRESH_SECRET
