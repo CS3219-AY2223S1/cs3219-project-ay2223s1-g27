@@ -1,0 +1,21 @@
+config:
+  target: "http://34.160.41.4"
+  phases:
+    - name: 'load test'
+      duration: 30
+      arrivalRate: 10
+  engines:
+    socketio-v3: { "transports": ["websocket"] }
+
+scenarios:
+  - name: match
+    engine: socketio-v3
+    flow:
+      - emit:
+          channel: "match"
+          data:
+            username: '{{ $randomString() }}'
+            difficulty: 'HIGH'
+
+          # do nothing for 30 seconds then disconnect
+      - think: 1
