@@ -48,7 +48,7 @@ export async function createUser(req, res) {
                 return res.status(201).json({username: username, message: `Created new user ${username} successfully!`, success:true});
             }
         } else {
-            return res.status(400).json({message: 'Username and/or Password are missing!', success:false});
+            return res.status(400).json({message: 'One or all of Username, Email and Password are missing!', success:false});
         }
     } catch (err) {
         return res.status(500).json({message: 'Database failure when creating new user!', success:false})
