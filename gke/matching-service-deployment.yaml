@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: matching-service-deployment
+  labels:
+    app: matching-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: matching-service
+  template:
+    metadata:
+      labels:
+        app: matching-service
+    spec:
+      containers:
+        - name: matching-service-deployment
+          image: cs3219g27/matching-service:latest
+          ports:
+            - name: ms-http
+              containerPort: 8001
+          resources:
+            limits:
+              cpu: 40m
+              memory: 100Mi

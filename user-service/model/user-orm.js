@@ -9,10 +9,10 @@ async function hashPassword(password) {
     return hashedPassword
 }
 
-export async function ormCreateUser(username, password) {
+export async function ormCreateUser(username, password, email) {
     try {
         const hashedPassword = await hashPassword(password)
-        const newUser = await createUser({username: username, password: hashedPassword});
+        const newUser = await createUser({username: username, password: hashedPassword, email: email});
         newUser.save();
         return true;
     } catch (err) {

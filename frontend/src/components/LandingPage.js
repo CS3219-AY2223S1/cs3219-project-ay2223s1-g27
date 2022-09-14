@@ -18,15 +18,15 @@ function LandingPage() {
         console.log(event.target.value);
         var levelSelected = event.target.value;
         setDifficultyLevel(levelSelected);
-        if (levelSelected == "beginner") {
+        if (levelSelected === "beginner") {
             setSelectBeginner(true);
             setSelectIntermediate(false);
             setSelectExpert(false);
-        } else if (levelSelected == "intermediate") {
+        } else if (levelSelected === "intermediate") {
             setSelectBeginner(false);
             setSelectIntermediate(true);
             setSelectExpert(false);
-        } else if (levelSelected == "expert") {
+        } else if (levelSelected === "expert") {
             setSelectBeginner(false);
             setSelectIntermediate(false);
             setSelectExpert(true);
@@ -34,7 +34,7 @@ function LandingPage() {
     }  
 
     const isAbleToFindMatch = () => {
-        if(difficultyLevel != "") {
+        if(difficultyLevel !== "") {
             return true;
         } else {
             return false;
@@ -43,7 +43,7 @@ function LandingPage() {
 
     const handleFindMatch = (event) => {
         // Navigates to MatchingPage
-        if (difficultyLevel == "") {
+        if (difficultyLevel === "") {
             // Error: No difficulty level found
         }
     }

@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service-deployment
+  labels:
+    app: user-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: user-service
+  template:
+    metadata:
+      labels:
+        app: user-service
+    spec:
+      containers:
+        - name: user-service-deployment
+          image: cs3219g27/user-service:latest
+          ports:
+            - name: us-http
+              containerPort: 8000
+          resources:
+            limits:
+              cpu: 40m
+              memory: 100Mi
+          env:
+            - name: DB_CLOUD_URI
+              value: mongodb+srv://yongxiangng:p6F9nkFmMDtgkGgF@cluster0.ivtwevt.mongodb.net/user-service
+            - name: ENV
+              value: PROD
