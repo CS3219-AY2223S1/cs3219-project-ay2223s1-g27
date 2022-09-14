@@ -9,10 +9,10 @@ const uid = function() {
   return Date.now().toString(36) + Math.random().toString(36).substring(2);
 }
 
-function matchUsers(io, socket1_id, socket2_id) {
+function matchUsers(socket1, socket2) {
   const roomId = uid();
-  sendMatchSuccess(io.to(socket1_id), { message: 'success', room_id: roomId });
-  sendMatchSuccess(io.to(socket2_id), { message: 'success', room_id: roomId });
+  sendMatchSuccess(socket1, { message: 'success', room_id: roomId });
+  sendMatchSuccess(socket2, { message: 'success', room_id: roomId });
 }
 
 async function matchTimeOut(before) {
@@ -60,7 +60,10 @@ export function registerHandlers(io, socket) {
         return;
       }
 
-      matchUsers(io, socket.id, resp.socket_id);
+      const pendingSocket = io.sockets.sockets.get(resp.socket_id);
+      matchUsers(socket, pendingSocket);
+      socket.disconnect();
+      pendingSocket.disconnect();
       await resp.destroy();
 
     } catch (err) {
