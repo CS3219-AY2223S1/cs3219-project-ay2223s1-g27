@@ -1,5 +1,6 @@
 import {CountdownCircleTimer} from "react-countdown-circle-timer";
 import NavigationBar from "./NavigationBar"; 
+import {io} from "socket.io-client";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
     Box, 
@@ -31,6 +32,28 @@ const buttonStyle = {
 function MatchingPage() { 
     const location = useLocation(); // Location contains username and selected difficulty level
     const navigate = useNavigate();
+    const socket = io('http://localhost:8001', { transports: ['websocket'] });
+
+    // Emit matching event here
+    socket.emit('match', { username: location.state.user, difficulty: location.state.difficultyLevel });
+    
+    // Listen to matchSuccess event
+    socket.once('matchSuccess', (data) => {
+        console.log('matchSuccess');
+        console.log(data.message);
+        console.log(data.room_id);
+        socket.removeAllListeners();  
+        handleMatchFound();
+    })
+
+    // Listen to matchFail event
+    socket.once('matchFail', (data) => {
+        console.log('matchFail');
+        console.log(data.message);  
+        socket.removeAllListeners(); 
+        handleNoMatchFound();
+    }) 
+
     const [isMatchFound, setIsMatchFound] = useState(null);
     const [key, setKey] = useState(0);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -46,25 +69,42 @@ function MatchingPage() {
         ); 
     };
      
+    const handleMatchFound = () => {
+        setIsMatchFound(true);
+        navigate("/room", {state: { user: location.state.user }});
+    }
+
     const handleNoMatchFound = () => {
+        // Disconnect all listeners
+        socket.disconnect(); 
+
         setIsMatchFound(false);
         setIsModalOpen(true);
         setWaitForMatch(false);
     } 
      
     const handleWaitForMatch = () => {
+        socket.disconnect(); 
         setWaitForMatch(true);
         setIsModalOpen(false);
-        setKey(previousKey => previousKey + 1);
+        setKey(previousKey => previousKey + 1);  
+        window.location.reload(false);
     }
 
     const handleChangeLevel = () => {
         setIsModalOpen(false);
         navigate("/landing", {state: { user: location.state.user }});
+         
+        // Disconnect all listeners
+        socket.disconnect();  
     }
 
     const handleProceedWithoutMatch = () => {
         setIsModalOpen(false);
+        navigate("/room", {state: { user: location.state.user }});
+        
+        // Disconnect all listeners
+        socket.disconnect(); 
     }
 
     return (
@@ -74,7 +114,7 @@ function MatchingPage() {
                 <CountdownCircleTimer
                     key={key}
                     isPlaying
-                    duration={3}
+                    duration={30}
                     colors={"#1B7CED"} 
                     size={300}
                     strokeWidth={25}
@@ -89,6 +129,7 @@ function MatchingPage() {
                 </h2>
             </Box>
 
+            {/* Match Failure */}
             <Modal 
                 open={isModalOpen}   
                 aria-labelledby="modal-modal-title" 
@@ -101,7 +142,7 @@ function MatchingPage() {
                     </Box> 
                     <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                         Unfortunately, we could not find you a match.
-                    </Typography>
+                    </Typography> 
                     <Box display={"flex"} flexDirection={"column"} style={{ paddingTop: "5%"}}> 
                         <div style={{ marginBottom:"2%" }}>
                             <Button 

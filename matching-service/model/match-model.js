@@ -17,7 +17,7 @@ let MatchModelSchema = new Object({
     unique: true
   },
   difficulty: {
-    type: DataTypes.ENUM('LOW', 'MEDIUM', 'HIGH'),
+    type: DataTypes.ENUM('BEGINNER', 'INTERMEDIATE', 'EXPERT'),
     allowNull: false
   }
 });
