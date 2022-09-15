@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import {useCookies} from 'react-cookie'
 import {useState} from "react";
+import {useNavigate} from 'react-router-dom';
 import axios from "axios";
 import {URL_USER_SVC_LOGIN} from "../configs";
 import {
@@ -46,6 +47,7 @@ function LoginPage() {
         invalidEmail: "Email has not been registered!",
     } 
 
+    const navigate = useNavigate();
     const [errorMessages, setErrorMessages] = useState({}); 
     const [isLoggedIn, setIsLoggedIn] = useState(false);  
     const [username, setUsername] = useState("")
@@ -105,6 +107,7 @@ function LoginPage() {
             setCookie('access_token', accessToken, { path: '/',  expires});
             setCookie('refresh_token', refreshToken, {path: '/', expires}); 
             // const token = res.headers.get('Authorization');  
+            navigate("/landing");
         }
 
         // To be deleted: temporary checks for testing UI
