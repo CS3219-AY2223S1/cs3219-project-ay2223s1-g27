@@ -17,6 +17,7 @@ export function jwtDecode(t) {
 
 export function refreshJwt() {
     const refresh_token = getCookie("refresh_token")
+    if (!refresh_token) return
     axios.post(URL_USER_SVC_REFRESH_TOKEN, {username: jwtDecode(refresh_token).username}, {
         headers: {
             Authorization: 'Bearer ' + refresh_token
