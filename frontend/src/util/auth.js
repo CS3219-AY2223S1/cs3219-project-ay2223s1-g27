@@ -5,4 +5,3 @@ export function jwtDecode(t) {
     token.payload = JSON.parse(window.atob(t.split('.')[1]));
     return token.payload
 }
-  

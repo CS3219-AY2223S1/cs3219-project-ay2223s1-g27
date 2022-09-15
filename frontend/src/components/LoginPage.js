@@ -56,7 +56,7 @@ function LoginPage() {
     const [email, setEmail] = useState("")
     const [isDialogOpen, setIsDialogOpen] = useState(false);  
     const [isEmailValid, setIsEmailValid] = useState(null); 
-    const [cookies, setCookie] = useCookies(['access_token', 'refresh_token']);
+    const [cookies] = useCookies(['access_token']);
 
     /** Reset Password Logic */
     const handleDialog = () => {  
@@ -86,7 +86,7 @@ function LoginPage() {
         event.preventDefault(); 
         setIsLoggedIn(false); 
 
-        const res = await axios.post(URL_USER_SVC_LOGIN, { username, password })
+        const res = await axios.post(URL_USER_SVC_LOGIN, { username, password }, { withCredentials: true })
             .catch((err) => {
                 if (err.response.status === STATUS_CODE_INVALID_USERNAME) {
                     setErrorMessages({ name: "username", message: errors.username});
@@ -101,10 +101,6 @@ function LoginPage() {
         
         if (res && res.status === STATUS_CODE_LOGIN) {
             setIsLoggedIn(true);
-            const accessToken = jwtDecode(res.data.accessToken);
-            const refreshToken = jwtDecode(res.data.refreshToken);
-            setCookie('access_token', accessToken, { path: '/',  expires: new Date(accessToken.exp * 1000)});
-            setCookie('refresh_token', refreshToken, {path: '/', expires: new Date(refreshToken.exp * 1000)}); 
             navigate("/landing");
         }
 
