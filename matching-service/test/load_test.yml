@@ -1,5 +1,6 @@
 config:
   target: "http://34.160.41.4"
+  timeout: 30
   phases:
     - name: 'load test'
       duration: 30
@@ -16,8 +17,9 @@ scenarios:
           data:
             username: '{{ $randomString() }}'
             difficulty: 'HIGH'
-          response:
-            channel: "matchSuccess"
-            data: 
-              message: "success"
+        response:
+          channel: "matchSuccess"
+          match: 
+            json: "$.message"
+            value: "success"
       - think: 1
