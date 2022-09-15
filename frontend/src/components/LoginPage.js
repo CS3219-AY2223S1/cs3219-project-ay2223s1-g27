@@ -22,7 +22,6 @@ import {
 } from "../constants";
 import {Link} from "react-router-dom";
 import NavigationBar from "./NavigationBar";
-import { jwtDecode } from "../util/auth";
 
 function LoginPage() {
 

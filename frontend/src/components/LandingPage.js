@@ -6,6 +6,7 @@ import {
 import {useState} from "react"; 
 import GroupIcon from '@mui/icons-material/Group';
 import NavigationBar from "./NavigationBar";  
+import { refreshJwt } from "../util/auth";
 
 function LandingPage() {  
 
@@ -47,7 +48,7 @@ function LandingPage() {
             // Error: No difficulty level found
         }
     }
-
+    refreshJwt();
     return (    
         <>
         <NavigationBar isAuthenticated={true}/>
