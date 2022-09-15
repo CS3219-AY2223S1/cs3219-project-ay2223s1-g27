@@ -16,6 +16,8 @@ scenarios:
           data:
             username: '{{ $randomString() }}'
             difficulty: 'HIGH'
-
-          # do nothing for 30 seconds then disconnect
+          response:
+            channel: "matchSuccess"
+            data: 
+              message: "success"
       - think: 1
