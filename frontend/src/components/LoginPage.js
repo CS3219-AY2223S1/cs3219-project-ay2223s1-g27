@@ -21,7 +21,8 @@ import {
     // STATUS_DATABASE_FAILURE
 } from "../constants";
 import {Link} from "react-router-dom";
-import NavigationBar from "./NavigationBar"; 
+import NavigationBar from "./NavigationBar";
+import { jwtDecode } from "../util/auth";
 
 function LoginPage() {
 
@@ -100,13 +101,10 @@ function LoginPage() {
         
         if (res && res.status === STATUS_CODE_LOGIN) {
             setIsLoggedIn(true);
-            const accessToken = res.data.accessToken;
-            const refreshToken = res.data.refreshToken;
-            let expires = new Date();
-            expires.setTime(expires.getTime() + (accessToken.expiresIn * 1000));
-            setCookie('access_token', accessToken, { path: '/',  expires});
-            setCookie('refresh_token', refreshToken, {path: '/', expires}); 
-            // const token = res.headers.get('Authorization');
+            const accessToken = jwtDecode(res.data.accessToken);
+            const refreshToken = jwtDecode(res.data.refreshToken);
+            setCookie('access_token', accessToken, { path: '/',  expires: new Date(accessToken.exp * 1000)});
+            setCookie('refresh_token', refreshToken, {path: '/', expires: new Date(refreshToken.exp * 1000)}); 
             navigate("/landing");
         }
 
