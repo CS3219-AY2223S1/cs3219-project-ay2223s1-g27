@@ -13,6 +13,7 @@ import {
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import CloseIcon from '@mui/icons-material/Close';
 import {useState} from 'react'; 
+import {useNavigate} from "react-router-dom";
  
 const modalStyle = {
     position: 'absolute',
@@ -26,14 +27,14 @@ const modalStyle = {
     p: 4,
   }; 
 
-function NavigationBar({ isAuthenticated }) {
+function NavigationBar({ isAuthenticated, user }) {
     // const [auth, setAuth] = useState(true);
     const [anchorEl, setAnchorEl] = useState(null);
     const [changePassword, setChangePassword] = useState(false);
     const [newPassword, setNewPassword] = useState("");
     const [deleteAccount, setDeleteAccount] = useState(false); 
     const [logOut, setLogOut] = useState(false);
-
+ 
     const handleOpenMenu = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -52,9 +53,12 @@ function NavigationBar({ isAuthenticated }) {
         setDeleteAccount(true);
     };
 
+    const navigate = useNavigate();
+
     const handleLogOut = async () => {
         setAnchorEl(null);
         setLogOut(true); 
+        navigate("/login");
     } 
 
     const handleCloseChangePassword = () => {
@@ -80,14 +84,16 @@ function NavigationBar({ isAuthenticated }) {
         // Triggers account deletion!
     }
 
-    return(
-        <Box sx={{ flexGrow: 1 }}> 
-            <AppBar style={{ margin: 0 }} position="static">
-                <Toolbar>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        CS3219
+    return( 
+            <AppBar style={{ margin: 0 }} position="static"> 
+                {isAuthenticated && (
+                    <Box  display={"flex"} flexDirection={"row"} sx={{ flexGrow: 1 }}>
+                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                            <div style={{margin:"1%"}}> 
+                                Welcome, {user}!
+                            </div>
                     </Typography>
-                    {isAuthenticated && (
+                    <Toolbar>
                         <div>
                             <IconButton 
                                 size="large"
@@ -98,27 +104,26 @@ function NavigationBar({ isAuthenticated }) {
                                 color="inherit"
                             >
                                 <AccountCircleIcon />
-                            </IconButton>
+                            </IconButton> 
                             <Menu
-                                id="menu-appbar"
-                                anchorEl={anchorEl}
-                                anchorOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                keepMounted
-                                transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                open={Boolean(anchorEl)}
-                                onClose={handleCloseMenu}
-                                >
+                            id="menu-appbar"
+                            anchorEl={anchorEl}
+                            anchorOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            keepMounted
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            open={Boolean(anchorEl)}
+                            onClose={handleCloseMenu}
+                            >
                                 <MenuItem onClick={handleChangePassword}>Change Password</MenuItem>
                                 <MenuItem onClick={handleDeleteAccount}>Delete Account</MenuItem>
                                 <MenuItem onClick={handleLogOut}>Log Out</MenuItem>
                             </Menu>
-
                             {/* Change Password Modal */}
                             <Modal 
                                 open={changePassword}  
@@ -149,7 +154,6 @@ function NavigationBar({ isAuthenticated }) {
                                     </Box>
                                 </Box>
                             </Modal>
-
                             {/* Delete Account Modal */}
                             <Modal 
                                 open={deleteAccount}  
@@ -173,7 +177,6 @@ function NavigationBar({ isAuthenticated }) {
                                     </Box>
                                 </Box>
                             </Modal>
-
                             {/* Log Out Modal */}
                             <Modal 
                                 open={logOut} 
@@ -195,13 +198,11 @@ function NavigationBar({ isAuthenticated }) {
                                         <Button variant={"contained"} href='/login' onClick={handleDeleteAccountOnClick}>Back to Login Page</Button>
                                     </Box>
                                 </Box>
-                            </Modal>
-                                
+                            </Modal> 
                         </div>
-                    )}
-                </Toolbar>
-            </AppBar>
-        </Box>
+                    </Toolbar></Box>
+                )}  
+            </AppBar> 
     );
 }
 

@@ -12,7 +12,7 @@ import {
 import {useState} from "react";
 import axios from "axios";
 import {URL_USER_SVC_CREATEUSER} from "../configs";
-import {STATUS_CODE_CONFLICT, STATUS_CODE_CREATED} from "../constants";
+import {STATUS_CODE_INVALID_SIGNUP, STATUS_DATABASE_FAILURE, STATUS_CODE_CREATED} from "../constants";
 import {Link} from "react-router-dom";
 import NavigationBar from "./NavigationBar";  
 
@@ -28,17 +28,16 @@ function SignupPage() {
     const handleSignup = async () => {
         setIsSignupSuccess(false)
         const res = await axios.post(URL_USER_SVC_CREATEUSER, { username, password, email })
-            .catch((err) => {
-                if (err.response.status === STATUS_CODE_CONFLICT) {
-                    setErrorDialog('This username already exists')
-                } else {
-                    setErrorDialog('Please try again later')
-                }
+            .catch((err) => {  
+                if (err.response.status === STATUS_CODE_INVALID_SIGNUP) {
+                    setErrorDialog(err.response.data.message)
+                }  
             })
+
         if (res && res.status === STATUS_CODE_CREATED) {
-            setSuccessDialog('Account successfully created')
+            setSuccessDialog(res.data.message)
             setIsSignupSuccess(true)
-        }
+        } 
     }
 
     const closeDialog = () => setIsDialogOpen(false)

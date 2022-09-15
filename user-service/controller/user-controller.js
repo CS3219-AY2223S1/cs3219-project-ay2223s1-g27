@@ -159,7 +159,7 @@ export async function resetPassword(req, res) {
             if (updatedUser === null) {
                 return res.status(500).json({message: "Error updating user in database", success:false})
             } else {
-                return res.status(200).json({username: updatedUser.username, message: `Resetted user ${updatedUser.username} password successfully!`, success:true})
+                return res.status(200).json({username: updatedUser.username, message: `Reset user ${updatedUser.username} password successfully!`, success:true})
             }
         } else {
             return res.status(400).json({message: "'Email address, username and/or new password are missing!", success:false})

@@ -11,48 +11,30 @@ import {
 import {useCookies} from 'react-cookie'
 import {useState} from "react";
 import axios from "axios";
-import {URL_USER_SVC_LOGIN} from "../configs";
+import {URL_USER_SVC_LOGIN, URL_USER_SVC_RESETPASSWORD} from "../configs";
 import {
     STATUS_CODE_LOGIN, 
-    STATUS_CODE_INVALID_USERNAME, 
-    STATUS_CODE_INVALID_PASSWORD,
-    STATUS_CODE_MISSING,
-    // STATUS_DATABASE_FAILURE
+    STATUS_CODE_INVALID_USER, 
+    STATUS_CODE_INCORRECT_PASSWORD,
+    STATUS_CODE_MISSING_FIELD,
+    STATUS_DATABASE_FAILURE,
 } from "../constants";
-import {Link} from "react-router-dom";
+import {Link, useNavigate, useHistory} from "react-router-dom";
 import NavigationBar from "./NavigationBar"; 
 
-function LoginPage() {
+function LoginPage() { 
 
-    // To be deleted: temporary database for testing UI
-    const database = [
-        {
-            email: "user1@gmail.com",
-            username: "user1",
-            password: "pass1"
-        },
-        {
-            email: "user2@gmail.com",
-            username: "user2",
-            password: "pass2"
-        }
-    ] 
-
-    const errors = {
-        username: "Invalid username!",
-        password: "Invalid password!", 
-        missing: "Username and/or password are missing!",
-        failure: "Database failure when retrieving user!",
-        invalidEmail: "Email has not been registered!",
-    } 
-
-    const [errorMessages, setErrorMessages] = useState({}); 
+    const [loginMessage, setLoginMessage] = useState("");
     const [isLoggedIn, setIsLoggedIn] = useState(false);  
-    const [username, setUsername] = useState("")
-    const [password, setPassword] = useState("")
-    const [email, setEmail] = useState("")
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [resetUsername, setResetUsername] = useState("");
+    const [resetPassword, setResetPassword] = useState("");
+    const [resetEmail, setResetEmail] = useState("");
     const [isDialogOpen, setIsDialogOpen] = useState(false);  
     const [isEmailValid, setIsEmailValid] = useState(null); 
+    const [resetPasswordFailed, setResetPasswordFailed] = useState(null);  
+    const [resetPasswordMessage, setResetPasswordMessage] = useState("");
     const [, setCookie] = useCookies(['access_token', 'refresh_token']);
 
     /** Reset Password Logic */
@@ -66,34 +48,41 @@ function LoginPage() {
         setIsDialogOpen(false);
     }
 
-    const handleReset = (event) => {
+    const handleResetPassword = async(event) => {
         event.preventDefault();
-        const userEmail = database.find((user) => user.email === email)
-        if (userEmail) {
-            setIsEmailValid(true);
-            console.log("True");
-        } else {
-            setIsEmailValid(false);
-            console.log("False");
-        }
+        setResetPasswordFailed(false);
+        const username = resetUsername;
+        const newPassword = resetPassword;
+        const email = resetEmail;
+        const res = await axios.put(URL_USER_SVC_RESETPASSWORD, { username, newPassword, email })
+            .catch((err) => {
+                if (err.response.status === 400 || err.response.status === 500 ) {
+                    setResetPasswordFailed(true);  
+                    setResetPasswordMessage(err.response.data.message);
+                } 
+            })
+
+        if (res && res.status === 200) {
+            setResetPasswordFailed(false);
+            setResetPasswordMessage(res.data.message);
+        } 
     }
 
     /** Login Logic */ 
+    const navigate = useNavigate(); 
     const handleLogin = async(event) => {  
         event.preventDefault(); 
         setIsLoggedIn(false); 
 
         const res = await axios.post(URL_USER_SVC_LOGIN, { username, password })
             .catch((err) => {
-                if (err.response.status === STATUS_CODE_INVALID_USERNAME) {
-                    setErrorMessages({ name: "username", message: errors.username});
-                } else if (err.response.status === STATUS_CODE_INVALID_PASSWORD) {
-                    setErrorMessages({ name: "password", message: errors.password});
-                } else if (err.response.status === STATUS_CODE_MISSING) {
-                    setErrorMessages({ name: "missing", message: errors.missing});
-                } else {
-                    setErrorMessages({ name: "failure", message: errors.failure});
-                }
+                if (err.response.status === STATUS_CODE_INCORRECT_PASSWORD || 
+                    err.response.status === STATUS_CODE_INVALID_USER ||
+                    err.response.status === STATUS_CODE_MISSING_FIELD ||
+                    err.response.status === STATUS_DATABASE_FAILURE ) {
+                        setIsLoggedIn(false);
+                        setLoginMessage(err.response.data.message);
+                    } 
             })
         
         if (res && res.status === STATUS_CODE_LOGIN) {
@@ -104,24 +93,9 @@ function LoginPage() {
             expires.setTime(expires.getTime() + (accessToken.expiresIn * 1000));
             setCookie('access_token', accessToken, { path: '/',  expires});
             setCookie('refresh_token', refreshToken, {path: '/', expires}); 
+            navigate("/landing", {state: { user: username }});  
             // const token = res.headers.get('Authorization');  
-        }
-
-        // To be deleted: temporary checks for testing UI
-        if (username === "" || password === "") {
-            setErrorMessages({ name: "missing", message: errors.missing});
-        } else {
-            const userData = database.find((user) => user.username === username);  
-            if (userData) { 
-                if (userData.password !== password) {
-                    setErrorMessages({ name: "password", message: errors.password});
-                } else {
-                    setIsLoggedIn(true);
-                }
-            } else {  
-                setErrorMessages({ name: "username", message: errors.username});
-            }
-        } 
+        }  
     } 
 
     return (  
@@ -158,7 +132,7 @@ function LoginPage() {
             </Box>
 
             <div>
-                {isLoggedIn ? <div> Login success! </div> : <div style={{ color: "red" }}>{errorMessages.message}</div>}
+                {isLoggedIn ? <div> Login success! </div> : <div style={{ color: "red" }}>{loginMessage}</div>}
             </div>
 
             <Dialog open={isDialogOpen} onClose={closeDialog} fullWidth maxWidth={"xs"}>
@@ -166,23 +140,40 @@ function LoginPage() {
                 <DialogContent>
                     <TextField
                         autoFocus
-                        label="Email Address"
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        label="Username" 
+                        value={resetUsername}
+                        onChange={(e) => setResetUsername(e.target.value)}
                         fullWidth
                         variant="standard"
-                        sx={{ marginBottom: "2rem" }} />
+                        sx={{ marginBottom: "1rem" }} />
+                    <TextField
+                        autoFocus
+                        label="Email Address"
+                        type="email"
+                        value={resetEmail}
+                        onChange={(e) => setResetEmail(e.target.value)}
+                        fullWidth
+                        variant="standard"
+                        sx={{ marginBottom: "1rem" }} />
+                    <TextField
+                        autoFocus
+                        label="New Password"
+                        type="password"
+                        value={resetPassword}
+                        onChange={(e) => setResetPassword(e.target.value)}
+                        fullWidth
+                        variant="standard"
+                        sx={{ marginBottom: "2rem" }} />    
                     <div>
-                        {isEmailValid ? <div style={{ color: "blue" }}> A link to reset your password has been sent to your email! </div>
-                            : isEmailValid === false ? <div style={{ color: "red" }}>{errors.invalidEmail}</div>
-                                : <div></div>}
+                        {resetPasswordFailed ? <div style={{ color: "red" }}> {resetPasswordMessage} </div>
+                                : resetPasswordFailed === false ? <div style={{ color: "blue" }}>{resetPasswordMessage}</div>
+                                    : <div></div>} 
                     </div>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={closeDialog}>Cancel</Button>
                     {/* Click on "Reset Password" triggers sending of email and success message as well */}
-                    <Button onClick={handleReset}>Reset Password</Button>
+                    <Button onClick={handleResetPassword}>Reset Password</Button>
                 </DialogActions>
             </Dialog>
         </Box>
