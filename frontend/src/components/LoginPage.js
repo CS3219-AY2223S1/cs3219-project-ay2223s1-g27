@@ -22,6 +22,7 @@ import {
 } from "../constants";
 import {Link} from "react-router-dom";
 import NavigationBar from "./NavigationBar"; 
+import {setRefreshToken, setJwtToken} from "../services/auth";
 
 function LoginPage() {
 
@@ -107,6 +108,8 @@ function LoginPage() {
             setCookie('access_token', accessToken, { path: '/',  expires});
             setCookie('refresh_token', refreshToken, {path: '/', expires}); 
             // const token = res.headers.get('Authorization');  
+            setJwtToken(accessToken)
+            setRefreshToken(refreshToken)
             navigate("/landing");
         }
 

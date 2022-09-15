@@ -4,6 +4,7 @@ import LoginPage from './components/LoginPage';
 import LandingPage from './components/LandingPage';
 // import NavigationBar from "./components/NavigationBar"; 
 import {Box} from "@mui/material"; 
+import { PrivateRoute } from "./components/PrivateRoute";
  
 function App() {  
     return (
@@ -15,7 +16,7 @@ function App() {
                         <Route exact path="/" element={<Navigate replace to="/login"/>}></Route>
                         <Route path="/signup" element={<SignupPage/>}/> 
                         <Route path="/login" element={<LoginPage/>}/>
-                        <Route path="/landing" element={<LandingPage/>}/> 
+                        <Route path="/landing" element={<PrivateRoute><LandingPage/></PrivateRoute>}/> 
                     </Routes>
                 </Router>
             </Box>
