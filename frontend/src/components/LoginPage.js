@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import {useCookies} from 'react-cookie'
 import {useState} from "react";
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, Navigate} from 'react-router-dom';
 import axios from "axios";
 import {URL_USER_SVC_LOGIN} from "../configs";
 import {
@@ -22,7 +22,7 @@ import {
 } from "../constants";
 import {Link} from "react-router-dom";
 import NavigationBar from "./NavigationBar"; 
-import {setRefreshToken, setJwtToken} from "../services/auth";
+import {setRefreshToken, setJwtToken, getJwtToken} from "../services/auth";
 
 function LoginPage() {
 
@@ -108,8 +108,8 @@ function LoginPage() {
             setCookie('access_token', accessToken, { path: '/',  expires});
             setCookie('refresh_token', refreshToken, {path: '/', expires}); 
             // const token = res.headers.get('Authorization');  
-            setJwtToken(accessToken)
-            setRefreshToken(refreshToken)
+            setJwtToken(accessToken);
+            setRefreshToken(refreshToken);
             navigate("/landing");
         }
 
@@ -130,7 +130,9 @@ function LoginPage() {
         } 
     } 
 
-    return (  
+    return getJwtToken() 
+        ? <Navigate to="/landing" /> 
+        : (  
         <>
         <NavigationBar isAuthenticated={false} /> 
         <Box display={"flex"} flexDirection={"column"} width={"30%"} style={{marginTop: "3%", marginLeft: "3%"}}>
