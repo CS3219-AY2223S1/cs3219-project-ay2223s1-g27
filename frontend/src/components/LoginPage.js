@@ -22,7 +22,6 @@ import {
 } from "../constants";
 import {Link} from "react-router-dom";
 import NavigationBar from "./NavigationBar";
-import { refreshJwt } from "../util/auth";
 
 function LoginPage() {
 
@@ -121,7 +120,7 @@ function LoginPage() {
         } 
     }
 
-    return (cookies["access_token"] || refreshJwt() || cookies["access_token"])
+    return cookies["refresh_token"]
         ? <Navigate to="/landing" /> 
         : (  
         <>
