@@ -22,7 +22,6 @@ import {
 } from "../constants";
 import {Link} from "react-router-dom";
 import NavigationBar from "./NavigationBar"; 
-import {setRefreshToken, setJwtToken, getJwtToken} from "../services/auth";
 
 function LoginPage() {
 
@@ -56,7 +55,7 @@ function LoginPage() {
     const [email, setEmail] = useState("")
     const [isDialogOpen, setIsDialogOpen] = useState(false);  
     const [isEmailValid, setIsEmailValid] = useState(null); 
-    const [, setCookie] = useCookies(['access_token', 'refresh_token']);
+    const [cookies, setCookie] = useCookies(['access_token', 'refresh_token']);
 
     /** Reset Password Logic */
     const handleDialog = () => {  
@@ -107,9 +106,7 @@ function LoginPage() {
             expires.setTime(expires.getTime() + (accessToken.expiresIn * 1000));
             setCookie('access_token', accessToken, { path: '/',  expires});
             setCookie('refresh_token', refreshToken, {path: '/', expires}); 
-            // const token = res.headers.get('Authorization');  
-            setJwtToken(accessToken);
-            setRefreshToken(refreshToken);
+            // const token = res.headers.get('Authorization');
             navigate("/landing");
         }
 
@@ -128,9 +125,9 @@ function LoginPage() {
                 setErrorMessages({ name: "username", message: errors.username});
             }
         } 
-    } 
+    }
 
-    return getJwtToken() 
+    return cookies["access_token"]
         ? <Navigate to="/landing" /> 
         : (  
         <>

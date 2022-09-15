@@ -1,6 +1,7 @@
-import { getJwtToken } from "../services/auth";
-import { Navigate } from "react-router-dom";
+import { useCookies } from 'react-cookie';
+import { Navigate } from 'react-router-dom';
 
 export const PrivateRoute = ({ children }) => {
-    return getJwtToken() ? children : <Navigate to="/login" />;
+    const [cookies] = useCookies(["access_token"]);
+    return cookies["access_token"] ? children : <Navigate to="/login" />;
 };

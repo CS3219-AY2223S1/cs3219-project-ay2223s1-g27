@@ -12,7 +12,8 @@ import {
 } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import CloseIcon from '@mui/icons-material/Close';
-import {useState} from 'react'; 
+import {useState} from 'react';
+import { useCookies } from 'react-cookie';
  
 const modalStyle = {
     position: 'absolute',
@@ -27,6 +28,7 @@ const modalStyle = {
   }; 
 
 function NavigationBar({ isAuthenticated }) {
+    const [,,removeCookie] = useCookies(["access_token", "refresh_cookie"]);
     // const [auth, setAuth] = useState(true);
     const [anchorEl, setAnchorEl] = useState(null);
     const [changePassword, setChangePassword] = useState(false);
@@ -77,6 +79,8 @@ function NavigationBar({ isAuthenticated }) {
 
     const handleDeleteAccountOnClick = () => {
         setAnchorEl(null);
+        removeCookie("access_token");
+        removeCookie("refresh_token");
         // Triggers account deletion!
     }
 
