@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import {useCookies} from 'react-cookie'
 import {useState} from "react";
+import {useNavigate, Navigate} from 'react-router-dom';
 import axios from "axios";
 import {URL_USER_SVC_LOGIN, URL_USER_SVC_RESETPASSWORD} from "../configs";
 import {
@@ -34,8 +35,8 @@ function LoginPage() {
     const [isDialogOpen, setIsDialogOpen] = useState(false);  
     const [isEmailValid, setIsEmailValid] = useState(null); 
     const [resetPasswordFailed, setResetPasswordFailed] = useState(null);  
-    const [resetPasswordMessage, setResetPasswordMessage] = useState("");
-    const [, setCookie] = useCookies(['access_token', 'refresh_token']);
+    const [resetPasswordMessage, setResetPasswordMessage] = useState(""); 
+    const [cookies] = useCookies(['access_token']);
 
     /** Reset Password Logic */
     const handleDialog = () => {  
@@ -74,7 +75,7 @@ function LoginPage() {
         event.preventDefault(); 
         setIsLoggedIn(false); 
 
-        const res = await axios.post(URL_USER_SVC_LOGIN, { username, password })
+        const res = await axios.post(URL_USER_SVC_LOGIN, { username, password }, { withCredentials: true })
             .catch((err) => {
                 if (err.response.status === STATUS_CODE_INCORRECT_PASSWORD || 
                     err.response.status === STATUS_CODE_INVALID_USER ||
@@ -87,18 +88,13 @@ function LoginPage() {
         
         if (res && res.status === STATUS_CODE_LOGIN) {
             setIsLoggedIn(true);
-            const accessToken = res.data.accessToken;
-            const refreshToken = res.data.refreshToken;
-            let expires = new Date();
-            expires.setTime(expires.getTime() + (accessToken.expiresIn * 1000));
-            setCookie('access_token', accessToken, { path: '/',  expires});
-            setCookie('refresh_token', refreshToken, {path: '/', expires}); 
-            navigate("/landing", {state: { user: username }});  
-            // const token = res.headers.get('Authorization');  
-        }  
-    } 
+            navigate("/landing");
+        } 
+    }
 
-    return (  
+    return cookies["refresh_token"]
+        ? <Navigate to="/landing" /> 
+        : (  
         <>
         <NavigationBar isAuthenticated={false} /> 
         <Box display={"flex"} flexDirection={"column"} width={"30%"} style={{marginTop: "3%", marginLeft: "3%"}}>

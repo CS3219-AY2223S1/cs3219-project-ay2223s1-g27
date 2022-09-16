@@ -1,9 +1,9 @@
 import {
     Box,
-    Button, 
+    Button,
     Typography
 } from "@mui/material";
-import {useState} from "react"; 
+import {useState} from "react";
 import GroupIcon from '@mui/icons-material/Group';
 import NavigationBar from "./NavigationBar";  
 import { useLocation, useNavigate } from "react-router-dom";
@@ -52,7 +52,7 @@ function LandingPage() {
         }
     }
 
-    return (    
+    return (
         <>
         <NavigationBar isAuthenticated={true} user={location.state.user}/>
         <Box display={"flex"} justifyContent={"center"} style={{marginTop: "3%"}}> 
