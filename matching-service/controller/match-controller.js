@@ -55,6 +55,7 @@ export function registerHandlers(io, socket) {
           setTimeout(function() {
             matchTimeOut(Date.now());
             sendMatchFail(socket, { message: 'Could not find a match!' });
+            socket.disconnect();
           }, WAITING_TIME);
         }
         return;
