@@ -20,7 +20,8 @@ import {
     STATUS_DATABASE_FAILURE,
 } from "../constants";
 import {Link, Navigate, useNavigate} from "react-router-dom";
-import NavigationBar from "./NavigationBar"; 
+import NavigationBar from "./NavigationBar";
+import {jwtDecode} from "../util/auth"
 
 function LoginPage() { 
 
@@ -35,7 +36,7 @@ function LoginPage() {
     const [isEmailValid, setIsEmailValid] = useState(null); 
     const [resetPasswordFailed, setResetPasswordFailed] = useState(null);  
     const [resetPasswordMessage, setResetPasswordMessage] = useState(""); 
-    const [cookies] = useCookies(['access_token']);
+    const [cookies, setCookie] = useCookies(['access_token']);
 
     /** Reset Password Logic */
     const handleDialog = () => {  
@@ -87,6 +88,10 @@ function LoginPage() {
         
         if (res && res.status === STATUS_CODE_LOGIN) {
             setIsLoggedIn(true);
+            const accessToken = res.data.accessToken;
+            const refreshToken = res.data.refreshToken;
+            setCookie('access_token', accessToken, { path: '/',  expires: new Date(jwtDecode(accessToken).exp * 1000)});
+            setCookie('refresh_token', refreshToken, {path: '/', expires: new Date(jwtDecode(refreshToken).exp * 1000)});
             navigate("/landing");
         } 
     }
