@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import {useCookies} from 'react-cookie'
 import {useState} from "react";
+import {useNavigate, Navigate} from 'react-router-dom';
 import axios from "axios";
 import {URL_USER_SVC_LOGIN} from "../configs";
 import {
@@ -20,7 +21,7 @@ import {
     // STATUS_DATABASE_FAILURE
 } from "../constants";
 import {Link} from "react-router-dom";
-import NavigationBar from "./NavigationBar"; 
+import NavigationBar from "./NavigationBar";
 
 function LoginPage() {
 
@@ -46,6 +47,7 @@ function LoginPage() {
         invalidEmail: "Email has not been registered!",
     } 
 
+    const navigate = useNavigate();
     const [errorMessages, setErrorMessages] = useState({}); 
     const [isLoggedIn, setIsLoggedIn] = useState(false);  
     const [username, setUsername] = useState("")
@@ -53,7 +55,7 @@ function LoginPage() {
     const [email, setEmail] = useState("")
     const [isDialogOpen, setIsDialogOpen] = useState(false);  
     const [isEmailValid, setIsEmailValid] = useState(null); 
-    const [, setCookie] = useCookies(['access_token', 'refresh_token']);
+    const [cookies] = useCookies(['access_token']);
 
     /** Reset Password Logic */
     const handleDialog = () => {  
@@ -83,7 +85,7 @@ function LoginPage() {
         event.preventDefault(); 
         setIsLoggedIn(false); 
 
-        const res = await axios.post(URL_USER_SVC_LOGIN, { username, password })
+        const res = await axios.post(URL_USER_SVC_LOGIN, { username, password }, { withCredentials: true })
             .catch((err) => {
                 if (err.response.status === STATUS_CODE_INVALID_USERNAME) {
                     setErrorMessages({ name: "username", message: errors.username});
@@ -98,13 +100,7 @@ function LoginPage() {
         
         if (res && res.status === STATUS_CODE_LOGIN) {
             setIsLoggedIn(true);
-            const accessToken = res.data.accessToken;
-            const refreshToken = res.data.refreshToken;
-            let expires = new Date();
-            expires.setTime(expires.getTime() + (accessToken.expiresIn * 1000));
-            setCookie('access_token', accessToken, { path: '/',  expires});
-            setCookie('refresh_token', refreshToken, {path: '/', expires}); 
-            // const token = res.headers.get('Authorization');  
+            navigate("/landing");
         }
 
         // To be deleted: temporary checks for testing UI
@@ -122,9 +118,11 @@ function LoginPage() {
                 setErrorMessages({ name: "username", message: errors.username});
             }
         } 
-    } 
+    }
 
-    return (  
+    return cookies["refresh_token"]
+        ? <Navigate to="/landing" /> 
+        : (  
         <>
         <NavigationBar isAuthenticated={false} /> 
         <Box display={"flex"} flexDirection={"column"} width={"30%"} style={{marginTop: "3%", marginLeft: "3%"}}>

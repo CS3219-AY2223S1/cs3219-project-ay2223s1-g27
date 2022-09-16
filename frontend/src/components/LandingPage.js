@@ -1,11 +1,11 @@
 import {
     Box,
-    Button, 
+    Button,
     Typography
 } from "@mui/material";
-import {useState} from "react"; 
+import {useState} from "react";
 import GroupIcon from '@mui/icons-material/Group';
-import NavigationBar from "./NavigationBar";  
+import NavigationBar from "./NavigationBar";
 
 function LandingPage() {  
 
@@ -48,10 +48,10 @@ function LandingPage() {
         }
     }
 
-    return (    
+    return (
         <>
         <NavigationBar isAuthenticated={true}/>
-        <Box display={"flex"} justifyContent={"center"} style={{marginTop: "3%"}}> 
+        <Box display={"flex"} justifyContent={"center"} style={{marginTop: "3%"}}>
             <Box display={"flex"} flexDirection={"column"} width={"50%"}>
                 <Typography variant={"h3"} display={"flex"} justifyContent={"center"} marginBottom={"2rem"}>Choose Your Difficulty Level</Typography>
                 <div style={{marginTop:'10px', marginBottom: '10px'}}>

@@ -6,6 +6,9 @@ import { getJWTTokenFromAuthHeader } from './user-controller.js'
 const jwtAccessSecretKey = process.env.JWT_ACCESS_SECRET
 const jwtRefreshSecretKey = process.env.JWT_REFRESH_SECRET
 
+const ACCESS_TOKEN_EXPIRE_TIME = 900000
+const REFRESH_TOKEN_EXPIRE_TIME = 1200000
+
 let refreshTokens = []
 // Cleanup happens every 20 minutes
 var refreshTokensCleanupTimer = setInterval(cleanupRefreshTokens, 1200000)
@@ -75,11 +78,14 @@ export function renewAccessAndRefreshTokens(req, res) {
         refreshTokens.filter((token) => token != refreshToken)
         const newAccessToken = generateAccessToken(decodedPayload.username)
         const newRefreshToken = generateRefreshToken(decodedPayload.username)
+        res.cookie('access_token', newAccessToken, { maxAge: ACCESS_TOKEN_EXPIRE_TIME, httpOnly: false });
+        res.cookie('refresh_token', newRefreshToken, { maxAge: REFRESH_TOKEN_EXPIRE_TIME, httpOnly: false });
         return res.status(200).json({username: decodedPayload.username, accessToken: newAccessToken, refreshToken: newRefreshToken, success:true})
     } catch (err) {
         if (err instanceof jwt.TokenExpiredError) {
             return res.status(401).json({message: "JWT refresh Token has Expired.", success:false})
         } else {
+            console.log(err)
             return res.status(400).json({message: "Problem verifying JWT refresh token, , make sure you passed the refresh token.", success:false})
         }
     }
