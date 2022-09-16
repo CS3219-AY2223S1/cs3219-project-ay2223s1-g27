@@ -2,6 +2,7 @@ import {CountdownCircleTimer} from "react-countdown-circle-timer";
 import NavigationBar from "./NavigationBar"; 
 import {io} from "socket.io-client";
 import { useLocation, useNavigate } from "react-router-dom";
+import {URL_MATCHING_SVC} from "../configs";
 import {
     Box, 
     Button,
@@ -32,7 +33,7 @@ const buttonStyle = {
 function MatchingPage() { 
     const location = useLocation(); // Location contains username and selected difficulty level
     const navigate = useNavigate();
-    const socket = io('http://localhost:8001', { transports: ['websocket'] });
+    const socket = io(URL_MATCHING_SVC, { transports: ['websocket'] });
 
     // Emit matching event here
     socket.emit('match', { username: location.state.user, difficulty: location.state.difficultyLevel });
