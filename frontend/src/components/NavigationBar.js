@@ -33,7 +33,7 @@ const modalStyle = {
 
 function NavigationBar({ isAuthenticated }) {
     const navigate = useNavigate();
-    const [cookies, removeCookie] = useCookies(["access_token", "refresh_cookie"]); 
+    const [cookies,,removeCookie] = useCookies(["access_token", "refresh_token"]); 
     const [anchorEl, setAnchorEl] = useState(null);
     const [changePassword, setChangePassword] = useState(false);
     const [newPassword, setNewPassword] = useState("");
@@ -59,9 +59,18 @@ function NavigationBar({ isAuthenticated }) {
     }; 
     
     const handleLogOut = async () => {
+        const refresh_token = cookies["refresh_token"]
+        axios.post(URL_USER_SVC_LOGOUT, {username: jwtDecode(refresh_token).username}, {
+            headers: {
+                Authorization: 'Bearer ' + refresh_token
+            }
+        }).then(x => {
+            navigate("/login")
+        })
+        removeCookie("access_token");
+        removeCookie("refresh_token");
         setAnchorEl(null);
         setLogOut(true); 
-        navigate("/login");
     } 
 
     const handleCloseChangePassword = () => {
@@ -83,16 +92,6 @@ function NavigationBar({ isAuthenticated }) {
     } 
 
     const handleDeleteAccountOnClick = () => {
-        const refresh_token = cookies["refresh_token"]
-        axios.post(URL_USER_SVC_LOGOUT, {username: jwtDecode(refresh_token).username}, {
-            headers: {
-                Authorization: 'Bearer ' + refresh_token
-            }
-        }).then(x => {
-            navigate("/login")
-        })
-        removeCookie("access_token");
-        removeCookie("refresh_token");
         setAnchorEl(null);
     }
 
