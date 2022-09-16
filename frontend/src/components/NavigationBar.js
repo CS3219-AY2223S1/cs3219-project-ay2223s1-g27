@@ -208,7 +208,7 @@ function NavigationBar({ isAuthenticated }) {
                                         Do you wish to end your session? 
                                     </Typography>
                                     <Box display={"flex"} flexDirection={"row"} justifyContent={"flexStart"} style={{ paddingTop: "5%"}}>
-                                        <Button variant={"contained"} onClick={handleDeleteAccountOnClick}>Configm Logout</Button>
+                                        <Button variant={"contained"} onClick={handleDeleteAccountOnClick}>Confirm Logout</Button>
                                     </Box>
                                 </Box>
                             </Modal>
