@@ -14,7 +14,11 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import CloseIcon from '@mui/icons-material/Close';
 import {useState} from 'react';
 import { useCookies } from 'react-cookie';
- 
+import axios from 'axios';
+import { jwtDecode } from '../util/auth';
+import { URL_USER_SVC_LOGOUT } from '../configs'; 
+import { useNavigate } from 'react-router-dom';
+
 const modalStyle = {
     position: 'absolute',
     top: '50%',
@@ -28,7 +32,8 @@ const modalStyle = {
   }; 
 
 function NavigationBar({ isAuthenticated }) {
-    const [,,removeCookie] = useCookies(["access_token", "refresh_cookie"]);
+    const navigate = useNavigate();
+    const [cookies,,removeCookie] = useCookies(["access_token", "refresh_cookie"]);
     // const [auth, setAuth] = useState(true);
     const [anchorEl, setAnchorEl] = useState(null);
     const [changePassword, setChangePassword] = useState(false);
@@ -78,10 +83,17 @@ function NavigationBar({ isAuthenticated }) {
     } 
 
     const handleDeleteAccountOnClick = () => {
-        setAnchorEl(null);
+        const refresh_token = cookies["refresh_token"]
+        axios.post(URL_USER_SVC_LOGOUT, {username: jwtDecode(refresh_token).username}, {
+            headers: {
+                Authorization: 'Bearer ' + refresh_token
+            }
+        }).then(x => {
+            navigate("/login")
+        })
         removeCookie("access_token");
         removeCookie("refresh_token");
-        // Triggers account deletion!
+        setAnchorEl(null);
     }
 
     return(
@@ -196,7 +208,7 @@ function NavigationBar({ isAuthenticated }) {
                                         Do you wish to end your session? 
                                     </Typography>
                                     <Box display={"flex"} flexDirection={"row"} justifyContent={"flexStart"} style={{ paddingTop: "5%"}}>
-                                        <Button variant={"contained"} href='/login' onClick={handleDeleteAccountOnClick}>Configm Logout</Button>
+                                        <Button variant={"contained"} onClick={handleDeleteAccountOnClick}>Configm Logout</Button>
                                     </Box>
                                 </Box>
                             </Modal>
