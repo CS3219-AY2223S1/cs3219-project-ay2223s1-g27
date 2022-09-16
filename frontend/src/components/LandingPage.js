@@ -4,11 +4,11 @@ import {
     Typography
 } from "@mui/material";
 import {useState} from "react";
-import GroupIcon from '@mui/icons-material/Group';
-import NavigationBar from "./NavigationBar";
+import GroupIcon from '@mui/icons-material/Group'; 
+import NavigationBar from "./NavigationBar";  
+import { useNavigate } from "react-router-dom";
 
-function LandingPage() {  
-
+function LandingPage() {   
     const [difficultyLevel, setDifficultyLevel] = useState(""); 
     const [selectBeginner, setSelectBeginner] = useState(false);
     const [selectIntermediate, setSelectIntermediate] = useState(false);
@@ -33,7 +33,7 @@ function LandingPage() {
         }
     }  
 
-    const isAbleToFindMatch = () => {
+    const isDifficultySelected = () => {
         if(difficultyLevel !== "") {
             return true;
         } else {
@@ -41,17 +41,16 @@ function LandingPage() {
         }
     }
 
+    const navigate = useNavigate();
     const handleFindMatch = (event) => {
         // Navigates to MatchingPage
-        if (difficultyLevel === "") {
-            // Error: No difficulty level found
-        }
+        navigate("/matching", {state: { difficultyLevel: difficultyLevel }}); 
     }
 
     return (
         <>
-        <NavigationBar isAuthenticated={true}/>
-        <Box display={"flex"} justifyContent={"center"} style={{marginTop: "3%"}}>
+        <NavigationBar isAuthenticated={true} />
+        <Box display={"flex"} justifyContent={"center"} style={{marginTop: "3%"}}> 
             <Box display={"flex"} flexDirection={"column"} width={"50%"}>
                 <Typography variant={"h3"} display={"flex"} justifyContent={"center"} marginBottom={"2rem"}>Choose Your Difficulty Level</Typography>
                 <div style={{marginTop:'10px', marginBottom: '10px'}}>
@@ -84,7 +83,7 @@ function LandingPage() {
                 </div>
                 <Box display={"flex"} flexDirection={"row"} justifyContent={"center"} style={{ paddingTop: "5%"}}>
                     <Button 
-                        disabled={!isAbleToFindMatch()} 
+                        disabled={!isDifficultySelected()} 
                         variant={"contained"} 
                         color="primary" 
                         endIcon={<GroupIcon/>} 
