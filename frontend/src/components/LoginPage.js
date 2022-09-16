@@ -9,8 +9,7 @@ import {
     Typography
 } from "@mui/material";
 import {useCookies} from 'react-cookie'
-import {useState} from "react";
-import {useNavigate, Navigate} from 'react-router-dom';
+import {useState} from "react"; 
 import axios from "axios";
 import {URL_USER_SVC_LOGIN, URL_USER_SVC_RESETPASSWORD} from "../configs";
 import {
@@ -20,7 +19,7 @@ import {
     STATUS_CODE_MISSING_FIELD,
     STATUS_DATABASE_FAILURE,
 } from "../constants";
-import {Link, useNavigate, useHistory} from "react-router-dom";
+import {Link, Navigate, useNavigate, useHistory} from "react-router-dom";
 import NavigationBar from "./NavigationBar"; 
 
 function LoginPage() { 

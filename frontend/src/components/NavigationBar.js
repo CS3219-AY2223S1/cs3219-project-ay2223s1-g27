@@ -33,8 +33,7 @@ const modalStyle = {
 
 function NavigationBar({ isAuthenticated }) {
     const navigate = useNavigate();
-    const [cookies,,removeCookie] = useCookies(["access_token", "refresh_cookie"]);
-    // const [auth, setAuth] = useState(true);
+    const [cookies, removeCookie] = useCookies(["access_token", "refresh_cookie"]); 
     const [anchorEl, setAnchorEl] = useState(null);
     const [changePassword, setChangePassword] = useState(false);
     const [newPassword, setNewPassword] = useState("");
@@ -103,7 +102,7 @@ function NavigationBar({ isAuthenticated }) {
                     <Box display={"flex"} flexDirection={"row"} sx={{ flexGrow: 1 }}>
                         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                             <div style={{margin:"1%"}}> 
-                                Welcome, {user}!
+                                Welcome, {jwtDecode(cookies["refresh_token"]).username}!
                             </div>
                         </Typography>
                         <Toolbar>

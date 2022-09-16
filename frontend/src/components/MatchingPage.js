@@ -2,6 +2,8 @@ import {CountdownCircleTimer} from "react-countdown-circle-timer";
 import NavigationBar from "./NavigationBar"; 
 import {io} from "socket.io-client";
 import { useLocation, useNavigate } from "react-router-dom";
+import { jwtDecode } from '../util/auth';
+import { useCookies } from 'react-cookie';
 import {URL_MATCHING_SVC} from "../configs";
 import {
     Box, 
@@ -33,10 +35,11 @@ const buttonStyle = {
 function MatchingPage() { 
     const location = useLocation(); // Location contains username and selected difficulty level
     const navigate = useNavigate();
+    const [cookies] = useCookies(['access_token']);
     const socket = io(URL_MATCHING_SVC, { transports: ['websocket'] });
 
     // Emit matching event here
-    socket.emit('match', { username: location.state.user, difficulty: location.state.difficultyLevel });
+    socket.emit('match', { username: jwtDecode(cookies['access_token']).username, difficulty: location.state.difficultyLevel });
     
     // Listen to matchSuccess event
     socket.once('matchSuccess', (data) => {
@@ -54,11 +57,9 @@ function MatchingPage() {
         socket.removeAllListeners(); 
         handleNoMatchFound();
     }) 
-
-    const [isMatchFound, setIsMatchFound] = useState(null);
+ 
     const [key, setKey] = useState(0);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [waitForMatch, setWaitForMatch] = useState(true);
+    const [isModalOpen, setIsModalOpen] = useState(false); 
 
     const renderTime = ({ remainingTime }) => {
         return (
@@ -70,23 +71,18 @@ function MatchingPage() {
         ); 
     };
      
-    const handleMatchFound = () => {
-        setIsMatchFound(true);
+    const handleMatchFound = () => { 
         navigate("/room", {state: { user: location.state.user }});
     }
 
     const handleNoMatchFound = () => {
         // Disconnect all listeners
-        socket.disconnect(); 
-
-        setIsMatchFound(false);
-        setIsModalOpen(true);
-        setWaitForMatch(false);
+        socket.disconnect();  
+        setIsModalOpen(true); 
     } 
      
     const handleWaitForMatch = () => {
-        socket.disconnect(); 
-        setWaitForMatch(true);
+        socket.disconnect();  
         setIsModalOpen(false);
         setKey(previousKey => previousKey + 1);  
         window.location.reload(false);
