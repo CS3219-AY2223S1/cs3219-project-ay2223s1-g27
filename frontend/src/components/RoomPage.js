@@ -18,7 +18,7 @@ function RoomPage() {
         <>
             <NavigationBar isAuthenticated={true} user={location.state.user} />
             <Box display={"flex"} flexDirection={"column"} width={"30%"} style={{ marginTop: "3%", marginLeft: "3%" }}>
-                <Typography variant={"h3"} marginBottom={"2rem"}>// Room Page //</Typography>
+                <Typography variant={"h3"} marginBottom={"2rem"}>Room Page</Typography>
                 <Box> 
                     <Button variant="contained" onClick={handleLeaveSession}>
                         Leave Session

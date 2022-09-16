@@ -19,7 +19,7 @@ import {
     STATUS_CODE_MISSING_FIELD,
     STATUS_DATABASE_FAILURE,
 } from "../constants";
-import {Link, Navigate, useNavigate, useHistory} from "react-router-dom";
+import {Link, Navigate, useNavigate} from "react-router-dom";
 import NavigationBar from "./NavigationBar"; 
 
 function LoginPage() { 
