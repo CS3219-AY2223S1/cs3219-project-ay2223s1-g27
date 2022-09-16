@@ -70,12 +70,6 @@ export async function loginUser(req, res) {
                     // generate and return JWT token
                     const accessToken = generateAccessToken(username)
                     const refreshToken = generateRefreshToken(username)
-                    res.header('Access-Control-Allow-Credentials', true);
-                    res.header('Access-Control-Allow-Origin', req.headers.origin);
-                    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,UPDATE,OPTIONS');
-                    res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
-                    res.cookie('access_token', accessToken, { maxAge: ACCESS_TOKEN_EXPIRE_TIME, httpOnly: false });
-                    res.cookie('refresh_token', refreshToken, { maxAge: REFRESH_TOKEN_EXPIRE_TIME, httpOnly: false });
                     return res.status(200).json({username: username, accessToken: accessToken, refreshToken: refreshToken, success:true})
                 } else {
                     return res.status(401).json({message: 'Incorrect password!', success:false});
