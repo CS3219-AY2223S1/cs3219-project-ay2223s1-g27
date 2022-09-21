@@ -7,8 +7,8 @@ WORKDIR /usr/src/app
 COPY . .
 
 RUN touch .env && \
-    echo REACT_APP_URI_MATCHING_SVC=http://34.160.41.4 >> .env && \
-    echo REACT_APP_URI_USER_SVC=http://34.160.255.45 >> .env && \
+    echo REACT_APP_URI_MATCHING_SVC=http://localhost >> .env && \
+    echo REACT_APP_URI_USER_SVC=http://localhost >> .env && \
     npm install --legacy-peer-deps && \
     npm run build
 
