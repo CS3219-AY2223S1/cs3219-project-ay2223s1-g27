@@ -75,7 +75,7 @@ function LoginPage() {
         event.preventDefault(); 
         setIsLoggedIn(false); 
 
-        const res = await axios.post(URL_USER_SVC_LOGIN, { username, password }, { withCredentials: true })
+        const res = await axios.post(URL_USER_SVC_LOGIN, { username, password })
             .catch((err) => {
                 if (err.response.status === STATUS_CODE_INCORRECT_PASSWORD || 
                     err.response.status === STATUS_CODE_INVALID_USER ||
