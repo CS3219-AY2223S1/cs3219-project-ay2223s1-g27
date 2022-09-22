@@ -11,7 +11,6 @@ app.options('*', cors())
 import { registerHandlers } from './controller/match-controller.js';
 
 app.get('/', (_, res) => res.send('Hello World from matching-service'))
-app.get('/api/matching/test', (_, res) => res.send('test'))
 
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
