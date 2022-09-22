@@ -6,6 +6,7 @@ FROM node:alpine as build
 WORKDIR /usr/src/app
 COPY . .
 
+# TODO update url after deployment
 RUN touch .env && \
     echo REACT_APP_URI_MATCHING_SVC=http://localhost >> .env && \
     echo REACT_APP_URI_USER_SVC=http://localhost >> .env && \
