@@ -1,4 +1,5 @@
 import UserModel from './user-model.js';
+import PwdResetModel from './pwd-reset-model.js';
 import 'dotenv/config'
 
 //Set up mongoose connection
@@ -28,9 +29,18 @@ export async function updatePassword(username, newPassword) {
   return updatedUser
 }
 
-
 export async function createUser(params) {
   //UserModel schema defines username to be unique, hence no duplicate usernames will exist.
   let userModelDocument = new UserModel(params)
   return userModelDocument
+}
+
+export async function createPwdResetRequest(params) {
+  let pwdResetDocument = new PwdResetModel(params)
+  return pwdResetDocument
+}
+
+export async function getPwdResetRequest(documentId) {
+  let pwdResetRequest = await PwdResetModel.findOneAndDelete({_id: documentId}).exec()
+  return pwdResetRequest
 }

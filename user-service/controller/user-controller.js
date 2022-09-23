@@ -3,6 +3,7 @@ import { ormGetUser as _getUser } from '../model/user-orm.js'
 import { ormDeleteUser as _deleteUser } from '../model/user-orm.js'
 import { ormUpdatePassword as _updatePassword } from '../model/user-orm.js'
 import { generateRefreshToken, generateAccessToken } from './user-token-handler.js'
+import { ormGetPwdResetRequest as _getPwdResetRequest } from '../model/pwd-reset-orm.js'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
@@ -139,24 +140,14 @@ export async function updatePassword(req, res) {
 
 export async function resetPassword(req, res) {
     try {
-        const username = req.body.username
+        const resetId = req.body.resetId
         const newPassword = req.body.newPassword
-        const email = req.body.email
-        if (username && email && newPassword) {
-            if (!emailRegex.test(email)) {
-                return res.status(400).json({message: 'Could not reset password, email format invalid. Email has to contain the @ and . character', success:false});
+        if (resetId && newPassword) {
+            const pwdResetRequest = await _getPwdResetRequest(resetId)
+            if (pwdResetRequest === null) {
+                return res.status(401).json({message: "Password Reset Reset ID invalid, does not exist in database", success:false})
             }
-            const existingUser = await _getUser(username)
-            var userEmail
-            if (existingUser) {
-                userEmail = existingUser.email
-                if (!userEmail) {
-                    return res.status(500).json({message: "No email address for specified user", success:false})
-                }
-                if (userEmail != email) {
-                    return res.status(400).json({message: "Email address does not match database records", success:false})
-                }
-            }
+            const username = pwdResetRequest.username
             const updatedUser = await _updatePassword(username, newPassword)
             if (updatedUser === null) {
                 return res.status(500).json({message: "Error updating user in database", success:false})
