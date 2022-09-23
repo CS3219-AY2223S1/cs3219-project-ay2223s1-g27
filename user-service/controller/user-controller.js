@@ -140,14 +140,18 @@ export async function updatePassword(req, res) {
 
 export async function resetPassword(req, res) {
     try {
+        const username = req.body.username
         const resetId = req.body.resetId
         const newPassword = req.body.newPassword
-        if (resetId && newPassword) {
+        if (resetId && newPassword && username) {
             const pwdResetRequest = await _getPwdResetRequest(resetId)
             if (pwdResetRequest === null) {
                 return res.status(401).json({message: "Password Reset Reset ID invalid, does not exist in database", success:false})
             }
-            const username = pwdResetRequest.username
+            const existingUsername = pwdResetRequest.username
+            if (existingUsername != username) {
+                return res.status(400).json({message: "Invalid username for this request Id", success:false})
+            }
             const updatedUser = await _updatePassword(username, newPassword)
             if (updatedUser === null) {
                 return res.status(500).json({message: "Error updating user in database", success:false})

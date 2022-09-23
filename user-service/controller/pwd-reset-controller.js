@@ -43,7 +43,6 @@ export async function sendPasswordResetEmail(req, res) {
             if (pwdResetRequest.err) {
                 return res.status(400).json({message: 'Could not create a password reset request!', success:false})
             }
-            console.log(pwdResetRequest)
             // the .id getter returns a string containing the mongoDB document id
             const requestId = pwdResetRequest.id
             // document added to mongodb collection
@@ -62,7 +61,6 @@ export async function sendPasswordResetEmail(req, res) {
                 }
             }
             console.log(pwdResetUrl)
-            console.log(emailMessage)
         } else {
             return res.status(404).json({message: 'User does not exist!', success:false});
         }
