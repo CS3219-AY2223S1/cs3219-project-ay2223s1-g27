@@ -53,14 +53,16 @@ export async function sendPasswordResetEmail(req, res) {
             try {
                 await sgMail.send(emailMessage)
                 console.log('Test email sent successfully');
+                console.log("reset ID: " + requestId)
+                return res.status(200).json({username: username, message: `Password reset email sent for user ${username} successfully!`, success:true})
             } catch (error) {
                 console.error('Error sending test email');
                 console.error(error);
                 if (error.response) {
                     console.error(error.response.body)
                 }
+                return res.status(400).json({message: "Error sending password reset email.", success:false})
             }
-            console.log(pwdResetUrl)
         } else {
             return res.status(404).json({message: 'User does not exist!', success:false});
         }
