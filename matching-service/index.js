@@ -13,7 +13,9 @@ import { registerHandlers } from './controller/match-controller.js';
 app.get('/', (_, res) => res.send('Hello World from matching-service'))
 
 const httpServer = createServer(app);
-const io = new Server(httpServer, {});
+const io = new Server(httpServer, {
+  path: "/api/matching"
+});
 
 io.on("connection", socket => {
   registerHandlers(io, socket);
