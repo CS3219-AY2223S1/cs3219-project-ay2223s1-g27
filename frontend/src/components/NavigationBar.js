@@ -33,7 +33,7 @@ const modalStyle = {
 
 function NavigationBar({ isAuthenticated }) {
     const navigate = useNavigate();
-    const [cookies,,removeCookie] = useCookies(["access_token", "refresh_token"]); 
+    const [cookies,,removeCookie] = useCookies(); 
     const [anchorEl, setAnchorEl] = useState(null);
     const [changePassword, setChangePassword] = useState(false);
     const [newPassword, setNewPassword] = useState("");
@@ -59,16 +59,6 @@ function NavigationBar({ isAuthenticated }) {
     }; 
     
     const handleLogOut = async () => {
-        const refresh_token = cookies["refresh_token"]
-        axios.post(URL_USER_SVC_LOGOUT, {username: jwtDecode(refresh_token).username}, {
-            headers: {
-                Authorization: 'Bearer ' + refresh_token
-            }
-        }).then(x => {
-            navigate("/login")
-        })
-        removeCookie("access_token");
-        removeCookie("refresh_token");
         setAnchorEl(null);
         setLogOut(true); 
     } 
@@ -92,6 +82,21 @@ function NavigationBar({ isAuthenticated }) {
     } 
 
     const handleDeleteAccountOnClick = () => {
+        const refresh_token = cookies["refresh_token"]
+        axios.post(URL_USER_SVC_LOGOUT, {username: jwtDecode(refresh_token).username}, {
+            headers: {
+                Authorization: 'Bearer ' + refresh_token
+            }
+        }).then(x => {
+            removeCookie("access_token");
+            removeCookie("refresh_token");
+            navigate("/login");
+        }).catch(err => {
+            console.log(err);
+            removeCookie("access_token");
+            removeCookie("refresh_token");
+            navigate("/login");
+        })
         setAnchorEl(null);
     }
 
@@ -206,7 +211,7 @@ function NavigationBar({ isAuthenticated }) {
                                             Do you wish to end your session? 
                                         </Typography>
                                         <Box display={"flex"} flexDirection={"row"} justifyContent={"flexStart"} style={{ paddingTop: "5%"}}>
-                                            <Button variant={"contained"} href='/login' onClick={handleDeleteAccountOnClick}>Back to Login Page</Button>
+                                            <Button variant={"contained"} onClick={handleDeleteAccountOnClick}>Back to Login Page</Button>
                                         </Box>
                                     </Box>
                                 </Modal> 

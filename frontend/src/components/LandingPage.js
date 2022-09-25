@@ -3,7 +3,7 @@ import {
     Button,
     Typography
 } from "@mui/material";
-import {useState} from "react";
+import { useState } from "react";
 import GroupIcon from '@mui/icons-material/Group'; 
 import NavigationBar from "./NavigationBar";  
 import { useNavigate } from "react-router-dom";

@@ -36,7 +36,7 @@ function LoginPage() {
     const [isEmailValid, setIsEmailValid] = useState(null); 
     const [resetPasswordFailed, setResetPasswordFailed] = useState(null);  
     const [resetPasswordMessage, setResetPasswordMessage] = useState(""); 
-    const [cookies, setCookie] = useCookies(['access_token']);
+    const [cookies, setCookie] = useCookies();
 
     /** Reset Password Logic */
     const handleDialog = () => {  

@@ -27,7 +27,7 @@ export function generateAccessToken(username) {
 
 export function generateRefreshToken(username) {
     try {
-        const refreshToken = jwt.sign({username: username}, jwtRefreshSecretKey, {expiresIn: "20m"})
+        const refreshToken = jwt.sign({username: username}, jwtRefreshSecretKey, {expiresIn: "24h"})
         refreshTokens.push(refreshToken)
         return refreshToken
     } catch (err) {
