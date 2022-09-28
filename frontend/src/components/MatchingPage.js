@@ -4,7 +4,7 @@ import {io} from "socket.io-client";
 import { useLocation, useNavigate } from "react-router-dom";
 import { jwtDecode } from '../util/auth';
 import { useCookies } from 'react-cookie';
-import {URL_MATCHING_SVC} from "../configs";
+import {URL_MATCHING_SVC, PREFIX_MATCHING_SVC} from "../configs";
 import {
     Box, 
     Button,
@@ -36,7 +36,10 @@ function MatchingPage() {
     const location = useLocation(); // Location contains username and selected difficulty level
     const navigate = useNavigate();
     const [cookies] = useCookies(['access_token']);
-    const socket = io(URL_MATCHING_SVC, { transports: ['websocket'] });
+    const socket = io(URL_MATCHING_SVC, { 
+        transports: ['websocket'],
+        path: PREFIX_MATCHING_SVC
+    });
 
     // Emit matching event here
     socket.emit('match', { username: jwtDecode(cookies['access_token']).username, difficulty: location.state.difficultyLevel });
