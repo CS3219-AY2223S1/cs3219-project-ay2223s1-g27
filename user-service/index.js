@@ -15,6 +15,7 @@ app.get("/", (req, res) => res.send("Hello World from user-service"))
 
 import { createUser, loginUser, deleteUser, updatePassword, resetPassword } from './controller/user-controller.js';
 import { validateAccessToken, renewAccessAndRefreshTokens, invalidateRefreshToken } from './controller/user-token-handler.js';
+import { sendPasswordResetEmail } from './controller/pwd-reset-controller.js';
 
 const router = express.Router()
 
@@ -28,6 +29,7 @@ router.post('/logout', invalidateRefreshToken)
 router.delete('/delete', deleteUser)
 router.put('/updatepassword', updatePassword)
 router.put('/resetpassword', resetPassword)
+router.post('/sendresetlink', sendPasswordResetEmail)
 
 app.use('/api/user', router)
 
