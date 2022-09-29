@@ -1,6 +1,9 @@
 
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { jwtDecode } from '../../util/auth';
+import { useCookies } from 'react-cookie';
+import { Alert, Snackbar } from "@mui/material";
 import { io } from "socket.io-client";
 import CodeEditorWindow from "./CodeEditorWindow";
 import axiosApiInstance from "../../axiosApiInstance";
@@ -23,6 +26,9 @@ const javascriptDefault = `// some comment`;
 
 const CodeEditorLanding = () => {
   const location = useLocation(); // Location contains username and selected difficulty level
+  const [cookies] = useCookies();
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [otherUser, setOtherUser] = useState("");
   const [code, setCode] = useState(javascriptDefault);
   const [customInput, setCustomInput] = useState("");
   const [outputDetails, setOutputDetails] = useState(null);
@@ -36,28 +42,30 @@ const CodeEditorLanding = () => {
   });
 
   useEffect(() => {
-    console.log(`finding room_id=${location.state.room_id}`);
     // Emit matching event here
     socket.emit('room', { room_id: location.state.room_id });  
 
     return () => { // component will unmount equivalent
-      socket.emit('leave room', { room_id: location.state.room_id });
+      socket.emit('leave room', { room_id: location.state.room_id, username: jwtDecode(cookies['refresh_token']).username });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  socket.on('receive leave', (data) => {
+    console.log(`user ${data.username} has left the room`);
+    setOtherUser(data.username)
+    setAlertOpen(true);
+  })
 
   const enterPress = useKeyPress("Enter");
   const ctrlPress = useKeyPress("Control");
 
   const onSelectChange = (sl) => {
-    console.log("selected Option...", sl);
     setLanguage(sl);
   };
 
   useEffect(() => {
     if (enterPress && ctrlPress) {
-      console.log("enterPress", enterPress);
-      console.log("ctrlPress", ctrlPress);
       handleCompile();
     }
    // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -99,7 +107,6 @@ const CodeEditorLanding = () => {
     axiosApiInstance
       .request(options)
       .then(function (response) {
-        console.log("res.data", response.data);
         const token = response.data.token;
         checkStatus(token);
       })
@@ -146,7 +153,6 @@ const CodeEditorLanding = () => {
         setProcessing(false);
         setOutputDetails(response.data);
         showSuccessToast(`Compiled Successfully!`);
-        console.log("response.data", response.data);
         return;
       }
     } catch (err) {
@@ -158,7 +164,6 @@ const CodeEditorLanding = () => {
 
   function handleThemeChange(th) {
     const theme = th;
-    console.log("theme...", theme);
 
     if (["light", "vs-dark"].includes(theme.value)) {
       setTheme(theme);
@@ -197,6 +202,10 @@ const CodeEditorLanding = () => {
     });
   };
 
+  const handleClose = () => {
+    setAlertOpen(false);
+  }
+
   return (
     <>
       <ToastContainer
@@ -211,6 +220,11 @@ const CodeEditorLanding = () => {
         pauseOnHover
       />
 
+      <Snackbar open={alertOpen} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="warning" sx={{ width: '100%' }}>
+          {otherUser} has left the room!
+        </Alert>
+      </Snackbar>
       <div className="flex flex-row">
         <div className="px-4 py-2">
           <LanguagesDropdown onSelectChange={onSelectChange} />

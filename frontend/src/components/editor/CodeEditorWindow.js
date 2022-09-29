@@ -20,7 +20,6 @@ const CodeEditorWindow = ({ onChange, language, code, theme, socket }) => {
   };
 
   socket.on('receive code', (payload) => {
-    console.log(`received payload ${payload.newCode}`)
     updateValue(payload.newCode)
   })
 

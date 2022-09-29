@@ -12,6 +12,7 @@ export function registerHandlers(io, socket) {
 
     socket.on('leave room', (data) => {
         console.log("received leaving")
+        socket.broadcast.to(data.room_id).emit('receive leave', data)
         socket.leave(data.room_id)
     });
 
