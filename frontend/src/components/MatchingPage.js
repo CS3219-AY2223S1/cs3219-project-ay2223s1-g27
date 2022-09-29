@@ -35,14 +35,14 @@ const buttonStyle = {
 function MatchingPage() { 
     const location = useLocation(); // Location contains username and selected difficulty level
     const navigate = useNavigate();
-    const [cookies] = useCookies(['access_token']);
+    const [cookies] = useCookies();
     const socket = io(URL_MATCHING_SVC, { 
         transports: ['websocket'],
         path: PREFIX_MATCHING_SVC
     });
 
     // Emit matching event here
-    socket.emit('match', { username: jwtDecode(cookies['access_token']).username, difficulty: location.state.difficultyLevel });
+    socket.emit('match', { username: jwtDecode(cookies['refresh_token']).username, difficulty: location.state.difficultyLevel });
     
     // Listen to matchSuccess event
     socket.once('matchSuccess', (data) => {

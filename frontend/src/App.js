@@ -7,8 +7,12 @@ import MatchingPage from "./components/MatchingPage";
 import {Box} from "@mui/material"; 
 import { PrivateRoute } from "./components/PrivateRoute";
 import RoomPage from "./components/RoomPage";
+import { initAxiosApiInstance } from "./axiosApiInstance";
+import { useCookies } from "react-cookie";
  
-function App() {  
+function App() {
+    const [cookies, setCookie] = useCookies();
+    initAxiosApiInstance(cookies, setCookie);
     return (
         <div className="App">
             {/* <NavigationBar isAuthenticated={true}/> */}
