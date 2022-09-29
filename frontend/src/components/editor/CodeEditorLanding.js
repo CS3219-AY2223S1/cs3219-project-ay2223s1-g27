@@ -1,5 +1,6 @@
 
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import CodeEditorWindow from "./CodeEditorWindow";
 import axiosApiInstance from "../../axiosApiInstance";
 import { classnames } from "../../util/general";
@@ -16,9 +17,12 @@ import OutputDetails from "./OutputDetails";
 import ThemeDropdown from "./ThemeDropdown";
 import LanguagesDropdown from "./LanguagesDropdown";
 
+import { PREFIX_COLLAB_SVC, URL_COLLAB_SVC } from "../../configs";
+
 const javascriptDefault = `// some comment`;
 
 const CodeEditorLanding = () => {
+  const location = useLocation(); // Location contains username and selected difficulty level
   const [code, setCode] = useState(javascriptDefault);
   const [customInput, setCustomInput] = useState("");
   const [outputDetails, setOutputDetails] = useState(null);
@@ -40,6 +44,7 @@ const CodeEditorLanding = () => {
       console.log("ctrlPress", ctrlPress);
       handleCompile();
     }
+   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ctrlPress, enterPress]);
 
   const onChange = (action, data) => {
@@ -53,6 +58,7 @@ const CodeEditorLanding = () => {
       }
     }
   };
+
   const handleCompile = () => {
     setProcessing(true);
     const formData = {
@@ -144,6 +150,7 @@ const CodeEditorLanding = () => {
       defineTheme(theme.value).then((_) => setTheme(theme));
     }
   }
+
   useEffect(() => {
     defineTheme("oceanic-next").then((_) =>
       setTheme({ value: "oceanic-next", label: "Oceanic Next" })
@@ -161,6 +168,7 @@ const CodeEditorLanding = () => {
       progress: undefined,
     });
   };
+
   const showErrorToast = (msg, timer) => {
     toast.error(msg || `Something went wrong! Please try again.`, {
       position: "top-right",

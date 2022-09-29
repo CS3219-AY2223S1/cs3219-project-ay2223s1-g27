@@ -16,5 +16,8 @@ export const URL_USER_SVC_REFRESH_TOKEN = URL_USER_SVC + PREFIX_REFRESH_TOKEN;
 
 const URI_MATCHING_SVC = process.env.REACT_APP_URI_MATCHING_SVC || "http://localhost:8001";
 export const PREFIX_MATCHING_SVC = "/api/matching";
-
 export const URL_MATCHING_SVC = URI_MATCHING_SVC;
+
+const URI_COLLAB_SVC = process.env.REACT_APP_URI_COLLAB_SVC || "http://localhost:8003";
+export const PREFIX_COLLAB_SVC = "/api/collab";
+export const URL_COLLAB_SVC = URI_COLLAB_SVC;
