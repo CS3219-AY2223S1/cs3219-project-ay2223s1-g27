@@ -41,6 +41,7 @@ const CodeEditorLanding = () => {
       handleCompile();
     }
   }, [ctrlPress, enterPress]);
+
   const onChange = (action, data) => {
     switch (action) {
       case "code": {
@@ -186,7 +187,6 @@ const CodeEditorLanding = () => {
         pauseOnHover
       />
 
-      <div className="h-4 w-full bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500"></div>
       <div className="flex flex-row">
         <div className="px-4 py-2">
           <LanguagesDropdown onSelectChange={onSelectChange} />
