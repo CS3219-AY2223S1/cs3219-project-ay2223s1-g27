@@ -16,7 +16,7 @@ export function registerHandlers(io, socket) {
     });
 
     socket.on('coding event', function(data) {
-        console.log(`received ${data.room_id}`)
+        console.log(`received coding ${data.room_id}`)
         socket.broadcast.to(data.room_id).emit('receive code', data)
     });
 }

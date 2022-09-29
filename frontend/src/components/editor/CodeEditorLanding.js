@@ -1,10 +1,12 @@
 
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { io } from "socket.io-client";
 import CodeEditorWindow from "./CodeEditorWindow";
 import axiosApiInstance from "../../axiosApiInstance";
 import { classnames } from "../../util/general";
 import { languageOptions } from "../../constants/languageOptions";
+import { PREFIX_COLLAB_SVC, URL_COLLAB_SVC } from "../../configs";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -20,12 +22,29 @@ import LanguagesDropdown from "./LanguagesDropdown";
 const javascriptDefault = `// some comment`;
 
 const CodeEditorLanding = () => {
+  const location = useLocation(); // Location contains username and selected difficulty level
   const [code, setCode] = useState(javascriptDefault);
   const [customInput, setCustomInput] = useState("");
   const [outputDetails, setOutputDetails] = useState(null);
   const [processing, setProcessing] = useState(null);
   const [theme, setTheme] = useState("cobalt");
   const [language, setLanguage] = useState(languageOptions[0]);
+
+  const socket = io(URL_COLLAB_SVC, { 
+    transports: ['websocket'],
+    path: PREFIX_COLLAB_SVC
+  });
+
+  useEffect(() => {
+    console.log(`finding room_id=${location.state.room_id}`);
+    // Emit matching event here
+    socket.emit('room', { room_id: location.state.room_id });  
+
+    return () => { // component will unmount equivalent
+      socket.emit('leave room', { room_id: location.state.room_id });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const enterPress = useKeyPress("Enter");
   const ctrlPress = useKeyPress("Control");
@@ -207,6 +226,7 @@ const CodeEditorLanding = () => {
             onChange={onChange}
             language={language?.value}
             theme={theme.value}
+            socket={socket}
           />
         </div>
 
