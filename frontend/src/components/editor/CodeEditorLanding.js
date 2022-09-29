@@ -17,12 +17,9 @@ import OutputDetails from "./OutputDetails";
 import ThemeDropdown from "./ThemeDropdown";
 import LanguagesDropdown from "./LanguagesDropdown";
 
-import { PREFIX_COLLAB_SVC, URL_COLLAB_SVC } from "../../configs";
-
 const javascriptDefault = `// some comment`;
 
 const CodeEditorLanding = () => {
-  const location = useLocation(); // Location contains username and selected difficulty level
   const [code, setCode] = useState(javascriptDefault);
   const [customInput, setCustomInput] = useState("");
   const [outputDetails, setOutputDetails] = useState(null);
