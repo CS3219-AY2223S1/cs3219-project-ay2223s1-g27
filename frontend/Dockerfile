@@ -9,6 +9,7 @@ COPY . .
 RUN touch .env && \
     echo REACT_APP_URI_MATCHING_SVC=http://34.160.41.4 >> .env && \
     echo REACT_APP_URI_USER_SVC=http://34.160.41.4 >> .env && \
+    echo REACT_APP_URI_COLLAB_SVC=http://34.160.41.4 >> .env && \
     npm install --legacy-peer-deps && \
     npm run build
 

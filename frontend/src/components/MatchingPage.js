@@ -50,7 +50,7 @@ function MatchingPage() {
         console.log(data.message);
         console.log(data.room_id);
         socket.removeAllListeners();  
-        handleMatchFound();
+        handleMatchFound(data.room_id);
     })
 
     // Listen to matchFail event
@@ -74,8 +74,8 @@ function MatchingPage() {
         ); 
     };
      
-    const handleMatchFound = () => { 
-        navigate("/room", {state: { user: location.state.user }});
+    const handleMatchFound = (room_id) => { 
+        navigate("/room", {state: { user: location.state.user, room_id: room_id }});
     }
 
     const handleNoMatchFound = () => {

@@ -40,6 +40,7 @@ const CodeEditorLanding = () => {
       console.log("ctrlPress", ctrlPress);
       handleCompile();
     }
+   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ctrlPress, enterPress]);
 
   const onChange = (action, data) => {
@@ -53,6 +54,7 @@ const CodeEditorLanding = () => {
       }
     }
   };
+
   const handleCompile = () => {
     setProcessing(true);
     const formData = {
@@ -144,6 +146,7 @@ const CodeEditorLanding = () => {
       defineTheme(theme.value).then((_) => setTheme(theme));
     }
   }
+
   useEffect(() => {
     defineTheme("oceanic-next").then((_) =>
       setTheme({ value: "oceanic-next", label: "Oceanic Next" })
@@ -161,6 +164,7 @@ const CodeEditorLanding = () => {
       progress: undefined,
     });
   };
+
   const showErrorToast = (msg, timer) => {
     toast.error(msg || `Something went wrong! Please try again.`, {
       position: "top-right",
