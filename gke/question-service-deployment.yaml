@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: question-service-deployment
+  labels:
+    app: question-service
+spec:
+  replicas: 1 
+  selector:
+    matchLabels:
+      app: question-service
+  template:
+    metadata:
+      labels:
+        app: question-service
+    spec:
+      containers:
+        - name: question-service-deployment
+          image: cs3219g27/question-service:latest
+          ports:
+            - name: qs-http
+              containerPort: 8002
+          resources:
+            limits:
+              cpu: 60m
+              memory: 150Mi

@@ -1,11 +1,11 @@
-name: gateway-cd
+name: question-service-cd
 
 on:
   push:
     branches:
       - "main"
     paths:
-      - gateway/**
+      - question-service/**
   pull_request:
 
 jobs:
@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./gateway
+        working-directory: ./question-service
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -27,10 +27,10 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
-          context: ./gateway
-          file: ./gateway/Dockerfile
+          context: ./question-service
+          file: ./question-service/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/gateway:latest
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/question-service:latest
 
   Deploy:
     needs: build
@@ -45,4 +45,4 @@ jobs:
           CLUSTER_NAME: cs3219g27
           ZONE_NAME: asia-southeast1-a
         with:
-          args: rollout restart -f gke/gateway-deployment.yaml
+          args: apply -f gke/
