@@ -61,8 +61,19 @@ const CodeEditorLanding = () => {
   const ctrlPress = useKeyPress("Control");
 
   const onSelectChange = (sl) => {
+    socket.emit('language event', { room_id: location.state.room_id, language_id: sl.id })
     setLanguage(sl);
   };
+
+  socket.on('receive language', (payload) => {
+    console.log(payload)
+    languageOptions.forEach(x => {
+      if (x.id === payload.language_id) {
+        console.log(`setting language to${x.name}`)
+        setLanguage(x);
+      }
+    })
+  })
 
   useEffect(() => {
     if (enterPress && ctrlPress) {
@@ -227,7 +238,10 @@ const CodeEditorLanding = () => {
       </Snackbar>
       <div className="flex flex-row">
         <div className="px-4 py-2">
-          <LanguagesDropdown onSelectChange={onSelectChange} />
+          <LanguagesDropdown 
+            language={language}
+            onSelectChange={onSelectChange}
+          />
         </div>
         <div className="px-4 py-2">
           <ThemeDropdown handleThemeChange={handleThemeChange} theme={theme} />
@@ -236,7 +250,7 @@ const CodeEditorLanding = () => {
       <div className="flex flex-row space-x-4 items-start px-4 py-4">
         <div className="flex flex-row w-full h-full justify-start items-end">
           <div className="grid grid-cols-2 gap-4 w-full">
-            <QuestionWindow />
+            <QuestionWindow socket={socket} />
             <CodeEditorWindow
               code={code}
               onChange={onChange}

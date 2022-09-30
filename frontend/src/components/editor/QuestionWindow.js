@@ -6,7 +6,7 @@ import { URL_QUESTION_SVC_QUESTIONS, URL_QUESTION_SVC_QUESTION } from "../../con
 import QuestionDropdown from "./QuestionDropdown";
 import QuestionDisplay from "./QuestionDisplay";
 
-export default function QuestionWindow() {
+export default function QuestionWindow({socket}) {
     const location = useLocation();
     let [questions, setQuestions] = useState([]);
     let [titleSlug, setTitleSlug] = useState("");
@@ -18,7 +18,7 @@ export default function QuestionWindow() {
                 console.log(res.data.problemsetQuestionList.questions)
                 setQuestions(res.data.problemsetQuestionList.questions)
             })
-
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(() => {
@@ -46,6 +46,7 @@ export default function QuestionWindow() {
                     value: q.titleSlug,
                     key: q.titleSlug
                 }))}
+                socket={socket}
             />
             <QuestionDisplay
                 content={content}
