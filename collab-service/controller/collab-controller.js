@@ -31,4 +31,9 @@ export function registerHandlers(io, socket) {
         console.log(`received question ${data.room_id}`)
         socket.broadcast.to(data.room_id).emit('receive question', data)
     });
+
+    socket.on('output event', function(data) {
+        console.log(`received output ${data.room_id}`)
+        socket.broadcast.to(data.room_id).emit('receive output', data)
+    });
 }

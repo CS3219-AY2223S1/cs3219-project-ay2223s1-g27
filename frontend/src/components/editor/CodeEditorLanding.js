@@ -6,7 +6,7 @@ import { Alert, Snackbar } from "@mui/material";
 import { io } from "socket.io-client";
 import CodeEditorWindow from "./CodeEditorWindow";
 import QuestionWindow from "./QuestionWindow";
-import axiosApiInstance from "../../axiosApiInstance";
+import axios from "axios";
 import { classnames } from "../../util/general";
 import { languageOptions } from "../../constants/languageOptions";
 import { PREFIX_COLLAB_SVC, URL_COLLAB_SVC } from "../../configs";
@@ -115,7 +115,7 @@ const CodeEditorLanding = () => {
       data: formData,
     };
 
-    axiosApiInstance
+    axios
       .request(options)
       .then(function (response) {
         const token = response.data.token;
@@ -150,7 +150,7 @@ const CodeEditorLanding = () => {
       },
     };
     try {
-      let response = await axiosApiInstance.request(options);
+      let response = await axios.request(options);
       let statusId = response.data.status?.id;
 
       // Processed - we have a result
@@ -163,7 +163,7 @@ const CodeEditorLanding = () => {
       } else {
         setProcessing(false);
         setOutputDetails(response.data);
-        showSuccessToast(`Compiled Successfully!`);
+        socket.emit('output event', { room_id: location.state.room_id, outputDetails: response.data })
         return;
       }
     } catch (err) {
@@ -172,6 +172,11 @@ const CodeEditorLanding = () => {
       showErrorToast();
     }
   };
+
+  socket.on('receive output', (payload) => {
+    showSuccessToast(`Compiled Successfully!`);
+    setOutputDetails(payload.outputDetails)
+  })
 
   function handleThemeChange(th) {
     const theme = th;
