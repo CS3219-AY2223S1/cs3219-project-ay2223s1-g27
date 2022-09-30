@@ -26,7 +26,6 @@ RUN --mount=type=bind,target=. \
   export REACT_APP_RAPID_API_KEY=$(cat /run/secrets/REACT_APP_RAPID_API_KEY)
 RUN echo REACT_APP_RAPID_API_KEY=$REACT_APP_RAPID_API_KEY >> .env
 
-RUN cat /run/secrets/REACT_APP_RAPID_API_KEY
 RUN cat .env
 
 RUN npm install --legacy-peer-deps && \
