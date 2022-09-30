@@ -49,7 +49,7 @@ export async function sendPasswordResetEmail(req, res) {
             const frontendUrl = process.env.FRONTEND_URL
             const pwdResetUrl = frontendUrl + "/" + requestId
             // const emailMessage = generateEmailMessage('zhen.teng@hotmail.com', username, pwdResetUrl)
-            const emailMessage = generateEmailMessage(email, pwdResetUrl)
+            const emailMessage = generateEmailMessage(email, username, pwdResetUrl)
             try {
                 await sgMail.send(emailMessage)
                 console.log('Test email sent successfully');
