@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { jwtDecode } from '../../util/auth';
 import { useCookies } from 'react-cookie';
-import { Alert, Snackbar } from "@mui/material";
+import { Alert, Snackbar, Link } from "@mui/material";
 import { io } from "socket.io-client";
 import CodeEditorWindow from "./CodeEditorWindow";
 import QuestionWindow from "./QuestionWindow";
@@ -35,6 +35,7 @@ const CodeEditorLanding = () => {
   const [processing, setProcessing] = useState(null);
   const [theme, setTheme] = useState("cobalt");
   const [language, setLanguage] = useState(languageOptions[0]);
+  const [titleSlug, setTitleSlug] = useState("");
 
   const socket = io(URL_COLLAB_SVC, { 
     transports: ['websocket'],
@@ -238,7 +239,12 @@ const CodeEditorLanding = () => {
 
       <Snackbar open={alertOpen} onClose={handleClose}>
         <Alert onClose={handleClose} severity="warning" sx={{ width: '100%' }}>
-          {otherUser} has left the room!
+          <span>{`${otherUser} has left the room! `}</span>
+          <span>{`Continue `}
+            <Link href={`https://leetcode.com/problems/${titleSlug}`} target="_blank" rel="noopener noreferrer" underline="always">
+              here
+            </Link>
+          </span>
         </Alert>
       </Snackbar>
       <div className="flex flex-row">
@@ -255,7 +261,7 @@ const CodeEditorLanding = () => {
       <div className="flex flex-row space-x-4 items-start px-4 py-4">
         <div className="flex flex-row w-full h-full justify-start items-end">
           <div className="grid grid-cols-2 gap-4 w-full">
-            <QuestionWindow socket={socket} />
+            <QuestionWindow socket={socket} titleSlug={titleSlug} setTitleSlug={setTitleSlug} />
             <CodeEditorWindow
               code={code}
               onChange={onChange}
