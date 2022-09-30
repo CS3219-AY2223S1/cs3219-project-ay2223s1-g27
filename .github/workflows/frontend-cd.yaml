@@ -31,11 +31,7 @@ jobs:
           file: ./frontend/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/frontend:latest
-          secrets: |
-            "REACT_APP_RAPID_API_URL=${{ secrets.REACT_APP_RAPID_API_URL }}"
-            "REACT_APP_RAPID_API_HOST=${{ secrets.REACT_APP_RAPID_API_HOST }}"
-            "REACT_APP_RAPID_API_KEY=${{ secrets.REACT_APP_RAPID_API_KEY }}"
-
+          
   Deploy:
     needs: build
     runs-on: ubuntu-latest
