@@ -9,29 +9,11 @@ COPY . .
 RUN touch .env && \
     echo REACT_APP_URI_MATCHING_SVC=http://34.160.41.4 >> .env && \
     echo REACT_APP_URI_USER_SVC=http://34.160.41.4 >> .env && \
-    echo REACT_APP_URI_COLLAB_SVC=http://34.160.41.4 >> .env
-
-RUN --mount=type=bind,target=. \
-  --mount=type=secret,id=REACT_APP_RAPID_API_URL \
-  export REACT_APP_RAPID_API_URL=$(cat /run/secrets/REACT_APP_RAPID_API_URL) && \
-  echo REACT_APP_RAPID_API_URL=$REACT_APP_RAPID_API_URL >> .env
-
-RUN --mount=type=bind,target=. \
-  --mount=type=secret,id=REACT_APP_RAPID_API_HOST \
-  export REACT_APP_RAPID_API_HOST=$(cat /run/secrets/REACT_APP_RAPID_API_HOST) && \
-  echo REACT_APP_RAPID_API_HOST=$REACT_APP_RAPID_API_HOST >> .env
-
-RUN --mount=type=bind,target=. \
-  --mount=type=secret,id=REACT_APP_RAPID_API_KEY \
-  export REACT_APP_RAPID_API_KEY=$(cat /run/secrets/REACT_APP_RAPID_API_KEY) && \
-  echo REACT_APP_RAPID_API_KEY=$REACT_APP_RAPID_API_KEY >> .env
-
-RUN --mount=type=bind,target=. \
-  --mount=type=secret,id=REACT_APP_RAPID_API_KEY \
-  cat /run/secrets/REACT_APP_RAPID_API_KEY
-RUN cat .env
-
-RUN npm install --legacy-peer-deps && \
+    echo REACT_APP_URI_COLLAB_SVC=http://34.160.41.4 >> .env && \
+    echo REACT_APP_RAPID_API_URL=https://judge0-ce.p.rapidapi.com/submissions >> .env && \
+    echo REACT_APP_RAPID_API_HOST=judge0-ce.p.rapidapi.com >> .env && \
+    echo REACT_APP_RAPID_API_KEY=8e10b077b8msh375ad963d374707p1e6cacjsna72e350a2322 >> .env && \
+    npm install --legacy-peer-deps && \
     npm run build
 
 FROM node:alpine as main
