@@ -10,6 +10,9 @@ RUN touch .env && \
     echo REACT_APP_URI_MATCHING_SVC=http://34.160.41.4 >> .env && \
     echo REACT_APP_URI_USER_SVC=http://34.160.41.4 >> .env && \
     echo REACT_APP_URI_COLLAB_SVC=http://34.160.41.4 >> .env && \
+    echo "REACT_APP_RAPID_API_URL=$(cat /run/secrets/REACT_APP_RAPID_API_URL)" >> .env && \
+    echo "REACT_APP_RAPID_API_HOST=$(cat /run/secrets/REACT_APP_RAPID_API_HOST)" >> .env && \
+    echo "REACT_APP_RAPID_API_KEY=$(cat /run/secrets/REACT_APP_RAPID_API_KEY)" >> .env && \
     npm install --legacy-peer-deps && \
     npm run build
 
