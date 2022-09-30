@@ -13,15 +13,15 @@ RUN touch .env && \
 
 RUN --mount=type=bind,target=. \
   --mount=type=secret,id=REACT_APP_RAPID_API_URL \
-  echo "REACT_APP_RAPID_API_URL=$(cat /run/secrets/REACT_APP_RAPID_API_URL)" >> .env
+  REACT_APP_RAPID_API_URL=$(cat /run/secrets/REACT_APP_RAPID_API_URL)
 
 RUN --mount=type=bind,target=. \
   --mount=type=secret,id=REACT_APP_RAPID_API_HOST \
-  echo "REACT_APP_RAPID_API_HOST=$(cat /run/secrets/REACT_APP_RAPID_API_HOST)" >> .env
+  REACT_APP_RAPID_API_HOST=$(cat /run/secrets/REACT_APP_RAPID_API_HOST)
 
 RUN --mount=type=bind,target=. \
   --mount=type=secret,id=REACT_APP_RAPID_API_KEY \
-  echo "REACT_APP_RAPID_API_KEY=$(cat /run/secrets/REACT_APP_RAPID_API_KEY)" >> .env
+  REACT_APP_RAPID_API_KEY=$(cat /run/secrets/REACT_APP_RAPID_API_KEY)
 
 RUN npm install --legacy-peer-deps && \
     npm run build
