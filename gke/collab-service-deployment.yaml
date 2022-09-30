@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: collab-service-deployment
+  labels:
+    app: collab-service
+spec:
+  replicas: 1 
+  selector:
+    matchLabels:
+      app: collab-service
+  template:
+    metadata:
+      labels:
+        app: collab-service
+    spec:
+      containers:
+        - name: collab-service-deployment
+          image: cs3219g27/collab-service:latest
+          ports:
+            - name: cs-http
+              containerPort: 8003
+          resources:
+            limits:
+              cpu: 60m
+              memory: 150Mi
