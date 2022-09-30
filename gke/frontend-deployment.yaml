@@ -22,8 +22,8 @@ spec:
               containerPort: 3000
           resources:
             limits:
-              cpu: 40m
-              memory: 300Mi
+              cpu: 100m
+              memory: 400Mi
           env: 
             - name: REACT_APP_RAPID_API_URL
               valueFrom:
