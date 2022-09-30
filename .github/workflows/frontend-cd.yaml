@@ -25,12 +25,16 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
       - name: Build and push
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         with:
           context: ./frontend
           file: ./frontend/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/frontend:latest
+          secrets: |
+            "REACT_APP_RAPID_API_URL=${{ secrets.REACT_APP_RAPID_API_URL }}"
+            "REACT_APP_RAPID_API_HOST=${{ secrets.REACT_APP_RAPID_API_HOST }}"
+            "REACT_APP_RAPID_API_KEY=${{ secrets.REACT_APP_RAPID_API_KEY }}"
 
   Deploy:
     needs: build
