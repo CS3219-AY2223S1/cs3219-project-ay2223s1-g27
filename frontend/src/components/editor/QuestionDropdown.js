@@ -2,13 +2,13 @@ import React from "react";
 import Select from "react-select";
 import { customStyles } from "../../constants/customStyles";
 
-const QuestionDropdown = ({ handleQuestionChange, question, questions, socket }) => {
+const QuestionDropdown = ({ handleQuestionChange, questions, questionName }) => {
   return (
     <Select
-      placeholder={`Select Question`}
+      placeholder={questionName}
       // options={languageOptions}
       options={questions}
-      value={question}
+      value={questionName}
       styles={customStyles}
       onChange={handleQuestionChange}
     />

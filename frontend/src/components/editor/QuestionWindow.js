@@ -10,6 +10,7 @@ export default function QuestionWindow({socket}) {
     const location = useLocation();
     let [questions, setQuestions] = useState([]);
     let [titleSlug, setTitleSlug] = useState("");
+    let [questionName, setQuestionName] = useState("Select Question");
     let [content, setContent] = useState("");
 
     useEffect(() => {
@@ -31,8 +32,16 @@ export default function QuestionWindow({socket}) {
     }, [titleSlug])
 
     const handleQuestionChange = (q) => {
+        socket.emit('question event', { room_id: location.state.room_id, titleSlug: q.value, questionName: q.label });
+        setQuestionName(q.label);
         setTitleSlug(q.value);
     }
+
+    socket.on('receive question', (payload) => {
+        console.log(`received question with titleSlug=${payload.titleSlug} and name=${payload.questionName}`)
+        setTitleSlug(payload.titleSlug);
+        setQuestionName(payload.questionName);
+    })
 
     return <div style={{
         height:"85vh",
@@ -46,7 +55,7 @@ export default function QuestionWindow({socket}) {
                     value: q.titleSlug,
                     key: q.titleSlug
                 }))}
-                socket={socket}
+                questionName={questionName}
             />
             <QuestionDisplay
                 content={content}
