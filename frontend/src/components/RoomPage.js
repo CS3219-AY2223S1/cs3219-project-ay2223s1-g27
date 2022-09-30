@@ -10,11 +10,12 @@ import NavigationBar from "./NavigationBar";
 function RoomPage() {
     const location = useLocation();
     const navigate = useNavigate();
+    console.log(location.state.difficultyLevel)
 
     const handleLeaveSession = () => {
         navigate("/landing", {state: { user: location.state.user }});
     }
-    
+
     return (
         <>
             <NavigationBar isAuthenticated={true} user={location.state.user} />

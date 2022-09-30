@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { jwtDecode } from '../../util/auth';
@@ -6,6 +5,7 @@ import { useCookies } from 'react-cookie';
 import { Alert, Snackbar } from "@mui/material";
 import { io } from "socket.io-client";
 import CodeEditorWindow from "./CodeEditorWindow";
+import QuestionWindow from "./QuestionWindow";
 import axiosApiInstance from "../../axiosApiInstance";
 import { classnames } from "../../util/general";
 import { languageOptions } from "../../constants/languageOptions";
@@ -234,14 +234,17 @@ const CodeEditorLanding = () => {
         </div>
       </div>
       <div className="flex flex-row space-x-4 items-start px-4 py-4">
-        <div className="flex flex-col w-full h-full justify-start items-end">
-          <CodeEditorWindow
-            code={code}
-            onChange={onChange}
-            language={language?.value}
-            theme={theme.value}
-            socket={socket}
-          />
+        <div className="flex flex-row w-full h-full justify-start items-end">
+          <div className="grid grid-cols-2 gap-4 w-full">
+            <QuestionWindow />
+            <CodeEditorWindow
+              code={code}
+              onChange={onChange}
+              language={language?.value}
+              theme={theme.value}
+              socket={socket}
+            />
+          </div>
         </div>
 
         <div className="right-container flex flex-shrink-0 w-[30%] flex-col">

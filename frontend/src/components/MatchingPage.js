@@ -75,7 +75,7 @@ function MatchingPage() {
     };
      
     const handleMatchFound = (room_id) => { 
-        navigate("/room", {state: { user: location.state.user, room_id: room_id }});
+        navigate("/room", {state: { user: location.state.user, room_id: room_id, difficultyLevel: location.state.difficultyLevel }});
     }
 
     const handleNoMatchFound = () => {
@@ -101,7 +101,8 @@ function MatchingPage() {
 
     const handleProceedWithoutMatch = () => {
         setIsModalOpen(false);
-        navigate("/room", {state: { user: location.state.user }});
+        console.log(location.state.difficultyLevel)
+        navigate("/room", {state: { user: location.state.user, difficultyLevel: location.state.difficultyLevel }});
         
         // Disconnect all listeners
         socket.disconnect(); 
