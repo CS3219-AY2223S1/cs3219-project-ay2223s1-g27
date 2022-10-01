@@ -33,7 +33,7 @@ export function registerHandlers(io, socket) {
       difficulty = difficulty.toUpperCase();
       const difficulties = Match.getAttributes().difficulty.values;
       if (!difficulties.includes(difficulty)) {
-        console.log(`Incorect match request argument format! difficulty=${difficulty}`);
+        console.log(`Incorrect match request argument format! difficulty=${difficulty}`);
         sendMatchFail(socket, { message: `Incorrect match request argument format! difficulty=${difficulty}` });
         return;
       }
