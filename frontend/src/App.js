@@ -7,20 +7,25 @@ import MatchingPage from "./components/MatchingPage";
 import {Box} from "@mui/material"; 
 import { PrivateRoute } from "./components/PrivateRoute";
 import RoomPage from "./components/RoomPage";
+import { initAxiosApiInstance } from "./axiosApiInstance";
+import { useCookies } from "react-cookie";
+import { PREFIX_FRONTEND_LANDING, PREFIX_FRONTEND_LOGIN, PREFIX_FRONTEND_MATCHING, PREFIX_FRONTEND_ROOM, PREFIX_FRONTEND_ROOT, PREFIX_FRONTEND_SIGNUP } from "./configs";
  
-function App() {  
+function App() {
+    const [cookies, setCookie] = useCookies();
+    initAxiosApiInstance(cookies, setCookie);
     return (
         <div className="App">
             {/* <NavigationBar isAuthenticated={true}/> */}
             <Box display={"flex"} flexDirection={"column"} >
                 <Router>
                     <Routes>
-                        <Route exact path="/" element={<Navigate replace to="/login"/>}></Route>
-                        <Route path="/signup" element={<SignupPage/>}/> 
-                        <Route path="/login" element={<LoginPage/>}/>
-                        <Route path="/landing" element={<PrivateRoute><LandingPage/></PrivateRoute>}/> 
-                        <Route path="/matching" element={<MatchingPage/>}/>
-                        <Route path="/room" element={<RoomPage/>}/>
+                        <Route exact path={PREFIX_FRONTEND_ROOT} element={<Navigate replace to="/login"/>}></Route>
+                        <Route path={PREFIX_FRONTEND_SIGNUP} element={<SignupPage/>}/> 
+                        <Route path={PREFIX_FRONTEND_LOGIN} element={<LoginPage/>}/>
+                        <Route path={PREFIX_FRONTEND_LANDING} element={<PrivateRoute><LandingPage/></PrivateRoute>}/> 
+                        <Route path={PREFIX_FRONTEND_MATCHING} element={<MatchingPage/>}/>
+                        <Route path={PREFIX_FRONTEND_ROOM} element={<RoomPage/>}/>
                     </Routes>
                 </Router>
             </Box>

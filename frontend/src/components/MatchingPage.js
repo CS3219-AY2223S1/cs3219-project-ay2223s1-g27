@@ -35,14 +35,14 @@ const buttonStyle = {
 function MatchingPage() { 
     const location = useLocation(); // Location contains username and selected difficulty level
     const navigate = useNavigate();
-    const [cookies] = useCookies(['access_token']);
+    const [cookies] = useCookies();
     const socket = io(URL_MATCHING_SVC, { 
         transports: ['websocket'],
         path: PREFIX_MATCHING_SVC
     });
 
     // Emit matching event here
-    socket.emit('match', { username: jwtDecode(cookies['access_token']).username, difficulty: location.state.difficultyLevel });
+    socket.emit('match', { username: jwtDecode(cookies['refresh_token']).username, difficulty: location.state.difficultyLevel });
     
     // Listen to matchSuccess event
     socket.once('matchSuccess', (data) => {
@@ -50,7 +50,7 @@ function MatchingPage() {
         console.log(data.message);
         console.log(data.room_id);
         socket.removeAllListeners();  
-        handleMatchFound();
+        handleMatchFound(data.room_id);
     })
 
     // Listen to matchFail event
@@ -74,8 +74,8 @@ function MatchingPage() {
         ); 
     };
      
-    const handleMatchFound = () => { 
-        navigate("/room", {state: { user: location.state.user }});
+    const handleMatchFound = (room_id) => { 
+        navigate("/room", {state: { user: location.state.user, room_id: room_id, difficultyLevel: location.state.difficultyLevel }});
     }
 
     const handleNoMatchFound = () => {
@@ -101,7 +101,8 @@ function MatchingPage() {
 
     const handleProceedWithoutMatch = () => {
         setIsModalOpen(false);
-        navigate("/room", {state: { user: location.state.user }});
+        console.log(location.state.difficultyLevel)
+        navigate("/room", {state: { user: location.state.user, difficultyLevel: location.state.difficultyLevel }});
         
         // Disconnect all listeners
         socket.disconnect(); 
