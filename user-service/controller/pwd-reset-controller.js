@@ -6,6 +6,7 @@ import sgMail from '@sendgrid/mail'
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 const emailRegex = RegExp("\\S+@\\S+\\.\\S+")
+const frontend_resetpwd_baseurl = process.env.FRONTEND_URL + "/resetpassword"
 
 function generateEmailMessage(recipientEmail, username, pwdResetUrl) {
     const body = 'You have requested to reset the password for the PeerPrep account with username: ' + username +'. \n Please click on the following link to do so.';
@@ -46,10 +47,9 @@ export async function sendPasswordResetEmail(req, res) {
             // the .id getter returns a string containing the mongoDB document id
             const requestId = pwdResetRequest.id
             // document added to mongodb collection
-            const frontendUrl = process.env.FRONTEND_URL
-            const pwdResetUrl = frontendUrl + "/" + requestId
+            const pwdResetUrl = frontend_resetpwd_baseurl + "/" + requestId
             // const emailMessage = generateEmailMessage('zhen.teng@hotmail.com', username, pwdResetUrl)
-            const emailMessage = generateEmailMessage(email, pwdResetUrl)
+            const emailMessage = generateEmailMessage(email, username, pwdResetUrl)
             try {
                 await sgMail.send(emailMessage)
                 console.log('Test email sent successfully');
