@@ -30,3 +30,12 @@ export const URL_QUESTION_SVC_QUESTIONS = URL_QUESTION_SVC + PREFIX_QUESTIONS;
 const URI_COLLAB_SVC = process.env.REACT_APP_URI_COLLAB_SVC || "http://localhost:8003";
 export const PREFIX_COLLAB_SVC = "/api/collab";
 export const URL_COLLAB_SVC = URI_COLLAB_SVC;
+
+export const PREFIX_FRONTEND_ROOT = "/";
+export const PREFIX_FRONTEND_SIGNUP = "/signup";
+export const PREFIX_FRONTEND_LOGIN = "/login";
+export const PREFIX_FRONTEND_LANDING = "/landing";
+export const PREFIX_FRONTEND_MATCHING = "/matching";
+export const PREFIX_FRONTEND_ROOM = "/room";
+export const PREFIX_FRONTEND_RESETPWD = "/resetpassword";
+
