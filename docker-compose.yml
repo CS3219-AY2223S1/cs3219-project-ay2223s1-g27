@@ -11,7 +11,7 @@ services:
     restart: always 
     depends_on:
       - mongodb
-      - gateway
+      - backend
     env_file: 
       - ./user-service/.env
 
@@ -19,21 +19,21 @@ services:
     build: ./matching-service
     restart: always
     depends_on:
-      - gateway
+      - backend 
     env_file:
       - ./matching-service/.env
 
   question-service-service:
     build: ./question-service
     depends_on:
-      - gateway
+      - backend 
     restart: always
 
   collab-service-service:
     build: ./collab-service
     restart: always
     depends_on:
-      - gateway
+      - backend 
     environment: 
       - ENV=DEV
 
@@ -47,7 +47,7 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=USERNAME
       - MONGO_INITDB_ROOT_PASSWORD=PASSWORD
 
-  gateway:
+  backend:
     build: ./gateway
     ports: 
       - 3001:80
