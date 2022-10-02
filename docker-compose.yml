@@ -5,8 +5,6 @@ services:
     ports:
       - 80:3000
     restart: always
-    env_file:
-      - ./frontend/.env
 
   user-service-service:
     build: ./user-service
