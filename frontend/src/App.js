@@ -22,7 +22,7 @@ function App() {
                     <Routes>
                         <Route exact path={PREFIX_FRONTEND_ROOT} element={<Navigate replace to="/login"/>}></Route>
                         <Route path={PREFIX_FRONTEND_SIGNUP} element={<SignupPage/>}/> 
-                        <Route path={PREFIX_FRONTEND_LOGIN} element={<LoginPage/>}/>
+                        <Route path={PREFIX_FRONTEND_LOGIN} element={<LoginPage cookies={cookies} setCookie={setCookie} />}/>
                         <Route path={PREFIX_FRONTEND_LANDING} element={<PrivateRoute><LandingPage/></PrivateRoute>}/> 
                         <Route path={PREFIX_FRONTEND_MATCHING} element={<MatchingPage/>}/>
                         <Route path={PREFIX_FRONTEND_ROOM} element={<RoomPage/>}/>

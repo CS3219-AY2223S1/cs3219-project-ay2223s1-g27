@@ -8,7 +8,6 @@ import {
     TextField,
     Typography
 } from "@mui/material";
-import {useCookies} from 'react-cookie'
 import {useState} from "react"; 
 import axios from "axios";
 import {URL_USER_SVC_LOGIN, URL_USER_SVC_RESETPASSWORD} from "../configs";
@@ -23,7 +22,7 @@ import {Link, Navigate, useNavigate} from "react-router-dom";
 import NavigationBar from "./NavigationBar";
 import {jwtDecode} from "../util/auth"
 
-function LoginPage() { 
+function LoginPage({ cookies, setCookie }) { 
 
     const [loginMessage, setLoginMessage] = useState("");
     const [isLoggedIn, setIsLoggedIn] = useState(false);  
@@ -35,8 +34,7 @@ function LoginPage() {
     const [isDialogOpen, setIsDialogOpen] = useState(false);  
     const [isEmailValid, setIsEmailValid] = useState(null); 
     const [resetPasswordFailed, setResetPasswordFailed] = useState(null);  
-    const [resetPasswordMessage, setResetPasswordMessage] = useState(""); 
-    const [cookies, setCookie] = useCookies();
+    const [resetPasswordMessage, setResetPasswordMessage] = useState("");
 
     /** Reset Password Logic */
     const handleDialog = () => {  
