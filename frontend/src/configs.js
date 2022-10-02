@@ -1,10 +1,10 @@
 const LIVE_BACKEND = "http://34.160.41.4"
 const DEV_BACKEND = "http://localhost:3001"
 
-const URI_USER_SVC = process.env.ENV == 'DEV' ? DEV_BACKEND : LIVE_BACKEND;
-const URI_MATCHING_SVC = process.env.ENV == 'DEV' ? DEV_BACKEND : LIVE_BACKEND;
-const URI_QUESTION_SVC = process.env.ENV == 'DEV' ? DEV_BACKEND : LIVE_BACKEND;
-const URI_COLLAB_SVC = process.env.ENV == 'DEV' ? DEV_BACKEND : LIVE_BACKEND;
+const URI_USER_SVC = process.env.ENV === 'DEV' ? DEV_BACKEND : LIVE_BACKEND;
+const URI_MATCHING_SVC = process.env.ENV === 'DEV' ? DEV_BACKEND : LIVE_BACKEND;
+const URI_QUESTION_SVC = process.env.ENV === 'DEV' ? DEV_BACKEND : LIVE_BACKEND;
+const URI_COLLAB_SVC = process.env.ENV === 'DEV' ? DEV_BACKEND : LIVE_BACKEND;
 
 const PREFIX_USER_SVC = "/api/user";
 const PREFIX_CREATEUSER = "/createuser";
