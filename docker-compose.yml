@@ -20,9 +20,8 @@ services:
     restart: always
     depends_on:
       - gateway 
-    environment:
-      - ENV=DEV 
-      - DB_LOCAL_URI="sqlite::memory:"
+    env_file:
+      - ./matching-service/.env
 
   question-service-service:
     build: ./question-service
