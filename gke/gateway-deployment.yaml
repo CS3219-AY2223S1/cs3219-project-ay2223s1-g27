@@ -26,6 +26,7 @@ spec:
               memory: 100Mi
           env:
             - name: JWT_ACCESS_SECRET
-              secretKeyRef:
-                name: user-service-secret
-                key: JWT_ACCESS_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: user-service-secret
+                  key: JWT_ACCESS_SECRET
