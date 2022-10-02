@@ -12,18 +12,16 @@ services:
     depends_on:
       - mongodb
       - gateway
-    environment: 
-      - ENV=DEV
-      - DB_LOCAL_URI=mongodb://USERNAME:PASSWORD@mongodb/user-db
+    env_file: 
+      - ./user-service/.env
 
   matching-service-service:
     build: ./matching-service
     restart: always
     depends_on:
       - gateway
-    environment: 
-      - ENV=DEV
-      - DB_LOCAL_URI=sqlite::memory
+    env_file:
+      - ./matching-service/.env
 
   question-service-service:
     build: ./question-service
