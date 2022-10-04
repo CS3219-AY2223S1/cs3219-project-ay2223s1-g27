@@ -9,7 +9,7 @@ import QuestionDisplay from "./QuestionDisplay";
 export default function QuestionWindow({socket, titleSlug, setTitleSlug}) {
     const location = useLocation();
     let [questions, setQuestions] = useState([]);
-    let [questionName, setQuestionName] = useState("Select Question");
+    let [questionName, setQuestionName] = useState("-");
     let [content, setContent] = useState("");
 
     useEffect(() => {
@@ -43,10 +43,12 @@ export default function QuestionWindow({socket, titleSlug, setTitleSlug}) {
     })
 
     return <div style={{
-        height:"85vh",
-        width:"100%"
+        height:"90vh",
+        width:"100%",
+        marginRight: "10px", 
+        borderWidth: '1px'
     }}>
-        <Box>
+        <Box display={"flex"} flexDirection={"column"}>
             <QuestionDropdown
                 handleQuestionChange={handleQuestionChange}
                 questions={questions.map((q) => ({

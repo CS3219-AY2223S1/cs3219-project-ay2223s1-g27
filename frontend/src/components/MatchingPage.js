@@ -107,6 +107,13 @@ function MatchingPage() {
         // Disconnect all listeners
         socket.disconnect(); 
     }
+    
+    const handleLeaveQueue = () => {
+        setIsModalOpen(false);
+        navigate("/landing", {state: { user: location.state.user }});
+        // Disconnect all listeners
+        socket.disconnect();  
+    }
 
     return (
         <div> 
@@ -123,11 +130,16 @@ function MatchingPage() {
                     >
                         {renderTime}
                 </CountdownCircleTimer>
-            </Box> 
-            <Box display={"flex"} justifyContent={"center"} style={{marginTop: "2%"}} > 
-                <h2>
+            </Box>  
+            <Box  display={"flex"} justifyContent={"center"} style={{marginTop: "2%"}}>
+                <h2 style={{fontWeight: "bold"}}>
                     Finding a match...
                 </h2>
+            </Box>
+            <Box display={"flex"} justifyContent={"center"} style={{marginTop: "1%"}}>  
+                <Button variant='contained' onClick={handleLeaveQueue}>
+                    Leave queue
+                </Button>
             </Box>
 
             {/* Match Failure */}

@@ -24,14 +24,14 @@ const CodeEditorWindow = ({ onChange, language, code, theme, socket }) => {
   })
 
   return (
-    <div className="overlay rounded-md overflow-hidden w-full h-full shadow-4xl">
+    <div style={{paddingTop: '10px'}}className="overlay rounded-md overflow-hidden w-full h-full shadow-4xl">
       <Editor
         height="85vh"
-        width={`100%`}
+        width={`100%`} 
         language={language || "javascript"}
         value={value}
         theme={theme}
-        defaultValue="// some comment"
+        defaultValue="// Start editing here"
         onChange={handleEditorChange}
       />
     </div>
