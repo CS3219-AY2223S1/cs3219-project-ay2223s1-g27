@@ -17,6 +17,15 @@ const io = new Server(httpServer, {
   path: "/api/collab"
 });
 
+io.use(
+  authorize({
+    secret: process.env.JWT_ACCESS_SECRET,
+    onAuthentication: async (decodedToken) => {
+      return decodedToken.username;
+    }
+  })
+);
+
 io.on("connection", socket => {
   registerHandlers(io, socket);
 });
