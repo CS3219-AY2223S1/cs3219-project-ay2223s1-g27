@@ -7,7 +7,6 @@ WORKDIR /usr/src/app
 COPY . .
 
 RUN touch .env && \
-    echo REACT_APP_ENV=DEV >> .env && \ 
     echo REACT_APP_RAPID_API_URL=https://judge0-ce.p.rapidapi.com/submissions >> .env && \
     echo REACT_APP_RAPID_API_HOST=judge0-ce.p.rapidapi.com >> .env && \
     echo REACT_APP_RAPID_API_KEY=8e10b077b8msh375ad963d374707p1e6cacjsna72e350a2322 >> .env && \
