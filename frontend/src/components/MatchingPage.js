@@ -53,7 +53,7 @@ function MatchingPage() {
   });
 
   // Emit matching event here
-  socket.emit('match', { username: jwtDecode(cookies['refresh_token']).username, difficulty: location.state.difficultyLevel });
+  socket.emit('match', { difficulty: location.state.difficultyLevel });
 
   // Listen to matchSuccess event
   socket.once('matchSuccess', (data) => {
