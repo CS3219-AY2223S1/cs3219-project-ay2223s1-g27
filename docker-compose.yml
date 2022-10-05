@@ -21,7 +21,7 @@ services:
     depends_on:
       - gateway 
     env_file:
-      - ./matching-service/.env
+      - ./user-service/.env
 
   question-service-service:
     build: ./question-service
@@ -34,8 +34,8 @@ services:
     restart: always
     depends_on:
       - gateway 
-    environment: 
-      - ENV=DEV
+    env_file:
+      - ./user-service/.env
 
   mongodb:
     image: mongo:5.0
