@@ -3,7 +3,6 @@ import NavigationBar from "./NavigationBar";
 import { io } from "socket.io-client";
 import { isUnauthorizedError } from '@thream/socketio-jwt/build/UnauthorizedError.js'
 import { useLocation, useNavigate } from "react-router-dom";
-import { jwtDecode } from '../util/auth';
 import { useCookies } from 'react-cookie';
 import { URL_MATCHING_SVC, PREFIX_MATCHING_SVC } from "../configs";
 import {
