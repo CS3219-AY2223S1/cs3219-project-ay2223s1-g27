@@ -21,7 +21,7 @@ services:
     depends_on:
       - gateway 
     env_file:
-      - ./matching-service/.env
+      - ./user-service/.env
 
   question-service-service:
     build: ./question-service
