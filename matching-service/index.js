@@ -22,6 +22,9 @@ const io = new Server(httpServer, {
 io.use(
   authorize({
     secret: process.env.JWT_ACCESS_SECRET,
+    onAuthentication: async (decodedToken) => {
+      return decodedToken.username;
+    }
   })
 )
 
