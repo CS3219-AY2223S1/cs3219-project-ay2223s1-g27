@@ -4,6 +4,7 @@ import { jwtDecode } from '../../util/auth';
 import { useCookies } from 'react-cookie';
 import { Alert, Snackbar, Link } from "@mui/material";
 import { io } from "socket.io-client";
+import { isUnauthorizedError } from '@thream/socketio-jwt/build/UnauthorizedError.js'
 import CodeEditorWindow from "./CodeEditorWindow";
 import QuestionWindow from "./QuestionWindow";
 import axios from "axios";
@@ -37,14 +38,24 @@ const CodeEditorLanding = () => {
   const [language, setLanguage] = useState(languageOptions[0]);
   const [titleSlug, setTitleSlug] = useState("");
 
-  const socket = io(URL_COLLAB_SVC, { 
+  const socket = io(URL_COLLAB_SVC, {
     transports: ['websocket'],
-    path: PREFIX_COLLAB_SVC
+    path: PREFIX_COLLAB_SVC,
+    auth: {
+      token: `Bearer ${cookies['access_token']}`
+    }
   });
+
+  socket.on('connect_error', (error) => {
+    if (isUnauthorizedError(error)) {
+      // TODO might need to handle the error here
+      console.log('User token has expired')
+    }
+  })
 
   useEffect(() => {
     // Emit matching event here
-    socket.emit('room', { room_id: location.state.room_id });  
+    socket.emit('room', { room_id: location.state.room_id });
 
     return () => { // component will unmount equivalent
       socket.emit('leave room', { room_id: location.state.room_id, username: jwtDecode(cookies['refresh_token']).username });
@@ -80,7 +91,7 @@ const CodeEditorLanding = () => {
     if (enterPress && ctrlPress) {
       handleCompile();
     }
-   // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ctrlPress, enterPress]);
 
   const onChange = (action, data) => {
@@ -118,7 +129,7 @@ const CodeEditorLanding = () => {
 
     axios
       .request(options)
-      .then(function (response) {
+      .then(function(response) {
         const token = response.data.token;
         checkStatus(token);
       })
@@ -249,7 +260,7 @@ const CodeEditorLanding = () => {
       </Snackbar>
       <div className="flex flex-row">
         <div className="px-4 py-2">
-          <LanguagesDropdown 
+          <LanguagesDropdown
             language={language}
             onSelectChange={onSelectChange}
           />
