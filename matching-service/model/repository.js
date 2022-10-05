@@ -3,7 +3,7 @@ import 'dotenv/config'
 
 import { Sequelize } from 'sequelize';
 
-let sqliteDB = process.env.ENV == "PROD" ? process.env.DB_CLOUD_URI : process.env.DB_LOCAL_URI;
+let sqliteDB = process.env.SQLITE_URI ? process.env.SQLITE_URI : 'sqlite::memory:';
 const sequelize = new Sequelize(sqliteDB, {
   logging: console.log
 })

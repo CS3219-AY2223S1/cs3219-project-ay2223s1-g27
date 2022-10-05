@@ -1,7 +1,9 @@
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
+import { authorize } from '@thream/socketio-jwt';
 
 const app = express();
 app.use(express.urlencoded({ extended: true }))
@@ -16,6 +18,13 @@ const httpServer = createServer(app);
 const io = new Server(httpServer, {
   path: "/api/matching"
 });
+
+io.use(
+  authorize({
+    secret: process.env.JWT_ACCESS_SECRET,
+  })
+)
+
 
 io.on("connection", socket => {
   registerHandlers(io, socket);
