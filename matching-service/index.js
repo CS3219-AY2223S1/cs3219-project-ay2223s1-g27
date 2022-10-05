@@ -26,8 +26,7 @@ io.use(
       return decodedToken.username;
     }
   })
-)
-
+);
 
 io.on("connection", socket => {
   registerHandlers(io, socket);
