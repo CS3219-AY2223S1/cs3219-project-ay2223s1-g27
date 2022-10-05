@@ -34,8 +34,8 @@ services:
     restart: always
     depends_on:
       - gateway 
-    environment: 
-      - ENV=DEV
+    env_file:
+      - ./user-service/.env
 
   mongodb:
     image: mongo:5.0
