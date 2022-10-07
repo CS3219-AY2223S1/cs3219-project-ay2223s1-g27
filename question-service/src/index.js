@@ -14,12 +14,14 @@ app.use(cors(corsOptions))
 app.get("/", (req, res) => res.send("Hello World from question-service"))
 
 const { getQuestion, getQuestions } = require('./controller/question-controller.js');
+const { compile } = require('./controller/compile-controller.js');
 
 const router = express.Router()
 
 router.get('/', (_, res) => res.send('Hello World from question-service'))
 router.get('/question', getQuestion)
 router.get('/questions', getQuestions)
+router.get('/compile', compile)
 
 app.use('/api/question', router)
 
