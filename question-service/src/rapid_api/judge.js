@@ -33,7 +33,7 @@ async function compile(formData) {
     }
 
     if (res.error) {
-      return res.error;
+      return res;
     }
 
     return res.data;
