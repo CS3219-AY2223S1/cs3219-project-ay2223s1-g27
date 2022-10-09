@@ -8,6 +8,7 @@ const CodeEditorWindow = ({ onChange, language, code, theme, socket }) => {
 
   useEffect(() => {
     updateValue(code);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [code])
 
 

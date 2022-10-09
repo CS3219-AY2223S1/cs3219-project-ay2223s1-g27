@@ -30,6 +30,7 @@ export default function QuestionWindow({ socket, titleSlug, setTitleSlug, setCod
         console.log(x)
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [titleSlug])
 
   const handleQuestionChange = (q) => {

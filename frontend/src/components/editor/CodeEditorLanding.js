@@ -80,6 +80,7 @@ const CodeEditorLanding = () => {
 
   useEffect(() => {
     updateCodeSnippet(codeSnippets);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [language])
 
   const updateCodeSnippet = (codeSnippets) => {
