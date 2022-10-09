@@ -21,7 +21,7 @@ const router = express.Router()
 router.get('/', (_, res) => res.send('Hello World from question-service'))
 router.get('/question', getQuestion)
 router.get('/questions', getQuestions)
-router.get('/compile', compile)
+router.post('/compile', compile)
 
 app.use('/api/question', router)
 
