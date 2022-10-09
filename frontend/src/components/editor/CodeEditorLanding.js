@@ -31,6 +31,7 @@ const CodeEditorLanding = () => {
   const [alertOpen, setAlertOpen] = useState(false);
   const [otherUser, setOtherUser] = useState("");
   const [code, setCode] = useState(javascriptDefault);
+  const [codeSnippets, setCodeSnippets] = useState([]);
   const [customInput, setCustomInput] = useState("");
   const [outputDetails, setOutputDetails] = useState(null);
   const [processing, setProcessing] = useState(null);
@@ -75,7 +76,19 @@ const CodeEditorLanding = () => {
   const onSelectChange = (sl) => {
     socket.emit('language event', { room_id: location.state.room_id, language_id: sl.id })
     setLanguage(sl);
-  };
+  }
+
+  useEffect(() => {
+    updateCodeSnippet(codeSnippets);
+  }, [language])
+
+  const updateCodeSnippet = (codeSnippets) => {
+    console.log(language);
+    const codeSnippet = codeSnippets.find(codeSnippet => {
+      return codeSnippet.lang.toLowerCase() === language.value.toLowerCase();
+    });
+    setCode(codeSnippet?.code || "");
+  }
 
   socket.on('receive language', (payload) => {
     console.log(payload)
@@ -227,7 +240,13 @@ const CodeEditorLanding = () => {
       <div className="flex flex-row space-x-4 items-start px-4 py-4">
         <div className="flex flex-row w-full h-full justify-start items-end">
           <div className="grid grid-cols-2 gap-4 w-full">
-            <QuestionWindow socket={socket} titleSlug={titleSlug} setTitleSlug={setTitleSlug} />
+            <QuestionWindow
+              socket={socket}
+              titleSlug={titleSlug}
+              setTitleSlug={setTitleSlug}
+              setCodeSnippets={setCodeSnippets}
+              updateCodeSnippet={updateCodeSnippet}
+            />
             <CodeEditorWindow
               code={code}
               onChange={onChange}
