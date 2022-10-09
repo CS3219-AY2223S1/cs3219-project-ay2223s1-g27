@@ -6,8 +6,7 @@ FROM node:alpine as build
 WORKDIR /usr/src/app
 COPY . .
 
-RUN npm install --legacy-peer-deps && \
-    npm run build
+RUN npm install --legacy-peer-deps && npm run build
 
 FROM node:alpine as main
 
