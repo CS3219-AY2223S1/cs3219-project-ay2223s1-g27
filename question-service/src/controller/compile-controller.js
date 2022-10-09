@@ -3,11 +3,12 @@ const judge = require('../rapid_api/judge.js')
 async function compile(req, res) {
   try {
     var formData = req.body;
-
     var resp = await judge.compile(formData);
 
+    console.log(resp)
+
     if (resp.error) {
-      console.log(`Get Leetcode question error: titleSlug=${titleSlug}, err=${resp.error}`);
+      console.log(`compile api error: err=${resp.error}`);
       return res.status(500).json({ message: resp.error, success: false });
     }
 
