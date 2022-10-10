@@ -12,8 +12,8 @@ import { useCookies } from "react-cookie";
 import { PREFIX_FRONTEND_LANDING, PREFIX_FRONTEND_LOGIN, PREFIX_FRONTEND_MATCHING, PREFIX_FRONTEND_ROOM, PREFIX_FRONTEND_ROOT, PREFIX_FRONTEND_SIGNUP } from "./configs";
  
 function App() {
-    const [cookies, setCookie] = useCookies();
-    initAxiosApiInstance(cookies, setCookie);
+    const [, setCookie] = useCookies();
+    initAxiosApiInstance(setCookie);
     return (
         <div className="App">
             {/* <NavigationBar isAuthenticated={true}/> */}
