@@ -44,4 +44,4 @@ jobs:
           CLUSTER_NAME: cs3219g27
           ZONE_NAME: asia-southeast1-a
         with:
-          args: rollout restart -f gke/question-service-deployment.yaml
+          args: apply -f gke/question-service-deployment.yaml
