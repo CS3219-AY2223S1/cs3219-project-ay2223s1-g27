@@ -6,6 +6,7 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import CodeEditorLanding from "./editor/CodeEditorLanding";
 import NavigationBar from "./NavigationBar";  
+import ChatWindow from "./chat/ChatWindow";
 
 function RoomPage() {
     const location = useLocation();
@@ -22,6 +23,7 @@ function RoomPage() {
             <Box display={"flex"} flexDirection={"column"} width={"90%"} style={{ marginTop: "3%", marginLeft: "3%" }}>
                 <Typography variant={"h3"} marginBottom={"2rem"}>Room Page</Typography>
                 <CodeEditorLanding/>
+                <ChatWindow/>
                 <Box> 
                     <Button variant="contained" onClick={handleLeaveSession}>
                         Leave Session

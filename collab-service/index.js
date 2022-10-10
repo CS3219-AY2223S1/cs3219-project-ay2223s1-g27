@@ -16,7 +16,6 @@ const httpServer = createServer(app);
 const io = new Server(httpServer, {
   path: "/api/collab"
 });
-
 io.on("connection", socket => {
   registerHandlers(io, socket);
 });
