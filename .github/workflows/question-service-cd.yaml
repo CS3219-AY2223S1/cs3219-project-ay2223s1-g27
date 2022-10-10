@@ -6,7 +6,6 @@ on:
       - "main"
     paths:
       - question-service/**
-  pull_request:
 jobs:
   build:
     runs-on: ubuntu-latest
