@@ -6,7 +6,7 @@ on:
       - "main"
     paths:
       - collab-service/**
-  pull_request:
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -44,4 +44,4 @@ jobs:
           CLUSTER_NAME: cs3219g27
           ZONE_NAME: asia-southeast1-a
         with:
-          args: apply -f gke/collab-service-deployment.yaml
+          args: rollout restart -f gke/collab-service-deployment.yaml
