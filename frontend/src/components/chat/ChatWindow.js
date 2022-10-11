@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { io } from "socket.io-client";
 import { useLocation } from "react-router-dom";
 import { useCookies } from 'react-cookie';
@@ -43,7 +43,7 @@ const ChatWindow = () => {
         return () => { // component will unmount equivalent
             chatSocket.emit('leave room', { room_id: room_id, username: username });
         }
-    }, [chatSocket]);
+    }, [chatSocket, room_id, username]);
 
     return (
         <div className="chat">

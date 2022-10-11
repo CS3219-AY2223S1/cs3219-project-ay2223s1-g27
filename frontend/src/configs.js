@@ -1,10 +1,10 @@
 const LIVE_BACKEND = "http://34.160.41.4"
 const DEV_BACKEND = "http://localhost:3001"
-const USER_BACKEND = "http://localhost:8000"
-const MATCHING_BACKEND = "http://localhost:8001"
-const COLLAB_BACKEND = "http://localhost:8003"
-const COMM_BACKEND = "http://localhost:8004"
-const QUESTION_BACKEND = "http://localhost:8002"
+// const USER_BACKEND = "http://localhost:8000"
+// const MATCHING_BACKEND = "http://localhost:8001"
+// const COLLAB_BACKEND = "http://localhost:8003"
+// const COMM_BACKEND = "http://localhost:8004"
+// const QUESTION_BACKEND = "http://localhost:8002"
 
 const URI_USER_SVC = process.env.REACT_APP_ENV === 'DEV' ? DEV_BACKEND : LIVE_BACKEND;
 const URI_MATCHING_SVC = process.env.REACT_APP_ENV === 'DEV' ? DEV_BACKEND : LIVE_BACKEND;

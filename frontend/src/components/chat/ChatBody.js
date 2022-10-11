@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { interviewQuestions } from "./InterviewQns";
 import QuestionSelector from "./QuestionSelector";
 import Button from '@mui/material/Button';
 
@@ -35,10 +34,6 @@ const ChatBody = ({ chatSocket, username, room_id }) => {
       })
     }
   };
-
-  const toggleShowQuestions = () => {
-    setShowQuestions(!showQuestions);
-  }
 
   return (
     <>
