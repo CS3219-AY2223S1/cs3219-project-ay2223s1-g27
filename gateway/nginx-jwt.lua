@@ -2,7 +2,7 @@
 local cjson = require "cjson"
 local jwt = require "resty.jwt"
 --your secret
-local secret = "MTc2MTY5ZGVkNmQwMzQzNjkwODhiZWQ2ZWU5Njg3YmQ5MWJkNDE5MzlmMDVlODQyMDQ5YTVkYmRiNDFjZTE0OGU3ZjI4ZjZmODMyY2ZhZDQxMjc2NmI3ODUxYjU2MDliMmJlYWNlYWJkYzVmNmIzNWE2YTBhNjllYWZkZDY4NWE="
+local secret = os.getenv("JWT_ACCESS_SECRET")
 -- No authentication required api detailed list
 local no_need_token_api_list = {'/api/user/login', '/api/user/createuser', '/api/user/renewtokens', '/api/user/resetpassword', '/api/user/logout'}
 local function ignore_url (val)
@@ -31,8 +31,8 @@ if token == nil then
 ngx.log(ngx.ERR, "Missing token")
 ngx.exit(ngx.HTTP_UNAUTHORIZED)
 end
---decode_base64 Consistent with the back end
-local jwt_obj = jwt:verify(ngx.decode_base64(secret), token)
+-- Consistent with the back end
+local jwt_obj = jwt:verify(secret, token)
 if jwt_obj.verified == false then
 ngx.log(ngx.ERR, "Invalid token: ".. jwt_obj.reason)
 ngx.status = ngx.HTTP_UNAUTHORIZED

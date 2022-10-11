@@ -23,10 +23,11 @@ async function matchTimeOut(before) {
 }
 
 export function registerHandlers(io, socket) {
-  async function findMatch({ username, difficulty }) {
+  async function findMatch({ difficulty }) {
     try {
-      if (!username || !difficulty) {
-        sendMatchFail(socket, { message: 'Username and/or Difficulty are missing!' });
+      const username = socket.user;
+      if (!difficulty) {
+        sendMatchFail(socket, { message: 'Difficulty is missing!' });
         return;
       }
 

@@ -105,3 +105,6 @@ dist
 
 # Kubernetes Secret txt file
 user-service-secret.txt
+
+# Data file
+data

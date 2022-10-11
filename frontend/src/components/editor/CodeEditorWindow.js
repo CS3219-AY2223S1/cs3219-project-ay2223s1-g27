@@ -1,10 +1,16 @@
-import React, {  useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Editor from "@monaco-editor/react";
 
 const CodeEditorWindow = ({ onChange, language, code, theme, socket }) => {
   const location = useLocation(); // Location contains username and selected difficulty level
   const [value, setValue] = useState(code || "");
+
+  useEffect(() => {
+    updateValue(code);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [code])
+
 
   const updateValue = (value) => {
     setValue(value);

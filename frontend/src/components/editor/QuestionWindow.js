@@ -12,35 +12,38 @@ export default function QuestionWindow({socket, titleSlug, setTitleSlug}) {
     let [questionName, setQuestionName] = useState("-");
     let [content, setContent] = useState("");
 
-    useEffect(() => {
-        axiosApiInstance.get(`${URL_QUESTION_SVC_QUESTIONS}?difficulty=${location.state.difficultyLevel.toUpperCase()}&page=1`)
-            .then(res => {
-                console.log(res.data.problemsetQuestionList.questions)
-                setQuestions(res.data.problemsetQuestionList.questions)
-            })
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+  useEffect(() => {
+    axiosApiInstance.get(`${URL_QUESTION_SVC_QUESTIONS}?difficulty=${location.state.difficultyLevel.toUpperCase()}&page=1`)
+      .then(res => {
+        console.log(res.data.problemsetQuestionList.questions)
+        setQuestions(res.data.problemsetQuestionList.questions)
+      })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
-    useEffect(() => {
-        if (titleSlug) {
-            axiosApiInstance.get(`${URL_QUESTION_SVC_QUESTION}?titleSlug=${titleSlug}`).then(x => {
-                setContent(x.data.content)
-                console.log(x)
-            })
-        }
-    }, [titleSlug])
-
-    const handleQuestionChange = (q) => {
-        socket.emit('question event', { room_id: location.state.room_id, titleSlug: q.value, questionName: q.label });
-        setQuestionName(q.label);
-        setTitleSlug(q.value);
+  useEffect(() => {
+    if (titleSlug) {
+      axiosApiInstance.get(`${URL_QUESTION_SVC_QUESTION}?titleSlug=${titleSlug}`).then(x => {
+        setContent(x.data.content)
+        setCodeSnippets(x.data.codeSnippets)
+        updateCodeSnippet(x.data.codeSnippets)
+        console.log(x)
+      })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [titleSlug])
 
-    socket.on('receive question', (payload) => {
-        console.log(`received question with titleSlug=${payload.titleSlug} and name=${payload.questionName}`)
-        setTitleSlug(payload.titleSlug);
-        setQuestionName(payload.questionName);
-    })
+  const handleQuestionChange = (q) => {
+    socket.emit('question event', { room_id: location.state.room_id, titleSlug: q.value, questionName: q.label });
+    setQuestionName(q.label);
+    setTitleSlug(q.value);
+  }
+
+  socket.on('receive question', (payload) => {
+    console.log(`received question with titleSlug=${payload.titleSlug} and name=${payload.questionName}`)
+    setTitleSlug(payload.titleSlug);
+    setQuestionName(payload.questionName);
+  })
 
     return <div style={{
         height:"90vh",
@@ -63,5 +66,5 @@ export default function QuestionWindow({socket, titleSlug, setTitleSlug}) {
             />
         </Box>
 
-    </div>
+  </div>
 }

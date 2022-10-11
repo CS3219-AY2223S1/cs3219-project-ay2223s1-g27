@@ -4,8 +4,14 @@ import { jwtDecode } from "./util/auth";
 
 const axiosApiInstance = axios.create();
 
-const refreshAccessToken = async (cookies, setCookie) => {
-  const refresh_token = cookies.refresh_token;
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+const refreshAccessToken = async (setCookie) => {
+  const refresh_token = getCookie('refresh_token');
   if (!refresh_token) return;
 
   const res = await axios.post(URL_USER_SVC_REFRESH_TOKEN, {username: jwtDecode(refresh_token).username}, {
@@ -22,12 +28,12 @@ const refreshAccessToken = async (cookies, setCookie) => {
   return res.data.accessToken;
 }
 
-export const initAxiosApiInstance = (cookies, setCookie) => {
+export const initAxiosApiInstance = (setCookie) => {
   // Request interceptor for API calls
   axiosApiInstance.interceptors.request.use(
     async config => {
       config.headers = { 
-        'Authorization': `Bearer ${cookies.access_token}`,
+        'Authorization': `Bearer ${getCookie('access_token')}`,
       }
       return config;
     },
@@ -42,7 +48,7 @@ export const initAxiosApiInstance = (cookies, setCookie) => {
     const originalRequest = error.config;
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-      const access_token = await refreshAccessToken(cookies, setCookie);            
+      const access_token = await refreshAccessToken(setCookie);            
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + access_token;
       return axiosApiInstance(originalRequest);
     }

@@ -21,8 +21,8 @@ import {
 } from "./configs";
  
 function App() {
-    const [cookies, setCookie] = useCookies();
-    initAxiosApiInstance(cookies, setCookie);
+    const [, setCookie] = useCookies();
+    initAxiosApiInstance(setCookie);
     return (
         <div className="App">
             {/* <NavigationBar isAuthenticated={true}/> */}
