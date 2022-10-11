@@ -1,15 +1,15 @@
-import {BrowserRouter as Router, Routes, Route, Navigate} from "react-router-dom";
-import SignupPage from './components/SignupPage'; 
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import SignupPage from './components/SignupPage';
 import LoginPage from './components/LoginPage';
-import LandingPage from './components/LandingPage';
+import LandingPage from './components/LandingPage'; 
 import MatchingPage from "./components/MatchingPage"; 
-import ResetPage from "./components/ResetPage";
+import ResetPage from "./components/ResetPage"; 
 // import NavigationBar from "./components/NavigationBar"; 
-import {Box} from "@mui/material"; 
+import { Box } from "@mui/material";
 import { PrivateRoute } from "./components/PrivateRoute";
 import RoomPage from "./components/RoomPage";
 import { initAxiosApiInstance } from "./axiosApiInstance";
-import { useCookies } from "react-cookie";
+import { useCookies } from "react-cookie"; 
 import { 
     PREFIX_FRONTEND_LANDING, 
     PREFIX_FRONTEND_LOGIN, 
@@ -40,7 +40,7 @@ function App() {
                 </Router>
             </Box>
         </div>
-    );
+    ); 
 }
 
 export default App;
