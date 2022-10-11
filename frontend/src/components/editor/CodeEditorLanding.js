@@ -7,7 +7,6 @@ import { io } from "socket.io-client";
 import CodeEditorWindow from "./CodeEditorWindow";
 import QuestionWindow from "./QuestionWindow";
 import axios from "axios";
-import { classnames } from "../../util/general";
 import { languageOptions } from "../../constants/languageOptions";
 import { PREFIX_COLLAB_SVC, URL_COLLAB_SVC } from "../../configs";
 
