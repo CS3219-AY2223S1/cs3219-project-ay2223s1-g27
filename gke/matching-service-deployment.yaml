@@ -24,3 +24,9 @@ spec:
             limits:
               cpu: 60m
               memory: 150Mi
+          env: 
+            - name: JWT_ACCESS_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: user-service-secret
+                  key: JWT_ACCESS_SECRET
