@@ -15,10 +15,6 @@ const ChatWindow = () => {
     const username = jwtDecode(cookies['refresh_token']).username;
     const room_id = location.state.room_id;
 
-    console.log(cookies['access_token']);
-    console.log(URL_COMM_SVC);
-    console.log(PREFIX_COMM_SVC_CHAT);
-
     const chatSocket = io(URL_COMM_SVC, { 
         transports: ['websocket'],
         path: PREFIX_COMM_SVC_CHAT,

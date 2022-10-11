@@ -11,9 +11,6 @@ const ChatBody = ({ chatSocket, username, room_id }) => {
   const interviewerSwitchRequestEvent = 'request interviewer switch';
   const interviewerSwitchEvent = 'interviewer switch event';
 
-  console.log(isInterviewer);
-  console.log(username);
-
   chatSocket.on(interviewerSwitchEvent, (data) => {
     const interviewer = data.interviewer;
     console.log(data)

@@ -5,10 +5,7 @@ const ChatFooter = ({ chatSocket, username, room_id }) => {
 
   const handleSendMessage = (e) => {
     e.preventDefault();
-    // console.log({ userName: localStorage.getItem('userName'), message });
     if (message.trim()) {
-        console.log(message)
-        console.log(chatSocket)
         chatSocket.emit('message', {
             text: message,
             username: username,

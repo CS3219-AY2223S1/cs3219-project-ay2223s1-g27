@@ -22,7 +22,6 @@ const QuestionSelector = ({ chatSocket, username, room_id }) => {
   const sendQuestion = (e, question) => {
     e.preventDefault();
     if (question.trim()) {
-      console.log(question)
       chatSocket.emit('message', {
           text: question,
           username: username,
