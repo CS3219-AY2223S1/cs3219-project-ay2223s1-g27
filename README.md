@@ -14,6 +14,9 @@ This is a template repository for CS3219 project.
 2. Run Frontend using `npm start`.
 
 ## Local Development
+Note that in order to test individual services via command line(without docker-compose), you will need to change url endpoints in frontend configs.js file. 
+
+Otherwise, to test the entire PeerPrep application:
 Ensure you have the following file in the root of user-service directory
     
     ENV=DEV
