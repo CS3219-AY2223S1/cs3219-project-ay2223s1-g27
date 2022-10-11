@@ -6,7 +6,6 @@ on:
       - "main"
     paths:
       - question-service/**
-
 jobs:
   build:
     runs-on: ubuntu-latest
