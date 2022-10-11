@@ -20,6 +20,8 @@ const io = new Server(httpServer, {
   path: "/api/comm/chat"
 });
 
+console.log(process.env.JWT_ACCESS_SECRET)
+
 io.use(
   authorize({
     secret: process.env.JWT_ACCESS_SECRET,
@@ -30,6 +32,7 @@ io.use(
 )
 
 io.on('connection', clientSocket => {
+  console.log(clientSocket)
   registerChatHandlers(io, clientSocket)
 });
 

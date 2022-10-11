@@ -39,3 +39,5 @@ To teardown the cluster, run:
 
     cd path/to/root
     docker-compose down
+
+Note that .env files in each service's root directory can cause conflicts in container env vars. 

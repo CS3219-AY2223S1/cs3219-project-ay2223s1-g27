@@ -3,6 +3,7 @@ import { io } from "socket.io-client";
 import { useLocation } from "react-router-dom";
 import { useCookies } from 'react-cookie';
 import { jwtDecode } from '../../util/auth';
+import { isUnauthorizedError } from '@thream/socketio-jwt/build/UnauthorizedError.js'
 import { URL_COMM_SVC, PREFIX_COMM_SVC_CHAT } from "../../configs";
 import ChatFooter from "./ChatFooter";
 import ChatBody from "./ChatBody";
@@ -14,6 +15,10 @@ const ChatWindow = () => {
     const username = jwtDecode(cookies['refresh_token']).username;
     const room_id = location.state.room_id;
 
+    console.log(cookies['access_token']);
+    console.log(URL_COMM_SVC);
+    console.log(PREFIX_COMM_SVC_CHAT);
+
     const chatSocket = io(URL_COMM_SVC, { 
         transports: ['websocket'],
         path: PREFIX_COMM_SVC_CHAT,
@@ -22,6 +27,9 @@ const ChatWindow = () => {
         }
     });
     chatSocket.on("connect_error", (err) => {
+        if (isUnauthorizedError(err)) {
+            console.log('User token has expired')
+        }
         console.log(`connect_error due to ${err.message}`);
     });
 

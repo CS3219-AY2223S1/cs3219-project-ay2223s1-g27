@@ -2,8 +2,8 @@ import { sendJoinRoomFail } from '../services/socket.js'
 
 
 var roomInterviewers = {};
-const interviewer_switch_event = 'interviewer switch event';
-const interviewer_switch_request_event = 'request interviewer switch';
+const interviewerSwitchEvent = 'interviewer switch event';
+const interviewerSwitchRequestEvent = 'request interviewer switch';
 
 export function registerChatHandlers(io, clientSocket) {
     clientSocket.on('join room', eventData => {
@@ -19,7 +19,7 @@ export function registerChatHandlers(io, clientSocket) {
         if (!room_id in roomInterviewers) {
             roomInterviewers[room_id] = username;
             // fire event to all clients in a room TODO
-            io.to(room_id).emit(interviewer_switch_event, {
+            io.to(room_id).emit(interviewerSwitchEvent, {
                 room_id: room_id,
                 interviewer: username,
             });
@@ -36,12 +36,12 @@ export function registerChatHandlers(io, clientSocket) {
     });
 
     // assumes only the interviewee can request to become the interviewer
-    clientSocket.on(interviewer_switch_request_event, data => {
+    clientSocket.on(interviewerSwitchRequestEvent, data => {
         const room_id = data.room_id;
         const newInterviewer = data.username;
         roomInterviewers[room_id] = newInterviewer;
         // fire event to all clients in a room TODO
-        io.to(room_id).emit(interviewer_switch_event, {
+        io.to(room_id).emit(interviewerSwitchEvent, {
             room_id: room_id,
             interviewer: newInterviewer,
         });

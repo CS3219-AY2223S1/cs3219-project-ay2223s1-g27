@@ -8,13 +8,13 @@ const ChatBody = ({ chatSocket, username, room_id }) => {
   const [showQuestions, setShowQuestions] = useState(false);
   const [welcomeMessage, setWelcomeMessage] = useState(true);
   const [messages, setMessages] = useState([]);
-  const interviewer_switch_request_event = 'request interviewer switch';
-  const interviewer_switch_event = 'interviewer switch event';
+  const interviewerSwitchRequestEvent = 'request interviewer switch';
+  const interviewerSwitchEvent = 'interviewer switch event';
 
   console.log(isInterviewer);
   console.log(username);
 
-  chatSocket.on(interviewer_switch_event, (data) => {
+  chatSocket.on(interviewerSwitchEvent, (data) => {
     const interviewer = data.interviewer;
     console.log(data)
     if (interviewer === username) {
@@ -32,7 +32,7 @@ const ChatBody = ({ chatSocket, username, room_id }) => {
 
   const handleSwitchRole = () => {
     if (!isInterviewer) {
-      chatSocket.emit(interviewer_switch_request_event, {
+      chatSocket.emit(interviewerSwitchRequestEvent, {
         room_id: room_id,
         username: username,
       })
