@@ -4,7 +4,6 @@ import Button from '@mui/material/Button';
 
 const ChatBody = ({ chatSocket, username, room_id }) => {
   const [isInterviewer, setIsInterviewer] = useState();
-  const [showQuestions, setShowQuestions] = useState(false);
   const [welcomeMessage, setWelcomeMessage] = useState(true);
   const [messages, setMessages] = useState([]);
   const interviewerSwitchRequestEvent = 'request interviewer switch';
