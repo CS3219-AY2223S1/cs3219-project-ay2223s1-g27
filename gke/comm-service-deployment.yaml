@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: comm-service-deployment
+  labels:
+    app: comm-service
+spec:
+  replicas: 1 
+  selector:
+    matchLabels:
+      app: comm-service
+  template:
+    metadata:
+      labels:
+        app: comm-service
+    spec:
+      containers:
+        - name: comm-service-deployment
+          image: cs3219g27/comm-service:latest
+          ports:
+            - name: cms-http
+              containerPort: 8004
+          resources:
+            limits:
+              cpu: 60m
+              memory: 150Mi
+          env: 
+            - name: JWT_ACCESS_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: user-service-secret
+                  key: JWT_ACCESS_SECRET
