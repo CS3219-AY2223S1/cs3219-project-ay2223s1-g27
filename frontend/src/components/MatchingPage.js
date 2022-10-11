@@ -109,36 +109,48 @@ function MatchingPage() {
     socket.disconnect();
   }
 
-  const handleProceedWithoutMatch = () => {
-    setIsModalOpen(false);
-    console.log(location.state.difficultyLevel)
-    navigate("/room", { state: { user: location.state.user, difficultyLevel: location.state.difficultyLevel } });
+    const handleProceedWithoutMatch = () => {
+        setIsModalOpen(false);
+        console.log(location.state.difficultyLevel)
+        navigate("/room", {state: { user: location.state.user, difficultyLevel: location.state.difficultyLevel }});
+        
+        // Disconnect all listeners
+        socket.disconnect(); 
+    }
+    
+    const handleLeaveQueue = () => {
+        setIsModalOpen(false);
+        navigate("/landing", {state: { user: location.state.user }});
+        // Disconnect all listeners
+        socket.disconnect();  
+    }
 
-    // Disconnect all listeners
-    socket.disconnect();
-  }
-
-  return (
-    <div>
-      <NavigationBar isAuthenticated={true} user={location.state.user} />
-      <Box display={"flex"} justifyContent={"center"} style={{ marginTop: "8%" }}>
-        <CountdownCircleTimer
-          key={key}
-          isPlaying
-          duration={30}
-          colors={"#1B7CED"}
-          size={300}
-          strokeWidth={25}
-          onComplete={handleNoMatchFound}
-        >
-          {renderTime}
-        </CountdownCircleTimer>
-      </Box>
-      <Box display={"flex"} justifyContent={"center"} style={{ marginTop: "2%" }} >
-        <h2>
-          Finding a match...
-        </h2>
-      </Box>
+    return (
+        <div> 
+            <NavigationBar isAuthenticated={true} user={location.state.user}/> 
+            <Box display={"flex"} justifyContent={"center"} style={{marginTop: "8%"}}>
+                <CountdownCircleTimer
+                    key={key}
+                    isPlaying
+                    duration={30}
+                    colors={"#1B7CED"} 
+                    size={300}
+                    strokeWidth={25}
+                    onComplete={handleNoMatchFound}
+                    >
+                        {renderTime}
+                </CountdownCircleTimer>
+            </Box>  
+            <Box  display={"flex"} justifyContent={"center"} style={{marginTop: "2%"}}>
+                <h2 style={{fontWeight: "bold"}}>
+                    Finding a match...
+                </h2>
+            </Box>
+            <Box display={"flex"} justifyContent={"center"} style={{marginTop: "1%"}}>  
+                <Button variant='contained' onClick={handleLeaveQueue}>
+                    Leave queue
+                </Button>
+            </Box>
 
       {/* Match Failure */}
       <Modal

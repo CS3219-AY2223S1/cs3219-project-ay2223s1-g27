@@ -2,13 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { jwtDecode } from '../../util/auth';
 import { useCookies } from 'react-cookie';
-import { Alert, Snackbar, Link } from "@mui/material";
+import { Alert, Box, Button, Snackbar, Link } from "@mui/material";
 import { io } from "socket.io-client";
 import { isUnauthorizedError } from '@thream/socketio-jwt/build/UnauthorizedError.js'
 import CodeEditorWindow from "./CodeEditorWindow";
 import QuestionWindow from "./QuestionWindow";
-import axiosApiInstance from "../../axiosApiInstance"
-import { classnames } from "../../util/general";
+import axiosApiInstance from "../../axiosApiInstance" 
 import { languageOptions } from "../../constants/languageOptions";
 import { PREFIX_COLLAB_SVC, URL_COLLAB_SVC, URL_QUESTION_SVC_COMPILE } from "../../configs";
 
@@ -226,59 +225,43 @@ const CodeEditorLanding = () => {
             </Link>
           </span>
         </Alert>
-      </Snackbar>
-      <div className="flex flex-row">
-        <div className="px-4 py-2">
-          <LanguagesDropdown
-            language={language}
-            onSelectChange={onSelectChange}
-          />
-        </div>
-        <div className="px-4 py-2">
-          <ThemeDropdown handleThemeChange={handleThemeChange} theme={theme} />
-        </div>
-      </div>
-      <div className="flex flex-row space-x-4 items-start px-4 py-4">
-        <div className="flex flex-row w-full h-full justify-start items-end">
-          <div className="grid grid-cols-2 gap-4 w-full">
-            <QuestionWindow
-              socket={socket}
-              titleSlug={titleSlug}
-              setTitleSlug={setTitleSlug}
-              setCodeSnippets={setCodeSnippets}
-              updateCodeSnippet={updateCodeSnippet}
-            />
-            <CodeEditorWindow
-              code={code}
-              onChange={onChange}
-              language={language?.value}
-              theme={theme.value}
-              socket={socket}
-            />
-          </div>
-        </div>
+      </Snackbar>  
 
-        <div className="right-container flex flex-shrink-0 w-[30%] flex-col">
-          <OutputWindow outputDetails={outputDetails} />
-          <div className="flex flex-col items-end">
-            <CustomInput
-              customInput={customInput}
-              setCustomInput={setCustomInput}
-            />
-            <button
-              onClick={handleCompile}
-              disabled={!code}
-              className={classnames(
-                "mt-4 border-2 border-black z-10 rounded-md shadow-[5px_5px_0px_0px_rgba(0,0,0)] px-4 py-2 hover:shadow transition duration-200 bg-white flex-shrink-0",
-                !code ? "opacity-50" : ""
-              )}
-            >
-              {processing ? "Processing..." : "Compile and Execute"}
-            </button>
-          </div>
-          {outputDetails && <OutputDetails outputDetails={outputDetails} />}
-        </div>
-      </div>
+      <Box>
+        <Box display={"flex"} flexDirection={"column"} style={{marginBottom: "1%"}}>  
+          <QuestionWindow socket={socket} titleSlug={titleSlug} setTitleSlug={setTitleSlug} setCodeSnippets={setCodeSnippets} updateCodeSnippet={updateCodeSnippet}/>    
+            <Box display={"flex"} flexDirection={"row"} style={{marginTop: "1%"}}> 
+              <LanguagesDropdown 
+              language={language}
+              onSelectChange={onSelectChange}
+              />      
+              <div style={{marginRight: "15px"}}></div>    
+              <ThemeDropdown handleThemeChange={handleThemeChange} theme={theme} />  
+            </Box>
+              <CodeEditorWindow
+                        code={code}
+                        onChange={onChange}
+                        language={language?.value}
+                        theme={theme.value}
+                        socket={socket}
+              />   
+        </Box> 
+        <OutputWindow outputDetails={outputDetails} />
+        <CustomInput
+            customInput={customInput}
+            setCustomInput={setCustomInput}
+          />
+          <Box style={{display: "flex", flexDirection:"row", justifyContent: "flex-end", marginBottom: '10px'}}>
+            <Button 
+                onClick={handleCompile}
+                disabled={!code}
+                variant='contained' 
+                style={{textTransform: 'none', borderWidth: '2px', borderRadius: '7px', backgroundColor: !code ? "#bcbcbc" : "#1e293b", fontSize:'15px', fontWeight: 'bold'}} 
+            > {processing ? "Processing..." : "Compile & Execute"}
+            </Button> 
+            {outputDetails && <OutputDetails outputDetails={outputDetails} />}
+          </Box> 
+      </Box>
     </>
   );
 };
