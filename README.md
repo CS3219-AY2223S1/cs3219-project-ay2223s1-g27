@@ -38,4 +38,4 @@ The frontend and backend should be running at http://localhost and http://localh
 To teardown the cluster, run:
 
     cd path/to/root
-    run docker-compose down
+    docker-compose down
