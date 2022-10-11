@@ -90,10 +90,11 @@ function NavigationBar({ isAuthenticated }) {
             .then(res => {
             console.log(res.data.message);
             console.log(res.body);
+            res.status === 200 ? setUpdateSuccess(true) : setUpdateSuccess(false);
             setMessage(message);
         }) 
     } 
-    
+
     const handleDeleteAccountOnClick = () => {
 
     }

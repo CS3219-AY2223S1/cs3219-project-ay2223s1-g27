@@ -1,5 +1,5 @@
 import axios from "axios";
-import { URL_USER_SVC_REFRESH_TOKEN, URL_USER_SVC_UPDATEPASSWORD } from "./configs";
+import { URL_USER_SVC_REFRESH_TOKEN } from "./configs";
 import { jwtDecode } from "./util/auth";
 
 const axiosApiInstance = axios.create();
@@ -26,26 +26,7 @@ const refreshAccessToken = async (setCookie) => {
   setCookie("access_token", res.data.accessToken);
   setCookie("refresh_token", res.data.refreshToken);
   return res.data.accessToken;
-}
-
-const updatePassword = async(newPassword) => { 
-  const refresh_token = getCookie('refresh_token'); 
-  const res = await axios.put(URL_USER_SVC_UPDATEPASSWORD, {username: jwtDecode(refresh_token).username, newPassword})
-  .catch((err) => {
-      if (err.response.status === 400 || err.response.status === 401 || err.response.status === 500) {
-          // setUpdateSuccess(false); 
-          // setMessage(err.response.data.message);
-          return err.response.data.message;
-      }    
-  })
-
-  if(res && res.status === 200) {
-      // setUpdateSuccess(true);
-      // setMessage(res.data.message);
-      return res.data.message;
-  }
-}
-
+} 
 
 export const initAxiosApiInstance = (setCookie) => {
   // Request interceptor for API calls
