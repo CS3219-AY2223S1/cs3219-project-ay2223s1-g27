@@ -24,3 +24,14 @@ spec:
             limits:
               cpu: 60m
               memory: 150Mi
+          env: 
+            - name: RAPID_API_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: question-service-secret
+                  key: RAPID_API_HOST
+            - name: RAPID_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: question-service-secret
+                  key: RAPID_API_KEY
