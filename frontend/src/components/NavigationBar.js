@@ -15,6 +15,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import {useState} from 'react';
 import { useCookies } from 'react-cookie';
 import axios from 'axios';
+import axiosApiInstance from "../axiosApiInstance" 
 import { jwtDecode } from '../util/auth';
 import { URL_USER_SVC_LOGOUT, URL_USER_SVC_UPDATEPASSWORD } from '../configs'; 
 import { useNavigate } from 'react-router-dom';
@@ -81,22 +82,18 @@ function NavigationBar({ isAuthenticated }) {
     const handleChangePasswordOnClick = async(event) => {
         setAnchorEl(null);
         event.preventDefault();
-        const refresh_token = cookies["refresh_token"]
-        const username = jwtDecode(refresh_token).username;
-        const res = await axios.put(URL_USER_SVC_UPDATEPASSWORD, { username, newPassword })
-            .catch((err) => {
-                if (err.response.status === 400 || err.response.status === 401 || err.response.status === 500) {
-                    setUpdateSuccess(false);
-                    setMessage(err.response.data.message);
-                }    
-            })
-        
-            if(res && res.status === 200) {
-                setUpdateSuccess(true);
-                setMessage(res.data.message);
-            }  
-    }   
-
+        const refresh_token = cookies["refresh_token"];
+        axiosApiInstance.put(`${URL_USER_SVC_UPDATEPASSWORD}`, {
+            username: jwtDecode(refresh_token).username,
+            newPassword: newPassword
+        })
+            .then(res => {
+            console.log(res.data.message);
+            console.log(res.body);
+            setMessage(message);
+        }) 
+    } 
+    
     const handleDeleteAccountOnClick = () => {
 
     }
