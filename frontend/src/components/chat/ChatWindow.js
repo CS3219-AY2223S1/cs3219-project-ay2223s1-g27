@@ -3,6 +3,7 @@ import { io } from "socket.io-client";
 import { useLocation } from "react-router-dom";
 import { useCookies } from 'react-cookie';
 import { jwtDecode } from '../../util/auth';
+import { URL_COMM_SVC, PREFIX_COMM_SVC_CHAT } from "../../configs";
 import ChatFooter from "./ChatFooter";
 import ChatBody from "./ChatBody";
 
@@ -13,10 +14,12 @@ const ChatWindow = () => {
     const username = jwtDecode(cookies['refresh_token']).username;
     const room_id = location.state.room_id;
 
-    // const chatSocket = io.connect('http://localhost:8004/api/comm/chat')
-    const chatSocket = io('http://localhost:8004', { 
+    const chatSocket = io(URL_COMM_SVC, { 
         transports: ['websocket'],
-        path: "/api/comm/chat"
+        path: PREFIX_COMM_SVC_CHAT,
+        auth: {
+            token: `Bearer ${cookies['access_token']}`
+        }
     });
     chatSocket.on("connect_error", (err) => {
         console.log(`connect_error due to ${err.message}`);

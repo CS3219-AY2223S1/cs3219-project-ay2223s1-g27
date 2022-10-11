@@ -4,3 +4,10 @@ export const interviewQuestions = [
     "What is the difference between a container and virtual machine?",
     "How do processes communicate if they do not share memory space?",
 ]
+
+// export const interviewQuestions = [
+//     "What?",
+//     "What?",
+//     "Whal machine?",
+//     "Howace?",
+// ]

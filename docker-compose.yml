@@ -36,6 +36,14 @@ services:
       - gateway 
     environment: 
       - ENV=DEV
+  
+  comm-service-service:
+    build: ./comm-service
+    restart: always
+    depends_on:
+      - gateway 
+    environment: 
+      - ENV=DEV
 
   mongodb:
     image: mongo:5.0

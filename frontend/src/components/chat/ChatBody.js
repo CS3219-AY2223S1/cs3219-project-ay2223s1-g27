@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { interviewQuestions } from "./InterviewQns";
+import QuestionSelector from "./QuestionSelector";
+import Button from '@mui/material/Button';
 
 const ChatBody = ({ chatSocket, username, room_id }) => {
   const [isInterviewer, setIsInterviewer] = useState();
@@ -37,20 +39,6 @@ const ChatBody = ({ chatSocket, username, room_id }) => {
     }
   };
 
-  const sendQuestion = (e, question) => {
-    e.preventDefault();
-    if (question.trim()) {
-      console.log(question)
-      chatSocket.emit('message', {
-          text: question,
-          username: username,
-          id: `${chatSocket.id}${Math.random()}`,
-          socketID: chatSocket.id,
-          room_id: room_id,
-      })
-    }
-  }
-
   const toggleShowQuestions = () => {
     setShowQuestions(!showQuestions);
   }
@@ -58,25 +46,14 @@ const ChatBody = ({ chatSocket, username, room_id }) => {
   return (
     <>
       <header className="chat_mainHeader">
-        {welcomeMessage ? <p>Welcome to PeerPrep!</p> :
-        isInterviewer ? <p>You are the Interviewer!</p> : <p>You are the Interviewee!</p>}
-        {isInterviewer ?
-        <div class="dropdown">
-          <button className="interviewerQuestion_btn" onClick={toggleShowQuestions}>
-            Question List
-          </button>
-            {showQuestions ? 
-            <div id="myDropdown" class="dropdown-content">
-              {interviewQuestions.map((question) =>
-              <div><button className="interviewerQuestion" onClick={e => sendQuestion(e, question)}>{question}</button></div>)}
-            </div> 
-            : null
-            }
-        </div>
-        : 
-        <button className="switchRole_btn" onClick={handleSwitchRole}>
-          Become the Interviewer
-        </button>}
+          {welcomeMessage ? <p>Welcome to PeerPrep!</p> :
+          isInterviewer ? <p>You are the Interviewer!</p> : <p>You are the Interviewee!</p>}
+          {isInterviewer ?
+          <QuestionSelector chatSocket={chatSocket} username={username} room_id={room_id}/>
+          : 
+          <Button onClick={handleSwitchRole} sx={{ width: '35%' }}          >
+            Become the Interviewer
+          </Button>}
       </header>
 
       {/*This shows messages sent from you*/}
