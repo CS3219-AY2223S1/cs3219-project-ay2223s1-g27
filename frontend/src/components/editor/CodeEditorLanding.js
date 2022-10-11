@@ -229,7 +229,7 @@ const CodeEditorLanding = () => {
 
       <Box>
         <Box display={"flex"} flexDirection={"column"} style={{marginBottom: "1%"}}>  
-          <QuestionWindow socket={socket} titleSlug={titleSlug} setTitleSlug={setTitleSlug} />    
+          <QuestionWindow socket={socket} titleSlug={titleSlug} setTitleSlug={setTitleSlug} setCodeSnippets={setCodeSnippets} updateCodeSnippet={updateCodeSnippet}/>    
             <Box display={"flex"} flexDirection={"row"} style={{marginTop: "1%"}}> 
               <LanguagesDropdown 
               language={language}

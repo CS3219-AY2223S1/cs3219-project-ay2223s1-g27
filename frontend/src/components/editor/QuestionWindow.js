@@ -6,7 +6,7 @@ import { URL_QUESTION_SVC_QUESTIONS, URL_QUESTION_SVC_QUESTION } from "../../con
 import QuestionDropdown from "./QuestionDropdown";
 import QuestionDisplay from "./QuestionDisplay";
 
-export default function QuestionWindow({socket, titleSlug, setTitleSlug}) {
+export default function QuestionWindow({socket, titleSlug, setTitleSlug, setCodeSnippets, updateCodeSnippet}) {
     const location = useLocation();
     let [questions, setQuestions] = useState([]);
     let [questionName, setQuestionName] = useState("-");
