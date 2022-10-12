@@ -6,6 +6,7 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import CodeEditorLanding from "./editor/CodeEditorLanding";
 import NavigationBar from "./NavigationBar";  
+import ChatWindow from "./chat/ChatWindow";
 import LogoutIcon from '@mui/icons-material/Logout';
 
 function RoomPage() {
@@ -24,6 +25,7 @@ function RoomPage() {
                 <Typography sx={{marginLeft: "3%", marginTop: "1%", marginBottom: "-2%"}} variant={"h3"} marginBottom={"2rem"}>Coding Room</Typography>   
                 <Box display={"flex"} flexDirection={"column"} style={{ marginTop: "3%", marginLeft: "3%", marginRight: "3%" }}>
                     <CodeEditorLanding/>
+                    <ChatWindow/>
                 </Box>
                 <Box display={"flex"} flexDirection={"row"} justifyContent={"flex-end"} sx={{marginRight: "3%", marginBottom: "10px"}}> 
                     <Button 
