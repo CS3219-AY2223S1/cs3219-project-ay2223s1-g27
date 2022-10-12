@@ -3,8 +3,7 @@ import QuestionSelector from "./QuestionSelector";
 import { Button, Box, Chip } from '@mui/material';
 
 const ChatBody = ({ chatSocket, username, room_id }) => {
-  const [isInterviewer, setIsInterviewer] = useState();
-  const [welcomeMessage, setWelcomeMessage] = useState(true);
+  const [isInterviewer, setIsInterviewer] = useState(); 
   const [messages, setMessages] = useState([]);
   const interviewerSwitchRequestEvent = 'request interviewer switch';
   const interviewerSwitchEvent = 'interviewer switch event';
@@ -16,8 +15,7 @@ const ChatBody = ({ chatSocket, username, room_id }) => {
         setIsInterviewer(true);
     } else {
         setIsInterviewer(false);
-    }
-    setWelcomeMessage(false)
+    } 
   })
 
   chatSocket.on('message response', (data) => {
