@@ -37,6 +37,14 @@ services:
     env_file:
       - ./user-service/.env
 
+  comm-service-service:
+    build: ./comm-service
+    restart: always
+    depends_on:
+      - gateway 
+    env_file:
+      - ./user-service/.env
+
   mongodb:
     image: mongo:5.0
     ports:

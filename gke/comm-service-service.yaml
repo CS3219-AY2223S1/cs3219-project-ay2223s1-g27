@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: comm-service
+  name: comm-service-service
+spec:
+  selector:
+    app: comm-service
+  type: ClusterIP
+  ports:
+    - name: cms-http
+      port: 8004
+      protocol: TCP
+      targetPort: cms-http
