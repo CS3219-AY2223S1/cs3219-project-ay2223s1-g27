@@ -46,15 +46,11 @@ const ChatWindow = () => {
         }
     }, [chatSocket, room_id, username]);
 
-    return (
-        // <div className="chat">
+    return ( 
         <Box display={"flex"} flexDirection={"column"} style={{ marginBottom: "3%" }}>
             <ChatBody chatSocket={chatSocket} username={username} room_id={room_id}/>
             <ChatFooter chatSocket={chatSocket} username={username} room_id={room_id}/>
-        </Box>
-            // <div className="main_chat">
-            // </div>
-        // </div>
+        </Box> 
     );
 };
 

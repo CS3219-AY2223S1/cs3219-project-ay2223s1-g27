@@ -1,18 +1,14 @@
 import * as React from 'react';
 import { 
   Button, 
-  Box, 
-  Chip, 
+  Box,  
   Menu, 
-  MenuItem, 
-  MenuList, 
-  Tooltip,
-  ListItemIcon, 
+  MenuItem,  
+  Tooltip, 
   Typography 
 } from '@mui/material'; 
 import { interviewQuestions } from './InterviewQns';  
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import SendIcon from '@mui/icons-material/Send';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'; 
 
 const QuestionSelector = ({ chatSocket, username, room_id }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -90,43 +86,7 @@ const QuestionSelector = ({ chatSocket, username, room_id }) => {
               
               )
               })} 
-      </Menu>
-      {/* <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-        }}
-        transformOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-        open={open}
-        sx={{ width: '35%' }}
-        onClose={handleClose}
-        MenuListProps={{
-          'aria-labelledby': 'basic-button',
-        }}
-      > */}
-        {/* <MenuList>
-            {interviewQuestions.map((question) => {
-            return (
-            <MenuItem onClick={e => {
-                sendQuestion(e, question);
-                handleClose();
-            }}>
-            <ListItemIcon>
-                <SendIcon fontSize="small" />
-            </ListItemIcon>
-            <Typography variant="inherit" style={{ display: "inline-block", whiteSpace: "pre-line" }}>
-                {question}
-            </Typography>
-            </MenuItem>
-            )
-            })}
-        </MenuList>
-      </Menu> */}
+      </Menu> 
     </div>
   );
 }
