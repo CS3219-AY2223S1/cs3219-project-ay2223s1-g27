@@ -26,7 +26,7 @@ const refreshAccessToken = async (setCookie) => {
   setCookie("access_token", res.data.accessToken);
   setCookie("refresh_token", res.data.refreshToken);
   return res.data.accessToken;
-}
+} 
 
 export const initAxiosApiInstance = (setCookie) => {
   // Request interceptor for API calls

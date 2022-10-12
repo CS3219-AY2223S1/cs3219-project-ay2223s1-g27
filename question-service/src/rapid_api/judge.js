@@ -7,8 +7,8 @@ async function compile(formData) {
   const headers = {
     "content-type": "application/json",
     "Content-Type": "application/json",
-    "X-RapidAPI-Host": process.env.REACT_APP_RAPID_API_HOST,
-    "X-RapidAPI-Key": process.env.REACT_APP_RAPID_API_KEY,
+    "X-RapidAPI-Host": process.env.RAPID_API_HOST,
+    "X-RapidAPI-Key": process.env.RAPID_API_KEY,
   }
 
   const options = {

@@ -15,8 +15,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import {useState} from 'react';
 import { useCookies } from 'react-cookie';
 import axios from 'axios';
+import axiosApiInstance from "../axiosApiInstance" 
 import { jwtDecode } from '../util/auth';
-import { URL_USER_SVC_LOGOUT } from '../configs'; 
+import { URL_USER_SVC_LOGOUT, URL_USER_SVC_UPDATEPASSWORD } from '../configs'; 
 import { useNavigate } from 'react-router-dom';
 
 const modalStyle = {
@@ -32,11 +33,13 @@ const modalStyle = {
   }; 
 
 function NavigationBar({ isAuthenticated }) {
-    const navigate = useNavigate();
+    const navigate = useNavigate(); 
     const [cookies,,removeCookie] = useCookies(); 
     const [anchorEl, setAnchorEl] = useState(null);
     const [changePassword, setChangePassword] = useState(false);
     const [newPassword, setNewPassword] = useState("");
+    const [message, setMessage] = useState("");
+    const [updateSuccess, setUpdateSuccess] = useState(null);
     const [deleteAccount, setDeleteAccount] = useState(false); 
     const [logOut, setLogOut] = useState(false);
  
@@ -60,7 +63,7 @@ function NavigationBar({ isAuthenticated }) {
     
     const handleLogOut = async () => {
         setAnchorEl(null);
-        setLogOut(true); 
+        setLogOut(true);  
     } 
 
     const handleCloseChangePassword = () => {
@@ -76,12 +79,27 @@ function NavigationBar({ isAuthenticated }) {
         setLogOut(false);
     }
  
-    const handleChangePasswordOnClick = () => {
+    const handleChangePasswordOnClick = async(event) => {
         setAnchorEl(null);
-        // Triggers change password! 
+        event.preventDefault();
+        const refresh_token = cookies["refresh_token"];
+        axiosApiInstance.put(`${URL_USER_SVC_UPDATEPASSWORD}`, {
+            username: jwtDecode(refresh_token).username,
+            newPassword: newPassword
+        })
+            .then(res => {
+            console.log(res.data.message);
+            console.log(res.body);
+            res.status === 200 ? setUpdateSuccess(true) : setUpdateSuccess(false);
+            setMessage(message);
+        }) 
     } 
 
     const handleDeleteAccountOnClick = () => {
+
+    }
+
+    const handleLogOutOnClick = () => { 
         const refresh_token = cookies["refresh_token"]
         axios.post(URL_USER_SVC_LOGOUT, {username: jwtDecode(refresh_token).username}, {
             headers: {
@@ -89,7 +107,7 @@ function NavigationBar({ isAuthenticated }) {
             }
         }).then(x => {
             removeCookie("access_token");
-            removeCookie("refresh_token");
+            removeCookie("refresh_token"); 
             navigate("/login");
         }).catch(err => {
             console.log(err);
@@ -165,6 +183,11 @@ function NavigationBar({ isAuthenticated }) {
                                             sx={{marginTop: "1rem", marginBottom: "1rem"}}
                                             autoFocus
                                         /> 
+                                        <div> 
+                                            {updateSuccess ? <div style={{ color: "blue" }}> {message} </div>
+                                                    : updateSuccess === false ? <div style={{ color: "red" }}>{message}</div>
+                                                        : <div></div>} 
+                                        </div>  
                                         <Box display={"flex"} flexDirection={"row"} justifyContent={"flexStart"} style={{ paddingTop: "5%"}}>
                                             <Button variant={"contained"} onClick={handleChangePasswordOnClick}>Confirm New Password</Button>
                                         </Box>
@@ -211,7 +234,7 @@ function NavigationBar({ isAuthenticated }) {
                                             Do you wish to end your session? 
                                         </Typography>
                                         <Box display={"flex"} flexDirection={"row"} justifyContent={"flexStart"} style={{ paddingTop: "5%"}}>
-                                            <Button variant={"contained"} onClick={handleDeleteAccountOnClick}>Back to Login Page</Button>
+                                            <Button variant={"contained"} onClick={handleLogOutOnClick}>Back to Login Page</Button>
                                         </Box>
                                     </Box>
                                 </Modal> 

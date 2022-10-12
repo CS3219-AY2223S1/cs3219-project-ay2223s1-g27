@@ -11,7 +11,7 @@ import {
 import {useCookies} from 'react-cookie'
 import {useState} from "react"; 
 import axios from "axios";
-import {URL_USER_SVC_LOGIN, URL_USER_SVC_RESETPASSWORD} from "../configs";
+import {URL_USER_SVC_LOGIN, URL_USER_SVC_RESETLINK} from "../configs";
 import {
     STATUS_CODE_LOGIN, 
     STATUS_CODE_INVALID_USER, 
@@ -29,12 +29,11 @@ function LoginPage() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);  
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [resetUsername, setResetUsername] = useState("");
-    const [resetPassword, setResetPassword] = useState("");
+    const [resetUsername, setResetUsername] = useState(""); 
     const [resetEmail, setResetEmail] = useState("");
     const [isDialogOpen, setIsDialogOpen] = useState(false);  
     const [isEmailValid, setIsEmailValid] = useState(null); 
-    const [resetPasswordFailed, setResetPasswordFailed] = useState(null);  
+    const [resetEmailSent, setResetEmailSent] = useState(null);  
     const [resetPasswordMessage, setResetPasswordMessage] = useState(""); 
     const [cookies, setCookie] = useCookies();
 
@@ -47,24 +46,29 @@ function LoginPage() {
     const closeDialog = () => {
         setIsEmailValid(null);
         setIsDialogOpen(false);
+        setResetUsername("");
+        setResetEmail("");
     }
 
     const handleResetPassword = async(event) => {
         event.preventDefault();
-        setResetPasswordFailed(false);
-        const username = resetUsername;
-        const newPassword = resetPassword;
+        setResetEmailSent(false);
+        const username = resetUsername; 
         const email = resetEmail;
-        const res = await axios.put(URL_USER_SVC_RESETPASSWORD, { username, newPassword, email })
+        if (username === "" || email === "") {
+            setResetEmailSent(false);  
+            setResetPasswordMessage("Missing fields!");
+            return;
+        }
+        const res = await axios.post(URL_USER_SVC_RESETLINK, { username, email })
             .catch((err) => {
                 if (err.response.status === 400 || err.response.status === 500 ) {
-                    setResetPasswordFailed(true);  
+                    setResetEmailSent(false);  
                     setResetPasswordMessage(err.response.data.message);
                 } 
-            })
-
+            }) 
         if (res && res.status === 200) {
-            setResetPasswordFailed(false);
+            setResetEmailSent(true);
             setResetPasswordMessage(res.data.message);
         } 
     }
@@ -154,26 +158,17 @@ function LoginPage() {
                         onChange={(e) => setResetEmail(e.target.value)}
                         fullWidth
                         variant="standard"
-                        sx={{ marginBottom: "1rem" }} />
-                    <TextField
-                        autoFocus
-                        label="New Password"
-                        type="password"
-                        value={resetPassword}
-                        onChange={(e) => setResetPassword(e.target.value)}
-                        fullWidth
-                        variant="standard"
-                        sx={{ marginBottom: "2rem" }} />    
+                        sx={{ marginBottom: "1rem" }} /> 
                     <div>
-                        {resetPasswordFailed ? <div style={{ color: "red" }}> {resetPasswordMessage} </div>
-                                : resetPasswordFailed === false ? <div style={{ color: "blue" }}>{resetPasswordMessage}</div>
+                        {resetEmailSent ? <div style={{ color: "blue" }}> {resetPasswordMessage} </div>
+                                : resetEmailSent === false ? <div style={{ color: "red" }}>{resetPasswordMessage}</div>
                                     : <div></div>} 
                     </div>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={closeDialog}>Cancel</Button>
                     {/* Click on "Reset Password" triggers sending of email and success message as well */}
-                    <Button onClick={handleResetPassword}>Reset Password</Button>
+                    <Button onClick={handleResetPassword}>Send Reset Link</Button>
                 </DialogActions>
             </Dialog>
         </Box>
