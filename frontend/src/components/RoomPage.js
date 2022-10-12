@@ -25,6 +25,8 @@ function RoomPage() {
                 <Typography sx={{marginLeft: "3%", marginTop: "1%", marginBottom: "-2%"}} variant={"h3"} marginBottom={"2rem"}>Coding Room</Typography>   
                 <Box display={"flex"} flexDirection={"column"} style={{ marginTop: "3%", marginLeft: "3%", marginRight: "3%" }}>
                     <CodeEditorLanding/>
+                    <div style={{ marginTop: '1%'}}></div>
+                    <h1 style={{fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '5px', color: '#0f172a'}}> Messenger </h1>
                     <ChatWindow/>
                 </Box>
                 <Box display={"flex"} flexDirection={"row"} justifyContent={"flex-end"} sx={{marginRight: "3%", marginBottom: "10px"}}> 

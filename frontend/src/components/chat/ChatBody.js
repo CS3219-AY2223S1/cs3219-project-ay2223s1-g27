@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import QuestionSelector from "./QuestionSelector";
-import Button from '@mui/material/Button';
+import QuestionSelector from "./QuestionSelector"; 
+import { Button, Box, Chip } from '@mui/material';
 
 const ChatBody = ({ chatSocket, username, room_id }) => {
   const [isInterviewer, setIsInterviewer] = useState();
@@ -35,16 +35,29 @@ const ChatBody = ({ chatSocket, username, room_id }) => {
   };
 
   return (
-    <>
-      <header className="chat_mainHeader">
-          {welcomeMessage ? <p>Welcome to PeerPrep!</p> :
-          isInterviewer ? <p>You are the Interviewer!</p> : <p>You are the Interviewee!</p>}
-          {isInterviewer ?
-          <QuestionSelector chatSocket={chatSocket} username={username} room_id={room_id}/>
+    <> 
+      <header className="chat_mainHeader"> 
+          <Chip label={isInterviewer ? 'Interviewer' : 'Interviewee' } sx={{backgroundColor: '#a2acbd', color: '#fff'}}/>   
+          {isInterviewer ?  
+            <QuestionSelector chatSocket={chatSocket} username={username} room_id={room_id}/> 
           : 
-          <Button onClick={handleSwitchRole} sx={{ width: '35%' }}          >
-            Become the Interviewer
-          </Button>}
+            <Box> 
+              <Button 
+                onClick={handleSwitchRole} 
+                variant='outlined'
+                sx={{ backgroundColor: '#0f172a', 
+                  color: '#fff', 
+                  borderRadius: '7px', 
+                  textTransform: 'none', 
+                  fontWeight: 'bold', 
+                  '&:hover': {
+                    backgroundColor: '#1e293b'
+                  }}}          
+                >
+                Become the Interviewer
+              </Button>
+            </Box>
+          }
       </header>
 
       {/*This shows messages sent from you*/}
