@@ -22,18 +22,22 @@ const CodeEditorWindow = ({ onChange, language, code, theme, socket }) => {
       room_id: location.state.room_id,
       newCode: value
     })
-    updateValue(value);
   };
 
-  socket.on('receive code', (payload) => {
-    updateValue(payload.newCode)
-  })
+  useEffect(() => {
+    if (socket == null) {
+      return;
+    }
+    socket.on('receive code', (payload) => {
+      updateValue(payload.newCode)
+    })
+  }, [socket]);
 
   return (
-    <div style={{paddingTop: '10px'}}className="overlay rounded-md overflow-hidden w-full h-full shadow-4xl">
+    <div style={{ paddingTop: '10px' }} className="overlay rounded-md overflow-hidden w-full h-full shadow-4xl">
       <Editor
         height="85vh"
-        width={`100%`} 
+        width={`100%`}
         language={language || "javascript"}
         value={value}
         theme={theme}
