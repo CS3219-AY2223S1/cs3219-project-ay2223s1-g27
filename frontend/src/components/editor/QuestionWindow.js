@@ -40,6 +40,9 @@ export default function QuestionWindow({ socket, titleSlug, setTitleSlug, setCod
   }
 
   useEffect(() => {
+    if (socket == null) {
+      return;
+    }
     socket.on('receive question', (payload) => {
       console.log(`received question with titleSlug=${payload.titleSlug} and name=${payload.questionName}`)
       setTitleSlug(payload.titleSlug);
