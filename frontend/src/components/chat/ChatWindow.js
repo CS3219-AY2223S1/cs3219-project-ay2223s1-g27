@@ -7,6 +7,7 @@ import { isUnauthorizedError } from '@thream/socketio-jwt/build/UnauthorizedErro
 import { URL_COMM_SVC, PREFIX_COMM_SVC_CHAT } from "../../configs";
 import ChatFooter from "./ChatFooter";
 import ChatBody from "./ChatBody";
+import { Box } from "@mui/material";
 
 const ChatWindow = () => {
     // assumption is that the room_id found in location.state.room_id(probably provided by Matching svc) will availiable to 2 users only.
@@ -45,13 +46,11 @@ const ChatWindow = () => {
         }
     }, [chatSocket, room_id, username]);
 
-    return (
-        <div className="chat">
-            <div className="main_chat">
-                <ChatBody chatSocket={chatSocket} username={username} room_id={room_id}/>
-                <ChatFooter chatSocket={chatSocket} username={username} room_id={room_id}/>
-            </div>
-        </div>
+    return ( 
+        <Box display={"flex"} flexDirection={"column"} style={{ marginBottom: "3%" }}>
+            <ChatBody chatSocket={chatSocket} username={username} room_id={room_id}/>
+            <ChatFooter chatSocket={chatSocket} username={username} room_id={room_id}/>
+        </Box> 
     );
 };
 

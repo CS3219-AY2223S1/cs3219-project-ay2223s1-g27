@@ -1,17 +1,18 @@
 import * as React from 'react';
-import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import { interviewQuestions } from './InterviewQns';
-import { Typography } from '@mui/material';
-
-import MenuList from '@mui/material/MenuList';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import SendIcon from '@mui/icons-material/Send';
+import { 
+  Button, 
+  Box,  
+  Menu, 
+  MenuItem,  
+  Tooltip, 
+  Typography 
+} from '@mui/material'; 
+import { interviewQuestions } from './InterviewQns';  
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'; 
 
 const QuestionSelector = ({ chatSocket, username, room_id }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
+  // const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -34,52 +35,58 @@ const QuestionSelector = ({ chatSocket, username, room_id }) => {
 
   return (
     <div>
-      <Button
-        id="basic-button"
-        aria-controls={open ? 'basic-menu' : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? 'true' : undefined}
-        onClick={handleClick}
-        sx={{ width: '50' }}
-      >
-        Question List
-      </Button>
+      <Box> 
+        <Button
+          variant='contained' 
+          onClick={handleClick} 
+          endIcon={<ArrowDropDownIcon/>}
+          sx={{ backgroundColor: '#0f172a', 
+                color: '#fff', 
+                borderRadius: '7px', 
+                textTransform: 'none', 
+                fontWeight: 'bold', 
+                '&:hover': {
+                  backgroundColor: '#1e293b'
+                }}}
+        >
+          Interview Questions
+        </Button>
+      </Box>
+      
       <Menu
-        id="basic-menu"
+        id="menu-appbar"
         anchorEl={anchorEl}
         anchorOrigin={{
             vertical: 'top',
             horizontal: 'right',
         }}
+        keepMounted
         transformOrigin={{
             vertical: 'top',
             horizontal: 'right',
-          }}
-        open={open}
-        sx={{ width: '35%' }}
-        onClose={handleClose}
-        MenuListProps={{
-          'aria-labelledby': 'basic-button',
         }}
-      >
-        <MenuList>
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+        > 
             {interviewQuestions.map((question) => {
-            return (
-            <MenuItem onClick={e => {
-                sendQuestion(e, question);
-                handleClose();
-            }}>
-            <ListItemIcon>
-                <SendIcon fontSize="small" />
-            </ListItemIcon>
-            <Typography variant="inherit" style={{ display: "inline-block", whiteSpace: "pre-line" }}>
-                {question}
-            </Typography>
-            </MenuItem>
-            )
-            })}
-        </MenuList>
-      </Menu>
+              return (
+                <Tooltip title="Click to send!">
+                  <MenuItem onClick={e => {
+                      sendQuestion(e, question);
+                      handleClose();
+                  }}>
+                  {/* <ListItemIcon>
+                      <SendIcon fontSize="small" />
+                  </ListItemIcon> */}
+                  <Typography variant="inherit" style={{ display: "inline-block", whiteSpace: "pre-line" }}>
+                      {question}
+                  </Typography>
+                  </MenuItem>
+                </Tooltip>
+              
+              )
+              })} 
+      </Menu> 
     </div>
   );
 }
