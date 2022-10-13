@@ -47,6 +47,7 @@ const CodeEditorLanding = () => {
         token: `Bearer ${cookies['access_token']}`
       }
     }))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -89,7 +90,6 @@ const CodeEditorLanding = () => {
       socket.emit('leave room', { room_id: location.state.room_id, username: jwtDecode(cookies['refresh_token']).username });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-
   }, [socket])
 
   const enterPress = useKeyPress("Enter");

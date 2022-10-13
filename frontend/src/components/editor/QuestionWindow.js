@@ -48,6 +48,7 @@ export default function QuestionWindow({ socket, titleSlug, setTitleSlug, setCod
       setTitleSlug(payload.titleSlug);
       setQuestionName(payload.questionName);
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket])
 
   return <><QuestionDropdown
