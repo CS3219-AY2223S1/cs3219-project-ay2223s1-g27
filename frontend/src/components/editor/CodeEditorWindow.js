@@ -31,6 +31,7 @@ const CodeEditorWindow = ({ onChange, language, code, theme, socket }) => {
     socket.on('receive code', (payload) => {
       updateValue(payload.newCode)
     })
+    // eslint-disable-next-line
   }, [socket]);
 
   return (
