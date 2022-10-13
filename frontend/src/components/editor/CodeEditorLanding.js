@@ -7,7 +7,7 @@ import { io } from "socket.io-client";
 import { isUnauthorizedError } from '@thream/socketio-jwt/build/UnauthorizedError.js'
 import CodeEditorWindow from "./CodeEditorWindow";
 import QuestionWindow from "./QuestionWindow";
-import axiosApiInstance from "../../axiosApiInstance" 
+import axiosApiInstance from "../../axiosApiInstance"
 import { languageOptions } from "../../constants/languageOptions";
 import { PREFIX_COLLAB_SVC, URL_COLLAB_SVC, URL_QUESTION_SVC_COMPILE } from "../../configs";
 
@@ -37,23 +37,51 @@ const CodeEditorLanding = () => {
   const [theme, setTheme] = useState("cobalt");
   const [language, setLanguage] = useState(languageOptions[0]);
   const [titleSlug, setTitleSlug] = useState("");
-
-  const socket = io(URL_COLLAB_SVC, {
-    transports: ['websocket'],
-    path: PREFIX_COLLAB_SVC,
-    auth: {
-      token: `Bearer ${cookies['access_token']}`
-    }
-  });
-
-  socket.on('connect_error', (error) => {
-    if (isUnauthorizedError(error)) {
-      // TODO might need to handle the error here
-      console.log('User token has expired')
-    }
-  })
+  const [socket, setSocket] = useState(null);
 
   useEffect(() => {
+    setSocket(io(URL_COLLAB_SVC, {
+      transports: ['websocket'],
+      path: PREFIX_COLLAB_SVC,
+      auth: {
+        token: `Bearer ${cookies['access_token']}`
+      }
+    }))
+  }, []);
+
+  useEffect(() => {
+    if (socket == null) {
+      return;
+    }
+
+    socket.on('connect_error', (error) => {
+      if (isUnauthorizedError(error)) {
+        // TODO might need to handle the error here
+        console.log('User token has expired')
+      }
+    })
+
+    socket.on('receive leave', (data) => {
+      console.log(`user ${data.username} has left the room`);
+      setOtherUser(data.username)
+      setAlertOpen(true);
+    })
+
+    socket.on('receive language', (payload) => {
+      console.log(payload)
+      languageOptions.forEach(x => {
+        if (x.id === payload.language_id) {
+          console.log(`setting language to${x.name}`)
+          setLanguage(x);
+        }
+      })
+    })
+
+    socket.on('receive output', (payload) => {
+      showSuccessToast(`Compiled Successfully!`);
+      setOutputDetails(payload.outputDetails)
+    })
+
     // Emit matching event here
     socket.emit('room', { room_id: location.state.room_id });
 
@@ -61,13 +89,8 @@ const CodeEditorLanding = () => {
       socket.emit('leave room', { room_id: location.state.room_id, username: jwtDecode(cookies['refresh_token']).username });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
-  socket.on('receive leave', (data) => {
-    console.log(`user ${data.username} has left the room`);
-    setOtherUser(data.username)
-    setAlertOpen(true);
-  })
+  }, [socket])
 
   const enterPress = useKeyPress("Enter");
   const ctrlPress = useKeyPress("Control");
@@ -90,15 +113,7 @@ const CodeEditorLanding = () => {
     setCode(codeSnippet?.code || "");
   }
 
-  socket.on('receive language', (payload) => {
-    console.log(payload)
-    languageOptions.forEach(x => {
-      if (x.id === payload.language_id) {
-        console.log(`setting language to${x.name}`)
-        setLanguage(x);
-      }
-    })
-  })
+
 
   useEffect(() => {
     if (enterPress && ctrlPress) {
@@ -152,11 +167,6 @@ const CodeEditorLanding = () => {
         showErrorToast();
       });
   };
-
-  socket.on('receive output', (payload) => {
-    showSuccessToast(`Compiled Successfully!`);
-    setOutputDetails(payload.outputDetails)
-  })
 
   function handleThemeChange(th) {
     const theme = th;
@@ -225,42 +235,42 @@ const CodeEditorLanding = () => {
             </Link>
           </span>
         </Alert>
-      </Snackbar>  
+      </Snackbar>
 
       <Box>
-        <Box display={"flex"} flexDirection={"column"} style={{marginBottom: "1%"}}>  
-          <QuestionWindow socket={socket} titleSlug={titleSlug} setTitleSlug={setTitleSlug} setCodeSnippets={setCodeSnippets} updateCodeSnippet={updateCodeSnippet}/>    
-            <Box display={"flex"} flexDirection={"row"} style={{marginTop: "1%"}}> 
-              <LanguagesDropdown 
+        <Box display={"flex"} flexDirection={"column"} style={{ marginBottom: "1%" }}>
+          <QuestionWindow socket={socket} titleSlug={titleSlug} setTitleSlug={setTitleSlug} setCodeSnippets={setCodeSnippets} updateCodeSnippet={updateCodeSnippet} />
+          <Box display={"flex"} flexDirection={"row"} style={{ marginTop: "1%" }}>
+            <LanguagesDropdown
               language={language}
               onSelectChange={onSelectChange}
-              />      
-              <div style={{marginRight: "15px"}}></div>    
-              <ThemeDropdown handleThemeChange={handleThemeChange} theme={theme} />  
-            </Box>
-              <CodeEditorWindow
-                        code={code}
-                        onChange={onChange}
-                        language={language?.value}
-                        theme={theme.value}
-                        socket={socket}
-              />   
-        </Box> 
+            />
+            <div style={{ marginRight: "15px" }}></div>
+            <ThemeDropdown handleThemeChange={handleThemeChange} theme={theme} />
+          </Box>
+          <CodeEditorWindow
+            code={code}
+            onChange={onChange}
+            language={language?.value}
+            theme={theme.value}
+            socket={socket}
+          />
+        </Box>
         <OutputWindow outputDetails={outputDetails} />
         <CustomInput
-            customInput={customInput}
-            setCustomInput={setCustomInput}
-          />
-          <Box style={{display: "flex", flexDirection:"row", justifyContent: "flex-end", marginBottom: '10px'}}>
-            <Button 
-                onClick={handleCompile}
-                disabled={!code}
-                variant='contained' 
-                style={{textTransform: 'none', borderWidth: '2px', borderRadius: '7px', backgroundColor: !code ? "#bcbcbc" : "#1e293b", fontSize:'15px', fontWeight: 'bold'}} 
-            > {processing ? "Processing..." : "Compile & Execute"}
-            </Button> 
-            {outputDetails && <OutputDetails outputDetails={outputDetails} />}
-          </Box> 
+          customInput={customInput}
+          setCustomInput={setCustomInput}
+        />
+        <Box style={{ display: "flex", flexDirection: "row", justifyContent: "flex-end", marginBottom: '10px' }}>
+          <Button
+            onClick={handleCompile}
+            disabled={!code}
+            variant='contained'
+            style={{ textTransform: 'none', borderWidth: '2px', borderRadius: '7px', backgroundColor: !code ? "#bcbcbc" : "#1e293b", fontSize: '15px', fontWeight: 'bold' }}
+          > {processing ? "Processing..." : "Compile & Execute"}
+          </Button>
+          {outputDetails && <OutputDetails outputDetails={outputDetails} />}
+        </Box>
       </Box>
     </>
   );
