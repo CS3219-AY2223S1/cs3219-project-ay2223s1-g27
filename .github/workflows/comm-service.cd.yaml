@@ -48,4 +48,4 @@ jobs:
           CLUSTER_NAME: cs3219g27
           ZONE_NAME: asia-southeast1-a
         with:
-          args: apply -f gke/comm-service-deployment.yaml
+          args: apply -f gke/comm-service-service.yaml
