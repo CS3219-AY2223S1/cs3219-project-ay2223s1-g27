@@ -8,6 +8,10 @@ export function registerHandlers(io, socket) {
     console.log('user disconnected');
   });
 
+  socket.on('disconnect', (reason) => {
+    console.log('disconnect', reason)
+  })
+
   socket.on('room', function(data) {
     console.log(`a user joined room=${data.room_id}`)
     socket.join(data.room_id);
