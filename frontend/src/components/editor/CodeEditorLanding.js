@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Alert, Box, Button, Snackbar, Link } from "@mui/material";
 import { isUnauthorizedError } from "@thream/socketio-jwt/build/UnauthorizedError.js";
-// import CodeEditorWindow from "./CodeEditorWindow";
 import Editor from "@monaco-editor/react";
 import QuestionWindow from "./QuestionWindow";
 import axiosApiInstance from "../../axiosApiInstance";
@@ -25,6 +24,7 @@ const javascriptDefault = `// some comment`;
 const CodeEditorLanding = ({ socket }) => {
   const location = useLocation(); // Location contains username and selected difficulty level
   const [alertOpen, setAlertOpen] = useState(false);
+  const [compileOpen, setCompileOpen] = useState(false);
   const [otherUser, setOtherUser] = useState("");
   const [code, setCode] = useState(javascriptDefault);
   const [codeSnippets, setCodeSnippets] = useState([]);
@@ -124,7 +124,7 @@ const CodeEditorLanding = ({ socket }) => {
       .request(options)
       .then(function (response) {
         setProcessing(false);
-        showSuccessToast(`Received results!`);
+        setCompileOpen(true);
         setOutputDetails(response.data);
         socket.emit("output event", {
           room_id: location.state.room_id,
@@ -140,7 +140,7 @@ const CodeEditorLanding = ({ socket }) => {
   };
 
   socket.on("receive output", (payload) => {
-    showSuccessToast(`Received results!`);
+    setCompileOpen(true);
     setOutputDetails(payload.outputDetails);
   });
 
@@ -153,6 +153,7 @@ const CodeEditorLanding = ({ socket }) => {
   };
 
   socket.on("receive code", (payload) => {
+    console.log("received code");
     onChange("code", payload.newCode);
   });
 
@@ -172,18 +173,6 @@ const CodeEditorLanding = ({ socket }) => {
     );
   }, []);
 
-  const showSuccessToast = (msg) => {
-    toast.success(msg || `Compiled Successfully!`, {
-      position: "top-right",
-      autoClose: 1000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-  };
-
   const showErrorToast = (msg, timer) => {
     toast.error(msg || `Something went wrong! Please try again.`, {
       position: "top-right",
@@ -199,6 +188,9 @@ const CodeEditorLanding = ({ socket }) => {
   const handleClose = () => {
     setAlertOpen(false);
   };
+  const handleCompileClose = () => {
+    setCompileOpen(false);
+  }
 
   return (
     <>
@@ -228,6 +220,11 @@ const CodeEditorLanding = ({ socket }) => {
               here
             </Link>
           </span>
+        </Alert>
+      </Snackbar>
+      <Snackbar open={compileOpen} onClose={handleCompileClose}>
+        <Alert onClose={handleCompileClose} sx={{ width: "100%" }}>
+          <span>{`Received results!`}</span>
         </Alert>
       </Snackbar>
 
