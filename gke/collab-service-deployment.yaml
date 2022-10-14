@@ -22,8 +22,8 @@ spec:
               containerPort: 8003
           resources:
             limits:
-              cpu: 60m
-              memory: 150Mi
+              cpu: 150m
+              memory: 200Mi
           env: 
             - name: JWT_ACCESS_SECRET
               valueFrom:
