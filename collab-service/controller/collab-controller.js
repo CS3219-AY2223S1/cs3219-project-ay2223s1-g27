@@ -15,6 +15,9 @@ export function registerHandlers(io, socket) {
   socket.on('room', function(data) {
     console.log(`a user joined room=${data.room_id}`)
     socket.join(data.room_id);
+    if (io.sockets.adapter.rooms.get(data.room_id).size != 1) {
+      return
+    }
     setInterval(() => {
       if (map[data.room_id])
         socket.broadcast.to(data.room_id).emit('receive code', map[data.room_id]);
