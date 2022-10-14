@@ -124,6 +124,7 @@ const CodeEditorLanding = ({ socket }) => {
       .request(options)
       .then(function (response) {
         setProcessing(false);
+        showSuccessToast(`Received results!`);
         setOutputDetails(response.data);
         socket.emit("output event", {
           room_id: location.state.room_id,
@@ -139,7 +140,7 @@ const CodeEditorLanding = ({ socket }) => {
   };
 
   socket.on("receive output", (payload) => {
-    showSuccessToast(`Compiled Successfully!`);
+    showSuccessToast(`Received results!`);
     setOutputDetails(payload.outputDetails);
   });
 
