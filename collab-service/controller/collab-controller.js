@@ -18,7 +18,7 @@ export function registerHandlers(io, socket) {
     setInterval(() => {
       if (map[data.room_id])
         socket.broadcast.to(data.room_id).emit('receive code', map[data.room_id]);
-    }, 500)
+    }, 1000)
   });
 
   socket.on('leave room', (data) => {
