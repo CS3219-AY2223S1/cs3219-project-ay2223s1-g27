@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { jwtDecode } from '../../util/auth';
-import { useCookies } from 'react-cookie';
 import { Alert, Box, Button, Snackbar, Link } from "@mui/material";
-import { io } from "socket.io-client";
-import { isUnauthorizedError } from '@thream/socketio-jwt/build/UnauthorizedError.js'
-import CodeEditorWindow from "./CodeEditorWindow";
+import { isUnauthorizedError } from "@thream/socketio-jwt/build/UnauthorizedError.js";
+// import CodeEditorWindow from "./CodeEditorWindow";
+import Editor from "@monaco-editor/react";
 import QuestionWindow from "./QuestionWindow";
-import axiosApiInstance from "../../axiosApiInstance" 
+import axiosApiInstance from "../../axiosApiInstance";
 import { languageOptions } from "../../constants/languageOptions";
-import { PREFIX_COLLAB_SVC, URL_COLLAB_SVC, URL_QUESTION_SVC_COMPILE } from "../../configs";
+import { URL_QUESTION_SVC_COMPILE } from "../../configs";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -24,9 +22,8 @@ import LanguagesDropdown from "./LanguagesDropdown";
 
 const javascriptDefault = `// some comment`;
 
-const CodeEditorLanding = () => {
+const CodeEditorLanding = ({ socket }) => {
   const location = useLocation(); // Location contains username and selected difficulty level
-  const [cookies] = useCookies();
   const [alertOpen, setAlertOpen] = useState(false);
   const [otherUser, setOtherUser] = useState("");
   const [code, setCode] = useState(javascriptDefault);
@@ -38,67 +35,52 @@ const CodeEditorLanding = () => {
   const [language, setLanguage] = useState(languageOptions[0]);
   const [titleSlug, setTitleSlug] = useState("");
 
-  const socket = io(URL_COLLAB_SVC, {
-    transports: ['websocket'],
-    path: PREFIX_COLLAB_SVC,
-    auth: {
-      token: `Bearer ${cookies['access_token']}`
+  socket.on("connect_error", (error) => {
+    if (isUnauthorizedError(error)) {
+      // TODO might need to handle the error here
+      console.log("User token has expired");
     }
   });
 
-  socket.on('connect_error', (error) => {
-    if (isUnauthorizedError(error)) {
-      // TODO might need to handle the error here
-      console.log('User token has expired')
-    }
-  })
-
-  useEffect(() => {
-    // Emit matching event here
-    socket.emit('room', { room_id: location.state.room_id });
-
-    return () => { // component will unmount equivalent
-      socket.emit('leave room', { room_id: location.state.room_id, username: jwtDecode(cookies['refresh_token']).username });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  socket.on('receive leave', (data) => {
+  socket.on("receive leave", (data) => {
     console.log(`user ${data.username} has left the room`);
-    setOtherUser(data.username)
+    setOtherUser(data.username);
     setAlertOpen(true);
-  })
+  });
 
   const enterPress = useKeyPress("Enter");
   const ctrlPress = useKeyPress("Control");
 
   const onSelectChange = (sl) => {
-    socket.emit('language event', { room_id: location.state.room_id, language_id: sl.id })
+    socket.emit("language event", {
+      room_id: location.state.room_id,
+      language_id: sl.id,
+    });
     setLanguage(sl);
-  }
+  };
 
   useEffect(() => {
     updateCodeSnippet(codeSnippets);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [language])
+  }, [language]);
 
   const updateCodeSnippet = (codeSnippets) => {
     console.log(language);
-    const codeSnippet = codeSnippets.find(codeSnippet => {
+    const codeSnippet = codeSnippets.find((codeSnippet) => {
       return codeSnippet.lang.toLowerCase() === language.value.toLowerCase();
     });
     setCode(codeSnippet?.code || "");
-  }
+  };
 
-  socket.on('receive language', (payload) => {
-    console.log(payload)
-    languageOptions.forEach(x => {
+  socket.on("receive language", (payload) => {
+    console.log(payload);
+    languageOptions.forEach((x) => {
       if (x.id === payload.language_id) {
-        console.log(`setting language to${x.name}`)
+        console.log(`setting language to${x.name}`);
         setLanguage(x);
       }
-    })
-  })
+    });
+  });
 
   useEffect(() => {
     if (enterPress && ctrlPress) {
@@ -140,10 +122,13 @@ const CodeEditorLanding = () => {
 
     axiosApiInstance
       .request(options)
-      .then(function(response) {
+      .then(function (response) {
         setProcessing(false);
         setOutputDetails(response.data);
-        socket.emit('output event', { room_id: location.state.room_id, outputDetails: response.data })
+        socket.emit("output event", {
+          room_id: location.state.room_id,
+          outputDetails: response.data,
+        });
         return;
       })
       .catch((err) => {
@@ -153,10 +138,22 @@ const CodeEditorLanding = () => {
       });
   };
 
-  socket.on('receive output', (payload) => {
+  socket.on("receive output", (payload) => {
     showSuccessToast(`Compiled Successfully!`);
-    setOutputDetails(payload.outputDetails)
-  })
+    setOutputDetails(payload.outputDetails);
+  });
+
+  const handleEditorChange = (value) => {
+    socket.emit("coding event", {
+      room_id: location.state.room_id,
+      newCode: value,
+    });
+    onChange("code", value);
+  };
+
+  socket.on("receive code", (payload) => {
+    onChange("code", payload.newCode);
+  });
 
   function handleThemeChange(th) {
     const theme = th;
@@ -200,7 +197,7 @@ const CodeEditorLanding = () => {
 
   const handleClose = () => {
     setAlertOpen(false);
-  }
+  };
 
   return (
     <>
@@ -217,50 +214,96 @@ const CodeEditorLanding = () => {
       />
 
       <Snackbar open={alertOpen} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="warning" sx={{ width: '100%' }}>
+        <Alert onClose={handleClose} severity="warning" sx={{ width: "100%" }}>
           <span>{`${otherUser} has left the room! `}</span>
-          <span>{`Continue `}
-            <Link href={`https://leetcode.com/problems/${titleSlug}`} target="_blank" rel="noopener noreferrer" underline="always">
+          <span>
+            {`Continue `}
+            <Link
+              href={`https://leetcode.com/problems/${titleSlug}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              underline="always"
+            >
               here
             </Link>
           </span>
         </Alert>
-      </Snackbar>  
+      </Snackbar>
 
       <Box>
-        <Box display={"flex"} flexDirection={"column"} style={{marginBottom: "1%"}}>  
-          <QuestionWindow socket={socket} titleSlug={titleSlug} setTitleSlug={setTitleSlug} setCodeSnippets={setCodeSnippets} updateCodeSnippet={updateCodeSnippet}/>    
-            <Box display={"flex"} flexDirection={"row"} style={{marginTop: "1%"}}> 
-              <LanguagesDropdown 
+        <Box
+          display={"flex"}
+          flexDirection={"column"}
+          style={{ marginBottom: "1%" }}
+        >
+          <QuestionWindow
+            socket={socket}
+            titleSlug={titleSlug}
+            setTitleSlug={setTitleSlug}
+            setCodeSnippets={setCodeSnippets}
+            updateCodeSnippet={updateCodeSnippet}
+          />
+          <Box
+            display={"flex"}
+            flexDirection={"row"}
+            style={{ marginTop: "1%" }}
+          >
+            <LanguagesDropdown
               language={language}
               onSelectChange={onSelectChange}
-              />      
-              <div style={{marginRight: "15px"}}></div>    
-              <ThemeDropdown handleThemeChange={handleThemeChange} theme={theme} />  
-            </Box>
-              <CodeEditorWindow
-                        code={code}
-                        onChange={onChange}
-                        language={language?.value}
-                        theme={theme.value}
-                        socket={socket}
-              />   
-        </Box> 
+            />
+            <div style={{ marginRight: "15px" }}></div>
+            <ThemeDropdown
+              handleThemeChange={handleThemeChange}
+              theme={theme}
+            />
+          </Box>
+          <div
+            style={{ paddingTop: "10px" }}
+            className="overlay rounded-md overflow-hidden w-full h-full shadow-4xl"
+          >
+            <Editor
+              height="85vh"
+              width={`100%`}
+              language={language?.value || "javascript"}
+              value={code}
+              theme={theme.value}
+              defaultValue="// Start editing here"
+              onChange={handleEditorChange}
+            />
+          </div>
+        </Box>
         <OutputWindow outputDetails={outputDetails} />
         <CustomInput
-            customInput={customInput}
-            setCustomInput={setCustomInput}
-          />
-          <Box style={{display: "flex", flexDirection:"row", justifyContent: "flex-end", marginBottom: '10px'}}>
-            <Button 
-                onClick={handleCompile}
-                disabled={!code}
-                variant='contained' 
-                style={{textTransform: 'none', borderWidth: '2px', borderRadius: '7px', backgroundColor: !code ? "#bcbcbc" : "#1e293b", fontSize:'15px', fontWeight: 'bold'}} 
-            > {processing ? "Processing..." : "Compile & Execute"}
-            </Button> 
-            {outputDetails && <OutputDetails outputDetails={outputDetails} />}
-          </Box> 
+          customInput={customInput}
+          setCustomInput={setCustomInput}
+        />
+        <Box
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "flex-end",
+            marginBottom: "10px",
+          }}
+        >
+          <Button
+            onClick={handleCompile}
+            disabled={!code}
+            variant="contained"
+            style={{
+              textTransform: "none",
+              borderWidth: "2px",
+              borderRadius: "7px",
+              backgroundColor: !code ? "#bcbcbc" : "#1e293b",
+              fontSize: "15px",
+              fontWeight: "bold",
+            }}
+          >
+            {" "}
+            {processing ? "Processing..." : "Compile & Execute"}
+          </Button>
+          {outputDetails && <OutputDetails outputDetails={outputDetails} />}
+        </Box>
       </Box>
     </>
   );
