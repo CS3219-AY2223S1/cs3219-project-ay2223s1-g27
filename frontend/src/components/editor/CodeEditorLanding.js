@@ -154,6 +154,7 @@ const CodeEditorLanding = ({ socket }) => {
       room_id: location.state.room_id,
       newCode: value,
     });
+    onChange("code", value);
   };
 
   socket.on("receive code", (payload) => {
