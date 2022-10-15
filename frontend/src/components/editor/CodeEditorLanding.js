@@ -40,6 +40,11 @@ const CodeEditorLanding = ({ socket }) => {
       // TODO might need to handle the error here
       console.log("User token has expired");
     }
+    console.log(error);
+  });
+
+  socket.on("disconnect", (reason) => {
+    console.log("disconnect", reason);
   });
 
   socket.on("receive leave", (data) => {
@@ -122,7 +127,7 @@ const CodeEditorLanding = ({ socket }) => {
 
     axiosApiInstance
       .request(options)
-      .then(function (response) {
+      .then(function(response) {
         setProcessing(false);
         setCompileOpen(true);
         setOutputDetails(response.data);
