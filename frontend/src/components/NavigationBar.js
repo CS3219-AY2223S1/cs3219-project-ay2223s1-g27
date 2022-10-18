@@ -116,7 +116,8 @@ function NavigationBar({ isAuthenticated }) {
   const handleLogOutOnClick = () => {
     const refresh_token = cookies["refresh_token"]
     axiosApiInstance.post(URL_USER_SVC_LOGOUT, {
-      username: jwtDecode(refresh_token).username
+      username: jwtDecode(refresh_token).username,
+      refresh_token: refresh_token
     }
     ).then(x => {
       removeCookie("access_token");
