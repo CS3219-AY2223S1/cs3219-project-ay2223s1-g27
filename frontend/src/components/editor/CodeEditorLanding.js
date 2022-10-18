@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
 import { Alert, Box, Button, Snackbar, Link } from "@mui/material";
 import { isUnauthorizedError } from "@thream/socketio-jwt/build/UnauthorizedError.js";
 import Editor from "@monaco-editor/react";
@@ -21,8 +20,7 @@ import LanguagesDropdown from "./LanguagesDropdown";
 
 const javascriptDefault = `// some comment`;
 
-const CodeEditorLanding = ({ socket }) => {
-  const location = useLocation(); // Location contains username and selected difficulty level
+const CodeEditorLanding = ({ socket, chatSocket, room_id, username }) => {
   const [alertOpen, setAlertOpen] = useState(false);
   const [compileOpen, setCompileOpen] = useState(false);
   const [otherUser, setOtherUser] = useState("");
@@ -58,7 +56,7 @@ const CodeEditorLanding = ({ socket }) => {
 
   const onSelectChange = (sl) => {
     socket.emit("language event", {
-      room_id: location.state.room_id,
+      room_id: room_id,
       language_id: sl.id,
     });
     setLanguage(sl);
@@ -132,7 +130,7 @@ const CodeEditorLanding = ({ socket }) => {
         setCompileOpen(true);
         setOutputDetails(response.data);
         socket.emit("output event", {
-          room_id: location.state.room_id,
+          room_id: room_id,
           outputDetails: response.data,
         });
         return;
@@ -151,7 +149,7 @@ const CodeEditorLanding = ({ socket }) => {
 
   const handleEditorChange = (value) => {
     socket.emit("coding event", {
-      room_id: location.state.room_id,
+      room_id: room_id,
       newCode: value,
     });
     onChange("code", value);
@@ -241,6 +239,8 @@ const CodeEditorLanding = ({ socket }) => {
         >
           <QuestionWindow
             socket={socket}
+            chatSocket={chatSocket}
+            username={username}
             titleSlug={titleSlug}
             setTitleSlug={setTitleSlug}
             setCodeSnippets={setCodeSnippets}

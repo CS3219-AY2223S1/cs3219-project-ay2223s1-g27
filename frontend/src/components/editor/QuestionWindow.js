@@ -1,16 +1,19 @@
 import { Box } from "@mui/system";
+import { FormHelperText } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import axiosApiInstance from "../../axiosApiInstance"
 import { URL_QUESTION_SVC_QUESTIONS, URL_QUESTION_SVC_QUESTION } from "../../configs";
 import QuestionDropdown from "./QuestionDropdown";
 import QuestionDisplay from "./QuestionDisplay";
+import { INTERVIEWER_SWITCH_EVENT } from "../../constants";
 
-export default function QuestionWindow({socket, titleSlug, setTitleSlug, setCodeSnippets, updateCodeSnippet}) {
-    const location = useLocation();
-    let [questions, setQuestions] = useState([]);
-    let [questionName, setQuestionName] = useState("-");
-    let [content, setContent] = useState("");
+export default function QuestionWindow({socket, chatSocket, username, titleSlug, setTitleSlug, setCodeSnippets, updateCodeSnippet}) {
+  const location = useLocation();
+  let [questions, setQuestions] = useState([]);
+  let [questionName, setQuestionName] = useState("-");
+  let [content, setContent] = useState("");
+  let [isInterviewer, setIsInterviewer] = useState(false);
 
   useEffect(() => {
     axiosApiInstance.get(`${URL_QUESTION_SVC_QUESTIONS}?difficulty=${location.state.difficultyLevel.toUpperCase()}&page=1`)
@@ -44,15 +47,36 @@ export default function QuestionWindow({socket, titleSlug, setTitleSlug, setCode
     setTitleSlug(payload.titleSlug);
     setQuestionName(payload.questionName);
   })
+  
+  console.log(chatSocket.user)
 
-    return <><QuestionDropdown
+  chatSocket.on(INTERVIEWER_SWITCH_EVENT, (data) => {
+    const interviewer = data.interviewer;
+    console.log("Logging username from questionWindow!")
+    console.log(username)
+    if (interviewer === username) {
+        setIsInterviewer(true);
+    } else {
+        setIsInterviewer(false);
+    } 
+  })
+
+  return (
+    <>
+      {isInterviewer ? 
+      <QuestionDropdown
       handleQuestionChange={handleQuestionChange}
       questions={questions.map((q) => ({
         label: q.title,
         value: q.titleSlug,
         key: q.titleSlug
       }))}
-      questionName={questionName} /><div style={{
+      questionName={questionName} />
+      :     
+      null
+      }
+      <FormHelperText>Selected Question</FormHelperText>
+      <div style={{
         height: "90vh",
         width: "100%",
         marginRight: "10px",
@@ -61,9 +85,10 @@ export default function QuestionWindow({socket, titleSlug, setTitleSlug, setCode
         marginTop: "1%"
       }}>
         <Box display={"flex"} flexDirection={"column"}>
-
           <QuestionDisplay
             content={content} />
         </Box>
-      </div></>
+      </div>
+    </>
+  )
 }

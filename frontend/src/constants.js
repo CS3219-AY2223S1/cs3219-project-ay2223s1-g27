@@ -11,3 +11,5 @@ export const STATUS_DATABASE_FAILURE = 500
 
 export const STATUS_CODE_CONFLICT = 409
 
+export const INTERVIEWER_SWITCH_REQUEST_EVENT = 'request interviewer switch';
+export const INTERVIEWER_SWITCH_EVENT = 'interviewer switch event';

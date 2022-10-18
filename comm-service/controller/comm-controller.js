@@ -13,10 +13,9 @@ export function registerChatHandlers(io, clientSocket) {
         }
         const room_id = eventData.room_id;
         const username = eventData.username;
-        console.log(eventData)
         console.log(`User ${username} joined room=${room_id}`)
         clientSocket.join(room_id);
-        if (!room_id in roomInterviewers) {
+        if (!(room_id in roomInterviewers)) {
             roomInterviewers[room_id] = username;
             // fire event to all clients in a room TODO
             io.to(room_id).emit(interviewerSwitchEvent, {
@@ -26,10 +25,6 @@ export function registerChatHandlers(io, clientSocket) {
         }
     });
 
-    // clientSocket.on('message', function(data) {
-    //     console.log(`Received message ${data.text}`);
-    //     clientSocket.broadcast.to(data.room_id).emit('receive message', data);
-    // });
     clientSocket.on('message', data => {
         console.log(data)
         io.to(data.room_id).emit('message response', data)
