@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
 import { Alert, Box, Button, Snackbar, Link } from "@mui/material";
 import { isUnauthorizedError } from "@thream/socketio-jwt/build/UnauthorizedError.js";
 import Editor from "@monaco-editor/react";

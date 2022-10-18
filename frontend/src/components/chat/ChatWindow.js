@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { isUnauthorizedError } from '@thream/socketio-jwt/build/UnauthorizedError.js'
 import ChatFooter from "./ChatFooter";
 import ChatBody from "./ChatBody";
