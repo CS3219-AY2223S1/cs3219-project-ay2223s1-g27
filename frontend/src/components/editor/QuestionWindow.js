@@ -1,4 +1,5 @@
 import { Box } from "@mui/system";
+import { FormHelperText } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import axiosApiInstance from "../../axiosApiInstance"
@@ -71,7 +72,10 @@ export default function QuestionWindow({socket, chatSocket, username, titleSlug,
         key: q.titleSlug
       }))}
       questionName={questionName} />
-    : null }
+      :     
+      null
+      }
+      <FormHelperText>Selected Question</FormHelperText>
       <div style={{
         height: "90vh",
         width: "100%",
