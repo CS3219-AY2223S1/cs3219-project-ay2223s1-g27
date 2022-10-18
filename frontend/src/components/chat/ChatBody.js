@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import QuestionSelector from "./QuestionSelector"; 
 import { Button, Box, Chip } from '@mui/material';
+import { INTERVIEWER_SWITCH_EVENT, INTERVIEWER_SWITCH_REQUEST_EVENT } from "../../constants";
 
 const ChatBody = ({ chatSocket, username, room_id }) => {
   const [isInterviewer, setIsInterviewer] = useState(); 
   const [messages, setMessages] = useState([]);
-  const interviewerSwitchRequestEvent = 'request interviewer switch';
-  const interviewerSwitchEvent = 'interviewer switch event';
 
-  chatSocket.on(interviewerSwitchEvent, (data) => {
+  chatSocket.on(INTERVIEWER_SWITCH_EVENT, (data) => {
     const interviewer = data.interviewer;
     console.log(data)
     if (interviewer === username) {
@@ -25,7 +24,7 @@ const ChatBody = ({ chatSocket, username, room_id }) => {
 
   const handleSwitchRole = () => {
     if (!isInterviewer) {
-      chatSocket.emit(interviewerSwitchRequestEvent, {
+      chatSocket.emit(INTERVIEWER_SWITCH_REQUEST_EVENT, {
         room_id: room_id,
         username: username,
       })
