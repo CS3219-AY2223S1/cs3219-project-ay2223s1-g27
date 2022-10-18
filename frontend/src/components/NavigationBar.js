@@ -91,14 +91,16 @@ function NavigationBar({ isAuthenticated }) {
         console.log(res.data.message);
         console.log(res.body);
         res.status === 200 ? setUpdateSuccess(true) : setUpdateSuccess(false);
-        setMessage(message);
+        setMessage(res.data.message);
       })
   }
 
   const handleDeleteAccountOnClick = () => {
     const refresh_token = cookies["refresh_token"]
     axiosApiInstance.delete(URL_USER_SVC_DELETEACCOUNT, {
-      username: jwtDecode(refresh_token).username
+      data: {
+        username: jwtDecode(refresh_token).username
+      }
     }
     ).then(x => {
       removeCookie("access_token");
