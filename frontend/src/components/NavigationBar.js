@@ -14,7 +14,6 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import CloseIcon from '@mui/icons-material/Close';
 import { useState } from 'react';
 import { useCookies } from 'react-cookie';
-import axios from 'axios';
 import axiosApiInstance from "../axiosApiInstance"
 import { jwtDecode } from '../util/auth';
 import { URL_USER_SVC_DELETEACCOUNT, URL_USER_SVC_LOGOUT, URL_USER_SVC_UPDATEPASSWORD } from '../configs';
