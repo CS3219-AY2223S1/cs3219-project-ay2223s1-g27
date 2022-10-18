@@ -1,10 +1,5 @@
 import React, { useEffect } from "react";
-import { io } from "socket.io-client";
-import { useLocation } from "react-router-dom";
-import { useCookies } from 'react-cookie';
-import { jwtDecode } from '../../util/auth';
 import { isUnauthorizedError } from '@thream/socketio-jwt/build/UnauthorizedError.js'
-import { URL_COMM_SVC, PREFIX_COMM_SVC_CHAT } from "../../configs";
 import ChatFooter from "./ChatFooter";
 import ChatBody from "./ChatBody";
 import { Box } from "@mui/material";

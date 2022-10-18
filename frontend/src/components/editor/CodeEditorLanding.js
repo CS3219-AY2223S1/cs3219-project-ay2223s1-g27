@@ -22,7 +22,6 @@ import LanguagesDropdown from "./LanguagesDropdown";
 const javascriptDefault = `// some comment`;
 
 const CodeEditorLanding = ({ socket, chatSocket, room_id, username }) => {
-  const location = useLocation(); // Location contains username and selected difficulty level
   const [alertOpen, setAlertOpen] = useState(false);
   const [compileOpen, setCompileOpen] = useState(false);
   const [otherUser, setOtherUser] = useState("");

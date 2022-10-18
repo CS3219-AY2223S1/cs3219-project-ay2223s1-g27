@@ -16,7 +16,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 
 function RoomPage() {
   const [cookies] = useCookies();
-  const location = useLocation();
+  const location = useLocation(); // Location contains username and selected difficulty level
   const navigate = useNavigate();
   console.log(location.state.difficultyLevel)
   const room_id = location.state.room_id;
