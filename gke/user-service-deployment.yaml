@@ -47,3 +47,13 @@ spec:
                 secretKeyRef:
                   name: user-service-secret
                   key: CORS_ORIGIN
+            - name: SENDGRID_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: user-service-secret
+                  key: SENDGRID_API_KEY
+            - name: USER_SVC_SENDER_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: user-service-secret
+                  key: USER_SVC_SENDER_EMAIL
