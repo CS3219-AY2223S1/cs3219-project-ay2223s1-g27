@@ -4,7 +4,7 @@ local jwt = require "resty.jwt"
 --your secret
 local secret = os.getenv("JWT_ACCESS_SECRET")
 -- No authentication required api detailed list
-local no_need_token_api_list = {'/api/user/login', '/api/user/createuser', '/api/user/renewtokens', '/api/user/resetpassword', '/api/user/logout'}
+local no_need_token_api_list = {'/api/user/login', '/api/user/createuser', '/api/user/renewtokens', '/api/user/resetpassword', '/api/user/sendresetlink'}
 local function ignore_url (val)
 for index, value in ipairs(no_need_token_api_list) do
 if (value == val) then
