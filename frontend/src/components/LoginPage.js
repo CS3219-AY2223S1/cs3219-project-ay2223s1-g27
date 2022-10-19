@@ -123,12 +123,12 @@ function LoginPage() {
                 sx={{ marginBottom: "2rem" }} /> 
             <div style={{ marginBottom: "5px" }} >
                 Do not have an account? Sign up {' '}
-                <Link to="/signup">here!</Link>
+                <Link style={{color: 'blue', textDecoration: 'underline'}} to="/signup">here</Link>!
             </div>
 
             <div>
                 Forget your password? Reset it {' '}
-                <Link onClick={handleDialog} to="">here!</Link>
+                <Link style={{color: 'blue', textDecoration: 'underline'}} onClick={handleDialog} to="">here</Link>!
             </div>
 
             <Box display={"flex"} flexDirection={"row"} justifyContent={"flex-end"}>
