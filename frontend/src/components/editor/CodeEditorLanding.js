@@ -148,16 +148,32 @@ const CodeEditorLanding = ({ socket, chatSocket, room_id, username }) => {
     setOutputDetails(payload.outputDetails);
   });
 
-  const handleEditorChange = (value) => {
+  const userEvents = ['input', 'delete', 'move', 'select', 'undo', 'redo'];
+
+  const isUserEvents = (transaction) => {
+    for (let i = 0; i < userEvents.length; i++) {
+      if (transaction.isUserEvent(userEvents[i])) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  const handleEditorChange = (value, update) => {
+    if (update.transactions && !isUserEvents(update.transactions[0])) {
+      return;
+    }
     socket.emit("coding event", {
       room_id: room_id,
       newCode: value,
     });
-    onChange("code", value);
   };
 
   socket.on("receive code", (payload) => {
     console.log("received code");
+    if (payload.from === socket.id) {
+      return;
+    }
     onChange("code", payload.newCode);
   });
 
@@ -273,10 +289,11 @@ const CodeEditorLanding = ({ socket, chatSocket, room_id, username }) => {
               value={code}
               theme={theme.value}
               defaultValue="// Start editing here"
-              onChange={handleEditorChange}
+            //onChange={handleEditorChange}
             />
             <CodeMirror
               value={code}
+              onChange={handleEditorChange}
               options={{
                 theme: 'monokai',
                 keyMap: 'sublime',
