@@ -1,5 +1,7 @@
 import UserModel from './user-model.js';
 import PwdResetModel from './pwd-reset-model.js';
+import MatchHistoryModel from './match-history.js';
+import QuestionHistoryModel from './question-history.js';
 import 'dotenv/config'
 
 //Set up mongoose connection
@@ -43,4 +45,51 @@ export async function createPwdResetRequest(params) {
 export async function getPwdResetRequest(documentId) {
   let pwdResetRequest = await PwdResetModel.findOneAndDelete({_id: documentId}).exec()
   return pwdResetRequest
+}
+
+export async function getMatchHistory(room_id) {
+  let session = await MatchHistoryModel.findOne({room_id : room_id});
+  return session;
+}
+
+export async function createMatchHistory(room_id, user_id) {
+  let session = new MatchHistoryModel({room_id: room_id, users: [ user_id ]});
+  await session.save();
+  return session;
+}
+
+export async function updateMatchHistory(room_id, users) {
+  let session = await MatchHistoryModel.findOneAndUpdate({room_id: room_id}, {users: users}, {new: true});
+  return session;
+}
+
+export async function getQuestionHistory(room_id) {
+  let questionHistory = await QuestionHistoryModel.findOne({ room_id: room_id });
+  return questionHistory;
+}
+
+export async function createQuestionHistory(room_id, titleSlug, codeSegment) {
+  let questionHistory = new QuestionHistoryModel({
+    room_id: room_id,
+    questions: [{
+      titleSlug: titleSlug, 
+      codeSegment: codeSegment
+    }]
+  });
+  await questionHistory.save();
+  return questionHistory;
+}
+
+export async function updateQuestionHistory(room_id, questions) {
+  let session = await QuestionHistoryModel.findOneAndUpdate({ room_id: room_id }, { questions: questions }, { new: true });
+  return session;
+}
+
+export async function getRoomIDsFromUserID(uid) {
+  let matches = await MatchHistoryModel.find({ users: uid });
+  let room_ids = [];
+  for (let match of matches) {
+    room_ids.push(match.room_id);
+  }
+  return room_ids;
 }

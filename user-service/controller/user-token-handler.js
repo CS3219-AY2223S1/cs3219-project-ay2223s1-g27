@@ -14,20 +14,20 @@ let refreshTokens = []
 var refreshTokensCleanupTimer = setInterval(cleanupRefreshTokens, 1200000)
 
 // requestbody is of the format: {"username":"<username>", "password":"<password>"}
-export function generateAccessToken(username) {
+export function generateAccessToken(username, id) {
   try {
     // Entire requestbody(includes password) is passed  to jwt.sign to add more 
     // variability to jwt token when user changes passwords
-    const accessToken = jwt.sign({ username: username }, jwtAccessSecretKey, { expiresIn: "15m" })
+    const accessToken = jwt.sign({ username: username, id: id }, jwtAccessSecretKey, { expiresIn: "15m" })
     return accessToken
   } catch (err) {
     console.log(err)
   }
 }
 
-export function generateRefreshToken(username) {
+export function generateRefreshToken(username, id) {
   try {
-    const refreshToken = jwt.sign({ username: username }, jwtRefreshSecretKey, { expiresIn: "24h" })
+    const refreshToken = jwt.sign({ username: username, id: id }, jwtRefreshSecretKey, { expiresIn: "24h" })
     refreshTokens.push(refreshToken)
     return refreshToken
   } catch (err) {
@@ -76,8 +76,8 @@ export function renewAccessAndRefreshTokens(req, res) {
       return res.status(401).json({ message: "JWT refresh Token invalid.", success: false })
     }
     refreshTokens.filter((token) => token != refreshToken)
-    const newAccessToken = generateAccessToken(decodedPayload.username)
-    const newRefreshToken = generateRefreshToken(decodedPayload.username)
+    const newAccessToken = generateAccessToken(decodedPayload.username, decodedPayload.id)
+    const newRefreshToken = generateRefreshToken(decodedPayload.username, decodedPayload.id)
     return res.status(200).json({ username: decodedPayload.username, accessToken: newAccessToken, refreshToken: newRefreshToken, success: true })
   } catch (err) {
     if (err instanceof jwt.TokenExpiredError) {
