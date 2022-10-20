@@ -279,10 +279,6 @@ const CodeEditorLanding = ({ socket, chatSocket, room_id, username }) => {
               onChange={handleEditorChange}
               theme={theme.value}
               extensions={[loadLanguage(language?.value || "tsx")]}
-              options={{
-                keyMap: 'sublime',
-                mode: 'jsx',
-              }}
             />
           </div>
         </Box>
