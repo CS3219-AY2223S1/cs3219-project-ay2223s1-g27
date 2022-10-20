@@ -171,9 +171,6 @@ const CodeEditorLanding = ({ socket, chatSocket, room_id, username }) => {
 
   socket.on("receive code", (payload) => {
     console.log("received code");
-    if (payload.from === socket.id) {
-      return;
-    }
     onChange("code", payload.newCode);
   });
 
