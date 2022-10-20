@@ -179,6 +179,7 @@ const CodeEditorLanding = ({ socket, chatSocket, room_id, username }) => {
   }
 
   useEffect(() => {
+    console.log(themes)
     setTheme({ value: themes["atomone"], label: "Atomone" })
   }, []);
 
@@ -272,6 +273,7 @@ const CodeEditorLanding = ({ socket, chatSocket, room_id, username }) => {
             className="overlay rounded-md overflow-hidden w-full h-full shadow-4xl"
           >
             <CodeMirror
+              height="500px"
               value={code}
               onChange={handleEditorChange}
               theme={theme.value}
