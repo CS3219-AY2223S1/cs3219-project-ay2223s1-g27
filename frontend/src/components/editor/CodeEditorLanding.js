@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Alert, Box, Button, Snackbar, Link } from "@mui/material";
 import { isUnauthorizedError } from "@thream/socketio-jwt/build/UnauthorizedError.js";
 import Editor from "@monaco-editor/react";
+import CodeMirror from '@uiw/react-codemirror';
 import QuestionWindow from "./QuestionWindow";
 import axiosApiInstance from "../../axiosApiInstance";
 import { languageOptions } from "../../constants/languageOptions";
@@ -273,6 +274,14 @@ const CodeEditorLanding = ({ socket, chatSocket, room_id, username }) => {
               theme={theme.value}
               defaultValue="// Start editing here"
               onChange={handleEditorChange}
+            />
+            <CodeMirror
+              value={code}
+              options={{
+                theme: 'monokai',
+                keyMap: 'sublime',
+                mode: 'jsx',
+              }}
             />
           </div>
         </Box>
