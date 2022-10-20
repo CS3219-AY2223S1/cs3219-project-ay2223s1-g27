@@ -10,7 +10,7 @@ import { URL_QUESTION_SVC_COMPILE } from "../../configs";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { defineTheme } from "../../lib/defineTheme";
+import * as themes from '@uiw/codemirror-themes-all';
 import useKeyPress from "../../hooks/useKeyPress";
 import OutputWindow from "./OutputWindow";
 import CustomInput from "./CustomInput";
@@ -175,18 +175,11 @@ const CodeEditorLanding = ({ socket, chatSocket, room_id, username }) => {
 
   function handleThemeChange(th) {
     const theme = th;
-
-    if (["light", "vs-dark"].includes(theme.value)) {
-      setTheme(theme);
-    } else {
-      defineTheme(theme.value).then((_) => setTheme(theme));
-    }
+    setTheme({ value: themes[theme.value], label: theme.label });
   }
 
   useEffect(() => {
-    defineTheme("oceanic-next").then((_) =>
-      setTheme({ value: "oceanic-next", label: "Oceanic Next" })
-    );
+    setTheme({ value: themes["atomone"], label: "Atomone" })
   }, []);
 
   const showErrorToast = (msg, timer) => {
@@ -281,8 +274,8 @@ const CodeEditorLanding = ({ socket, chatSocket, room_id, username }) => {
             <CodeMirror
               value={code}
               onChange={handleEditorChange}
+              theme={theme.value}
               options={{
-                theme: 'monokai',
                 keyMap: 'sublime',
                 mode: 'jsx',
               }}
