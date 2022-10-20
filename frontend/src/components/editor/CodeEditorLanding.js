@@ -10,6 +10,7 @@ import { URL_QUESTION_SVC_COMPILE } from "../../configs";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 import * as themes from '@uiw/codemirror-themes-all';
 import useKeyPress from "../../hooks/useKeyPress";
 import OutputWindow from "./OutputWindow";
@@ -277,6 +278,7 @@ const CodeEditorLanding = ({ socket, chatSocket, room_id, username }) => {
               value={code}
               onChange={handleEditorChange}
               theme={theme.value}
+              extensions={[loadLanguage(language?.value || "tsx")]}
               options={{
                 keyMap: 'sublime',
                 mode: 'jsx',
