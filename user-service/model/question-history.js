@@ -8,10 +8,14 @@ export let QuestionHistorySchema = new Schema({
     questions: [{
         titleSlug: {
             type: String,
-            required: true,
+            required: false,
         },
         codeSegment: {
             type: String,
+            required: false,
+        },
+        language: {
+            type: Number,
             required: false,
         }
     }],

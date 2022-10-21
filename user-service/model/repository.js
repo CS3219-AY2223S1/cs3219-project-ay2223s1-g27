@@ -68,12 +68,13 @@ export async function getQuestionHistory(room_id) {
   return questionHistory;
 }
 
-export async function createQuestionHistory(room_id, titleSlug, codeSegment) {
+export async function createQuestionHistory(room_id, titleSlug, codeSegment, language) {
   let questionHistory = new QuestionHistoryModel({
     room_id: room_id,
     questions: [{
       titleSlug: titleSlug, 
-      codeSegment: codeSegment
+      codeSegment: codeSegment,
+      language: language
     }]
   });
   await questionHistory.save();

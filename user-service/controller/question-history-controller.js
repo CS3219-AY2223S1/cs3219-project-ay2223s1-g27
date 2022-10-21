@@ -40,10 +40,10 @@ export async function saveSession(req, res) {
 
 export async function saveQuestion(req, res) {
     try {
-        const { room_id, titleSlug, codeSegment } = req.body;
+        const { room_id, titleSlug, codeSegment, language } = req.body;
         let session = await getQuestionHistory(room_id);
         if (!session) {
-            let newSession = await createQuestionHistory(room_id, titleSlug, codeSegment);
+            let newSession = await createQuestionHistory(room_id, titleSlug, codeSegment, language);
             return res.status(201).json(newSession);
         }
         let sessionQuestions = session.questions;
@@ -52,12 +52,14 @@ export async function saveQuestion(req, res) {
             if (sessionQuestion.titleSlug === titleSlug) {
                 found = true;
                 sessionQuestion.codeSegment = codeSegment;
+                sessionQuestion.language = language;
             }
         }
         if (!found) {
             sessionQuestions.push({
                 titleSlug: titleSlug,
-                codeSegment: codeSegment
+                codeSegment: codeSegment,
+                language: language
             })
         }
         let updatedSession = await updateQuestionHistory(room_id, sessionQuestions);
