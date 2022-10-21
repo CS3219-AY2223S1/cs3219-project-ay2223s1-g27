@@ -8,7 +8,10 @@ export async function questionHistory(req, res) {
         for (let room of rooms) {
             let questionHistory = await getQuestionHistory(room.room_id);
             if (!questionHistory) continue;
-            data.push(questionHistory);
+            data.push({
+                difficulty_level: room.difficulty_level,
+                question_history: questionHistory
+            });
         }
         const allRooms = await getRoomsFromUserID(uid, 0, 0);
         let cnt = 0;
@@ -29,10 +32,10 @@ export async function questionHistory(req, res) {
 
 export async function saveSession(req, res) {
     try {
-        const { room_id, user_id } = req.body;
+        const { room_id, user_id, difficulty_level } = req.body;
         let session = await getMatchHistory(room_id);
         if (!session) {
-            let newSession = await createMatchHistory(room_id, user_id);
+            let newSession = await createMatchHistory(room_id, user_id, difficulty_level);
             return res.status(201).json(newSession);
         }
         let sessionUsers = session.users;

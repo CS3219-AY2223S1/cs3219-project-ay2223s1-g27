@@ -146,6 +146,7 @@ function NavigationBar({ isAuthenticated }) {
               variant="h6" 
               component="div"
               sx={{
+                ml: 3,
                 flexGrow: 1
               }}
             >

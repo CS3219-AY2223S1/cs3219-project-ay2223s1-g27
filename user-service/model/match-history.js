@@ -5,6 +5,10 @@ export let MatchHistorySchema = new Schema({
         type: String,
         required: true,
     },
+    difficulty_level: {
+        type: String,
+        required: true,
+    },
     users: [{
         type: String,
         required: true,

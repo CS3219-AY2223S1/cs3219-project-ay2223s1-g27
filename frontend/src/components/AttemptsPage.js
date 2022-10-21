@@ -38,6 +38,7 @@ function AttemptsPage() {
         },
       })
       .then((res) => {
+        console.log(res.data.rows)
         setRows(res.data.rows);
         setCount(Math.ceil(res.data.totalCount / 10));
       });
@@ -73,14 +74,16 @@ function AttemptsPage() {
                       <Link
                         to="/room"
                         state={{
-                          cache: row.questions,
-                          difficultyLevel: "past_attempt",
+                          cache: row.question_history.questions,
+                          is_live: false,
+                          difficultyLevel: row.difficulty_level
                         }}
                       >
-                        {row.room_id}
+                        {console.log(row.question_history.difficulty_level)}
+                        {row.question_history.room_id}
                       </Link>
                     </TableCell>
-                    <TableCell align="right">{row._id}</TableCell>
+                    <TableCell align="right">{row.question_history._id}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

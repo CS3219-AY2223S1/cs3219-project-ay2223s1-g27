@@ -52,8 +52,8 @@ export async function getMatchHistory(room_id) {
   return session;
 }
 
-export async function createMatchHistory(room_id, user_id) {
-  let session = new MatchHistoryModel({room_id: room_id, users: [ user_id ]});
+export async function createMatchHistory(room_id, user_id, difficulty_level) {
+  let session = new MatchHistoryModel({room_id: room_id, users: [ user_id ], difficulty_level: difficulty_level});
   await session.save();
   return session;
 }

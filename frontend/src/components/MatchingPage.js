@@ -87,8 +87,12 @@ function MatchingPage() {
   };
 
   const handleMatchFound = (room_id) => {
-    axiosApiInstance.post(URL_USER_SVC_SAVESESSION, { room_id: room_id, user_id: jwtDecode(cookies["refresh_token"]).id }).then(x => {
-      navigate("/room", { state: { user: location.state.user, room_id: room_id, difficultyLevel: location.state.difficultyLevel } });
+    axiosApiInstance.post(URL_USER_SVC_SAVESESSION, { 
+      room_id: room_id, 
+      user_id: jwtDecode(cookies["refresh_token"]).id, 
+      difficulty_level: location.state.difficultyLevel 
+    }).then(x => {
+      navigate("/room", { state: { user: location.state.user, room_id: room_id, difficultyLevel: location.state.difficultyLevel, is_live: true } });
     });
   }
 
@@ -116,7 +120,7 @@ function MatchingPage() {
     const handleProceedWithoutMatch = () => {
         setIsModalOpen(false);
         console.log(location.state.difficultyLevel)
-        navigate("/room", {state: { user: location.state.user, difficultyLevel: location.state.difficultyLevel }});
+        navigate("/room", {state: { user: location.state.user, difficultyLevel: location.state.difficultyLevel, is_live: true }});
         
         // Disconnect all listeners
         socket.disconnect(); 
