@@ -86,7 +86,7 @@ export async function updateQuestionHistory(room_id, questions) {
 }
 
 export async function getRoomIDsFromUserID(uid, limit, offset, pageSize) {
-  let matches = await MatchHistoryModel.find({ users: uid }, undefined, {skip: offset*pageSize, limit: limit});
+  let matches = await MatchHistoryModel.find({ users: uid }, undefined, {skip: offset, limit: limit});
   let room_ids = [];
   for (let match of matches) {
     room_ids.push(match.room_id);

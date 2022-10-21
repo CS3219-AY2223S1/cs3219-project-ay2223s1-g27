@@ -10,6 +10,7 @@ function AttemptsPage() {
     const [cookies] = useCookies();
     const [page, setPage] = useState(1);
     const [rows, setRows] = useState([]);
+    const [count, setCount] = useState(1);
 
     const handlePagination = (_, value) => {
         setPage(value);
@@ -22,7 +23,10 @@ function AttemptsPage() {
             offset: (page - 1) * 10,
             pageSize: 10,
          } }).then(
-            res => setRows(res.data)
+            res => {
+                setRows(res.data.rows)
+                setCount(Math.ceil(res.data.totalCount / 10))
+            }
         );
     }, [page]);
 
@@ -43,9 +47,9 @@ function AttemptsPage() {
                         </TableRow>
                         </TableHead>
                         <TableBody>
-                        {rows.map((row) => (
+                        {rows.map((row, idx) => (
                             <TableRow
-                            key={row.room_id}
+                            key={idx}
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
                             <TableCell component="th" scope="row">
@@ -58,7 +62,7 @@ function AttemptsPage() {
                     </Table>
                     </TableContainer>
                 </Box>
-                <Pagination count={10} onChange={handlePagination} />
+                <Pagination count={count} onChange={handlePagination} />
             </Box>
         </div>
     )

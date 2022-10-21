@@ -10,7 +10,10 @@ export async function questionHistory(req, res) {
             if (!questionHistory) continue;
             data.push(questionHistory);
         }
-        return res.status(200).json(data);
+        return res.status(200).json({
+            rows: data,
+            totalCount: (await getRoomIDsFromUserID(uid, 0, 0, 0)).length
+        });
     } catch (err) {
         console.log(`questionHistory error, err=${err}`);
         res.status(500).json({ success: false });
