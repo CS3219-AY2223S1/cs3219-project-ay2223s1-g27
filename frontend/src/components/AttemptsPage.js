@@ -79,7 +79,6 @@ function AttemptsPage() {
                           difficultyLevel: row.difficulty_level
                         }}
                       >
-                        {console.log(row.question_history.difficulty_level)}
                         {row.question_history.room_id}
                       </Link>
                     </TableCell>

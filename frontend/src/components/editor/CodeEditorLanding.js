@@ -69,6 +69,16 @@ const CodeEditorLanding = ({ socket, chatSocket, room_id, username, cache, is_li
   }, [language]);
 
   const updateCodeSnippet = (codeSnippets) => {
+    let found = false;
+    if (cache) {
+      cache.forEach(question => {
+        if (question.titleSlug === titleSlug) {
+          found = true;
+        }
+      })
+    }
+    if (found) return;
+    console.log('updating snippet')
     console.log(language);
     const codeSnippet = codeSnippets.find((codeSnippet) => {
       return codeSnippet.lang.toLowerCase() === language.value.toLowerCase();
@@ -90,8 +100,13 @@ const CodeEditorLanding = ({ socket, chatSocket, room_id, username, cache, is_li
     if (cache) {
       cache.forEach(question => {
         if (question.titleSlug === titleSlug) {
-          setLanguage(question.language);
           setCode(question.codeSegment);
+          languageOptions.forEach((x) => {
+            if (x.id === question.language) {
+              console.log(`setting language to${x.name}`);
+              setLanguage(x);
+            }
+          });
         }
       })
     }
