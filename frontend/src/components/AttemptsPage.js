@@ -62,6 +62,7 @@ function AttemptsPage() {
                 <TableRow>
                   <TableCell>Room ID</TableCell>
                   <TableCell align="right">Partner</TableCell>
+                  <TableCell align="right">Created at</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -83,6 +84,7 @@ function AttemptsPage() {
                       </Link>
                     </TableCell>
                     <TableCell align="right">{row.question_history._id}</TableCell>
+                    <TableCell align="right">{row.created_at.split('T')[0]}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

@@ -10,6 +10,7 @@ export async function questionHistory(req, res) {
             if (!questionHistory) continue;
             data.push({
                 difficulty_level: room.difficulty_level,
+                created_at: room.createdAt,
                 question_history: questionHistory
             });
         }
