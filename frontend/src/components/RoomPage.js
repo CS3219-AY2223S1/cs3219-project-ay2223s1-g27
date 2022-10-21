@@ -73,6 +73,7 @@ function RoomPage() {
     return () => { // component will unmount equivalent
         chatSocket.emit('leave room', { room_id: room_id, username: username });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleLeaveSession = () => {
