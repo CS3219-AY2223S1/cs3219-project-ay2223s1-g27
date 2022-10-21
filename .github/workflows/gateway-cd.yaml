@@ -6,10 +6,6 @@ on:
       - "main"
     paths:
       - gateway/**
-  pull_request:
-    branches: [main]
-    paths:
-      - gateway/**
 
 jobs:
   build:
