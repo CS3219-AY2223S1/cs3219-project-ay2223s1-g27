@@ -120,10 +120,12 @@ code {
 .message_container > * {
   margin-bottom: 10px; 
 }
-.chat_footer {
+.chat_footer { 
+  display: flex;
   padding: 10px;
   background-color: #1976d2;
-  height: 7vh;
+  height: 100%;
+  width: 100%;
 }
 .form {
   width: 100%;

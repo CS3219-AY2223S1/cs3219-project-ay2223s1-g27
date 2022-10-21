@@ -92,7 +92,7 @@ function MatchingPage() {
       user_id: jwtDecode(cookies["refresh_token"]).id, 
       difficulty_level: location.state.difficultyLevel 
     }).then(x => {
-      navigate("/room", { state: { user: location.state.user, room_id: room_id, difficultyLevel: location.state.difficultyLevel, is_live: true } });
+      navigate("/room", { state: { user: location.state.user, room_id: room_id, difficultyLevel: location.state.difficultyLevel, matched: true, is_live: true } });
     });
   }
 
@@ -120,7 +120,7 @@ function MatchingPage() {
     const handleProceedWithoutMatch = () => {
         setIsModalOpen(false);
         console.log(location.state.difficultyLevel)
-        navigate("/room", {state: { user: location.state.user, difficultyLevel: location.state.difficultyLevel, is_live: true }});
+        navigate("/room", {state: { user: location.state.user, difficultyLevel: location.state.difficultyLevel, matched: 'false', is_live: true }});
         
         // Disconnect all listeners
         socket.disconnect(); 
