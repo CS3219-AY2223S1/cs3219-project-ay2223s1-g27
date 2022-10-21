@@ -84,7 +84,13 @@ function AttemptsPage() {
                         {row.question_history.room_id}
                       </Link>
                     </TableCell>
-                    <TableCell align="right">{row.question_history._id}</TableCell>
+                    <TableCell align="right">
+                      {
+                        row.usernames[0] === jwtDecode(cookies["refresh_token"]).username 
+                          ? row.usernames[1] 
+                          : row.usernames[0]
+                      }
+                    </TableCell>
                     <TableCell align="right">{row.created_at.split('T')[0]}</TableCell>
                   </TableRow>
                 ))}

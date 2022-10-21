@@ -90,6 +90,7 @@ function MatchingPage() {
     axiosApiInstance.post(URL_USER_SVC_SAVESESSION, { 
       room_id: room_id, 
       user_id: jwtDecode(cookies["refresh_token"]).id, 
+      username: jwtDecode(cookies["refresh_token"]).username,
       difficulty_level: location.state.difficultyLevel 
     }).then(x => {
       navigate("/room", { state: { user: location.state.user, room_id: room_id, difficultyLevel: location.state.difficultyLevel, matched: true, is_live: true } });
