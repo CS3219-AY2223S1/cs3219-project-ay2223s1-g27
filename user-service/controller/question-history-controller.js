@@ -1,4 +1,14 @@
-import { getMatchHistory, createMatchHistory, updateMatchHistory, getQuestionHistory, createQuestionHistory, updateQuestionHistory, getRoomsFromUserID } from "../model/repository.js";
+import { 
+    getMatchHistory, 
+    createMatchHistory, 
+    updateMatchHistory, 
+    getQuestionHistory, 
+    createQuestionHistory, 
+    updateQuestionHistory, 
+    getRoomsFromUserID,
+    createMessageHistory,
+    getMessageHistory
+} from "../model/repository.js";
 
 export async function questionHistory(req, res) {
     try {
@@ -77,6 +87,28 @@ export async function saveQuestion(req, res) {
         return res.status(201).json(updatedSession);
     } catch (err) {
         console.log(`saveQuestion error, err=${err}`);
+        res.status(500).json({ success: false });
+    }
+}
+
+export async function saveMessage(req, res) {
+    try {
+        const { room_id, messages } = req.body;
+        let savedMessage = await createMessageHistory(room_id, messages);
+        return res.status(201).json(savedMessage);
+    } catch (err) {
+        console.log(`saveMessage error, err=${err}`);
+        res.status(500).json({ success: false });
+    }
+}
+
+export async function getMessage(req, res) {
+    try {
+        const { room_id } = req.query;
+        let messages = await getMessageHistory(room_id);
+        return res.status(200).json(messages);
+    } catch (err) {
+        console.log(`getMessage error, err=${err}`);
         res.status(500).json({ success: false });
     }
 }

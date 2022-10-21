@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import QuestionSelector from "./QuestionSelector"; 
 import { Button, Box, Chip } from '@mui/material';
 import { INTERVIEWER_SWITCH_EVENT, INTERVIEWER_SWITCH_REQUEST_EVENT } from "../../constants";
@@ -21,6 +21,10 @@ const ChatBody = ({ chatSocket, username, room_id }) => {
     console.log(data)
     setMessages([...messages, data])
   });
+
+  useEffect(() => {
+    console.log(messages);
+  }, [messages]);
 
   const handleSwitchRole = () => {
     if (!isInterviewer) {

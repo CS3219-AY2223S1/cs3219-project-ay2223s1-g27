@@ -16,7 +16,7 @@ app.get("/", (req, res) => res.send("Hello World from user-service"))
 import { createUser, loginUser, deleteUser, updatePassword, resetPassword } from './controller/user-controller.js';
 import { validateAccessToken, renewAccessAndRefreshTokens, invalidateRefreshToken } from './controller/user-token-handler.js';
 import { sendPasswordResetEmail } from './controller/pwd-reset-controller.js';
-import { questionHistory, saveSession, saveQuestion } from './controller/question-history-controller.js';
+import { questionHistory, saveSession, saveQuestion, saveMessage, getMessage } from './controller/question-history-controller.js';
 
 const router = express.Router()
 
@@ -34,6 +34,7 @@ router.post('/sendresetlink', sendPasswordResetEmail)
 router.get('/questionhistory', questionHistory)
 router.post('/savesession', saveSession)
 router.post('/savequestion', saveQuestion)
+router.post('/message', saveMessage).get('/message', getMessage)
 
 app.use('/api/user', router)
 

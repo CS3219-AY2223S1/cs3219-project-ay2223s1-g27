@@ -2,6 +2,7 @@ import UserModel from './user-model.js';
 import PwdResetModel from './pwd-reset-model.js';
 import MatchHistoryModel from './match-history.js';
 import QuestionHistoryModel from './question-history.js';
+import MessageHistoryModel from './message-history.js';
 import 'dotenv/config'
 
 //Set up mongoose connection
@@ -89,4 +90,17 @@ export async function updateQuestionHistory(room_id, questions) {
 export async function getRoomsFromUserID(uid, limit, offset) {
   let matches = await MatchHistoryModel.find({ users: uid }, undefined, {skip: offset, limit: limit}).sort({ createdAt: -1, updatedAt: -1 });
   return matches;
+}
+
+export async function createMessageHistory(room_id, messages) {
+  let message = await MessageHistoryModel.findOneAndUpdate(
+    { room_id: room_id }, 
+    { messages: messages }, 
+    { upsert: true, new: true });
+  return message;
+}
+
+export async function getMessageHistory(room_id) {
+  let message = await MessageHistoryModel.findOne({room_id: room_id});
+  return message;
 }
