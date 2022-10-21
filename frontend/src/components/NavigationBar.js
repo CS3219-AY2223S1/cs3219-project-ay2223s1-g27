@@ -141,26 +141,20 @@ function NavigationBar({ isAuthenticated }) {
   return (
     <AppBar style={{ margin: 0 }} position="static">
       {isAuthenticated && (
-        <Box display={"flex"} flexDirection={"row"} sx={{ flexGrow: 1 }} >
-          <Link to="/landing">
-            <Typography
-              variant="h4"
-              noWrap
+        <Box display={"flex"} flexDirection={"row"} sx={{ flexGrow: 1 }} alignItems={"center"}>
+          <Typography
+              variant="h6" 
+              component="div"
               sx={{
-                mr: 2,
-                ml: 4,
-                mt: 1.8,
-                display: { xs: 'none', md: 'flex' },
-                fontWeight: 700,
-                letterSpacing: '.1rem',
-                color: 'inherit',
-                textDecoration: 'none',
                 flexGrow: 1
               }}
             >
-              PeerPrep
-            </Typography>
-          </Link>
+            <Link to="/landing">
+              <div style={{ margin: "1%" }}>
+                PeerPrep              
+              </div>
+            </Link>
+          </Typography>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <div style={{ margin: "1%" }}>
               Welcome, {jwtDecode(cookies["refresh_token"]).username}!
