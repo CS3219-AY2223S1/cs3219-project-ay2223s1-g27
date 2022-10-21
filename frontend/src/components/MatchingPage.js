@@ -4,7 +4,7 @@ import { io } from "socket.io-client";
 import { isUnauthorizedError } from '@thream/socketio-jwt/build/UnauthorizedError.js'
 import { useLocation, useNavigate } from "react-router-dom";
 import { useCookies } from 'react-cookie';
-import { URL_MATCHING_SVC, PREFIX_MATCHING_SVC } from "../configs";
+import { URL_MATCHING_SVC, PREFIX_MATCHING_SVC, URL_USER_SVC_SAVESESSION } from "../configs";
 import {
   Box,
   Button,
@@ -12,6 +12,8 @@ import {
   Typography
 } from "@mui/material";
 import { useState } from "react";
+import axiosApiInstance from "../axiosApiInstance";
+import { jwtDecode } from "../util/auth";
 
 const modalStyle = {
   position: 'absolute',
@@ -85,7 +87,9 @@ function MatchingPage() {
   };
 
   const handleMatchFound = (room_id) => {
-    navigate("/room", { state: { user: location.state.user, room_id: room_id, difficultyLevel: location.state.difficultyLevel } });
+    axiosApiInstance.post(URL_USER_SVC_SAVESESSION, { room_id: room_id, user_id: jwtDecode(cookies["refresh_token"]).id }).then(x => {
+      navigate("/room", { state: { user: location.state.user, room_id: room_id, difficultyLevel: location.state.difficultyLevel } });
+    });
   }
 
   const handleNoMatchFound = () => {

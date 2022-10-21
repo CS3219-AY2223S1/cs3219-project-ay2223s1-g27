@@ -27,7 +27,7 @@ function AttemptsPage() {
                 setCount(Math.ceil(res.data.totalCount / 10))
             }
         );
-    }, [page]);
+    }, [page, cookies]);
 
     return (
         <div>

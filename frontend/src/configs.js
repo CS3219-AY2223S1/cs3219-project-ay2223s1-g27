@@ -22,14 +22,15 @@ const URI_COMM_SVC = process.env.REACT_APP_ENV === 'DEV' ? DEV_BACKEND : LIVE_BA
 
 const PREFIX_USER_SVC = "/api/user";
 const PREFIX_CREATEUSER = "/createuser";
-const PREFIX_LOGIN = "/login"
-const PREFIX_LOGOUT = "/logout"
-const PREFIX_REFRESH_TOKEN = "/renewtokens"
-const PREFIX_RESETPASSWORD = "/resetpassword"
-const PREFIX_RESETLINK = "/sendresetlink"
-const PREFIX_UPDATEPASSWORD = "/updatepassword"
-const PREFIX_DELETEACCOUNT = "/delete"
-const PREFIX_QUESTIONHISTORY = "/questionhistory"
+const PREFIX_LOGIN = "/login";
+const PREFIX_LOGOUT = "/logout";
+const PREFIX_REFRESH_TOKEN = "/renewtokens";
+const PREFIX_RESETPASSWORD = "/resetpassword";
+const PREFIX_RESETLINK = "/sendresetlink";
+const PREFIX_UPDATEPASSWORD = "/updatepassword";
+const PREFIX_DELETEACCOUNT = "/delete";
+const PREFIX_QUESTIONHISTORY = "/questionhistory";
+const PREFIX_SAVESESSION = "/savesession";
 
 export const URL_USER_SVC = URI_USER_SVC + PREFIX_USER_SVC;
 export const URL_USER_SVC_CREATEUSER = URL_USER_SVC + PREFIX_CREATEUSER;
@@ -41,6 +42,7 @@ export const URL_USER_SVC_LOGOUT = URL_USER_SVC + PREFIX_LOGOUT;
 export const URL_USER_SVC_REFRESH_TOKEN = URL_USER_SVC + PREFIX_REFRESH_TOKEN;
 export const URL_USER_SVC_DELETEACCOUNT = URL_USER_SVC + PREFIX_DELETEACCOUNT;
 export const URL_USER_SVC_QUESTIONHISTORY = URL_USER_SVC + PREFIX_QUESTIONHISTORY;
+export const URL_USER_SVC_SAVESESSION = URL_USER_SVC + PREFIX_SAVESESSION;
 
 export const PREFIX_MATCHING_SVC = "/api/matching";
 export const URL_MATCHING_SVC = URI_MATCHING_SVC;

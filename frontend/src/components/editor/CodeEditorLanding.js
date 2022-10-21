@@ -160,6 +160,7 @@ const CodeEditorLanding = ({ socket, chatSocket, room_id, username }) => {
   }
 
   const handleEditorChange = (value, update) => {
+    setCode(value); // setCode here otherwise cannot compile when user is solo
     if (update.transactions && !isUserEvents(update.transactions[0])) {
       return;
     }

@@ -17,7 +17,7 @@ import { useCookies } from 'react-cookie';
 import axiosApiInstance from "../axiosApiInstance"
 import { jwtDecode } from '../util/auth';
 import { URL_USER_SVC_DELETEACCOUNT, URL_USER_SVC_LOGOUT, URL_USER_SVC_UPDATEPASSWORD } from '../configs';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const modalStyle = {
   position: 'absolute',
@@ -142,25 +142,25 @@ function NavigationBar({ isAuthenticated }) {
     <AppBar style={{ margin: 0 }} position="static">
       {isAuthenticated && (
         <Box display={"flex"} flexDirection={"row"} sx={{ flexGrow: 1 }} >
-          <Typography
-            variant="h4"
-            noWrap
-            component="a"
-            href="/landing"
-            sx={{
-              mr: 2,
-              ml: 4,
-              mt: 1.8,
-              display: { xs: 'none', md: 'flex' },
-              fontWeight: 700,
-              letterSpacing: '.1rem',
-              color: 'inherit',
-              textDecoration: 'none',
-              flexGrow: 1
-            }}
-          >
-            PeerPrep
-          </Typography>
+          <Link to="/landing">
+            <Typography
+              variant="h4"
+              noWrap
+              sx={{
+                mr: 2,
+                ml: 4,
+                mt: 1.8,
+                display: { xs: 'none', md: 'flex' },
+                fontWeight: 700,
+                letterSpacing: '.1rem',
+                color: 'inherit',
+                textDecoration: 'none',
+                flexGrow: 1
+              }}
+            >
+              PeerPrep
+            </Typography>
+          </Link>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <div style={{ margin: "1%" }}>
               Welcome, {jwtDecode(cookies["refresh_token"]).username}!
