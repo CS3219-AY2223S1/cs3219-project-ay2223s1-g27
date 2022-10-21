@@ -42,8 +42,8 @@ export function registerChatHandlers(io, clientSocket) {
         });
     })
 
-    clientSocket.on('disconnect', () => {
-        console.log('The user has disconnected from chat');
+    clientSocket.on('disconnect', (reason) => {
+        console.log('The user has disconnected from chat due to ' + reason);
     });
 
     clientSocket.on('leave room', data => {
