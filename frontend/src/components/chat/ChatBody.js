@@ -35,6 +35,7 @@ const ChatBody = ({ chatSocket, username, room_id, is_live }) => {
         }
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSwitchRole = () => {
