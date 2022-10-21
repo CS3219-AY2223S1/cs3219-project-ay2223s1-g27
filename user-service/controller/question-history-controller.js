@@ -2,8 +2,8 @@ import { getMatchHistory, createMatchHistory, updateMatchHistory, getQuestionHis
 
 export async function questionHistory(req, res) {
     try {
-        const { uid, limit, offset, pageSize } = req.query;
-        const room_ids = await getRoomIDsFromUserID(uid, limit, offset, pageSize);
+        const { uid, limit, offset } = req.query;
+        const room_ids = await getRoomIDsFromUserID(uid, limit, offset);
         let data = [];
         for (let room_id of room_ids) {
             let questionHistory = await getQuestionHistory(room_id);
@@ -12,7 +12,7 @@ export async function questionHistory(req, res) {
         }
         return res.status(200).json({
             rows: data,
-            totalCount: (await getRoomIDsFromUserID(uid, 0, 0, 0)).length
+            totalCount: (await getRoomIDsFromUserID(uid, 0, 0)).length
         });
     } catch (err) {
         console.log(`questionHistory error, err=${err}`);

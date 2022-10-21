@@ -21,7 +21,6 @@ function AttemptsPage() {
             uid: jwtDecode(cookies["refresh_token"]).id,
             limit: 10,
             offset: (page - 1) * 10,
-            pageSize: 10,
          } }).then(
             res => {
                 setRows(res.data.rows)

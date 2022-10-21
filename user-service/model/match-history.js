@@ -8,7 +8,7 @@ export let MatchHistorySchema = new Schema({
     users: [{
         type: String,
         required: true,
-    }]
-})
+    }],
+}, { timestamps: true })
 
 export default mongoose.model('MatchHistoryModel', MatchHistorySchema)
