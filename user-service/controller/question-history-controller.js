@@ -2,8 +2,8 @@ import { getMatchHistory, createMatchHistory, updateMatchHistory, getQuestionHis
 
 export async function questionHistory(req, res) {
     try {
-        const { uid } = req.query;
-        const room_ids = await getRoomIDsFromUserID(uid);
+        const { uid, limit, offset, pageSize } = req.query;
+        const room_ids = await getRoomIDsFromUserID(uid, limit, offset, pageSize);
         let data = [];
         for (let room_id of room_ids) {
             let questionHistory = await getQuestionHistory(room_id);

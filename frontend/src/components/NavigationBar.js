@@ -50,6 +50,11 @@ function NavigationBar({ isAuthenticated }) {
     setAnchorEl(null);
   };
 
+  const handlePastAttempts = () => {
+    navigate("/attempts");
+    setAnchorEl(null);
+  }
+
   const handleChangePassword = () => {
     setAnchorEl(null);
     setChangePassword(true);
@@ -136,7 +141,26 @@ function NavigationBar({ isAuthenticated }) {
   return (
     <AppBar style={{ margin: 0 }} position="static">
       {isAuthenticated && (
-        <Box display={"flex"} flexDirection={"row"} sx={{ flexGrow: 1 }}>
+        <Box display={"flex"} flexDirection={"row"} sx={{ flexGrow: 1 }} >
+          <Typography
+            variant="h4"
+            noWrap
+            component="a"
+            href="/landing"
+            sx={{
+              mr: 2,
+              ml: 4,
+              mt: 1.8,
+              display: { xs: 'none', md: 'flex' },
+              fontWeight: 700,
+              letterSpacing: '.1rem',
+              color: 'inherit',
+              textDecoration: 'none',
+              flexGrow: 1
+            }}
+          >
+            PeerPrep
+          </Typography>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <div style={{ margin: "1%" }}>
               Welcome, {jwtDecode(cookies["refresh_token"]).username}!
@@ -169,6 +193,7 @@ function NavigationBar({ isAuthenticated }) {
                 open={Boolean(anchorEl)}
                 onClose={handleCloseMenu}
               >
+                <MenuItem onClick={handlePastAttempts}>Past attempts</MenuItem>
                 <MenuItem onClick={handleChangePassword}>Change Password</MenuItem>
                 <MenuItem onClick={handleDeleteAccount}>Delete Account</MenuItem>
                 <MenuItem onClick={handleLogOut}>Log Out</MenuItem>
