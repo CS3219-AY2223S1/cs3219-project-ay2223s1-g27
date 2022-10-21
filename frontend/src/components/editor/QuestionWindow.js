@@ -8,7 +8,7 @@ import QuestionDropdown from "./QuestionDropdown";
 import QuestionDisplay from "./QuestionDisplay";
 import { INTERVIEWER_SWITCH_EVENT } from "../../constants";
 
-export default function QuestionWindow({socket, chatSocket, username, titleSlug, setTitleSlug, setCodeSnippets, updateCodeSnippet}) {
+export default function QuestionWindow({socket, chatSocket, username, titleSlug, setTitleSlug, setCodeSnippets, updateCodeSnippet, is_live}) {
   const location = useLocation();
   let [questions, setQuestions] = useState([]);
   let [questionName, setQuestionName] = useState("-");
@@ -21,6 +21,7 @@ export default function QuestionWindow({socket, chatSocket, username, titleSlug,
         console.log(res.data.problemsetQuestionList.questions)
         setQuestions(res.data.problemsetQuestionList.questions)
       })
+    if (!is_live) setIsInterviewer(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

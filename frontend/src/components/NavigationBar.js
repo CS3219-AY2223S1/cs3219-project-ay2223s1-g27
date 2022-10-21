@@ -17,7 +17,7 @@ import { useCookies } from 'react-cookie';
 import axiosApiInstance from "../axiosApiInstance"
 import { jwtDecode } from '../util/auth';
 import { URL_USER_SVC_DELETEACCOUNT, URL_USER_SVC_LOGOUT, URL_USER_SVC_UPDATEPASSWORD } from '../configs';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const modalStyle = {
   position: 'absolute',
@@ -49,6 +49,11 @@ function NavigationBar({ isAuthenticated }) {
   const handleCloseMenu = () => {
     setAnchorEl(null);
   };
+
+  const handlePastAttempts = () => {
+    navigate("/attempts");
+    setAnchorEl(null);
+  }
 
   const handleChangePassword = () => {
     setAnchorEl(null);
@@ -136,7 +141,21 @@ function NavigationBar({ isAuthenticated }) {
   return (
     <AppBar style={{ margin: 0 }} position="static">
       {isAuthenticated && (
-        <Box display={"flex"} flexDirection={"row"} sx={{ flexGrow: 1 }}>
+        <Box display={"flex"} flexDirection={"row"} sx={{ flexGrow: 1 }} alignItems={"center"}>
+          <Typography
+              variant="h6" 
+              component="div"
+              sx={{
+                ml: 3,
+                flexGrow: 1
+              }}
+            >
+            <Link to="/landing">
+              <div style={{ margin: "1%" }}>
+                PeerPrep              
+              </div>
+            </Link>
+          </Typography>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <div style={{ margin: "1%" }}>
               Welcome, {jwtDecode(cookies["refresh_token"]).username}!
@@ -169,6 +188,7 @@ function NavigationBar({ isAuthenticated }) {
                 open={Boolean(anchorEl)}
                 onClose={handleCloseMenu}
               >
+                <MenuItem onClick={handlePastAttempts}>Past attempts</MenuItem>
                 <MenuItem onClick={handleChangePassword}>Change Password</MenuItem>
                 <MenuItem onClick={handleDeleteAccount}>Delete Account</MenuItem>
                 <MenuItem onClick={handleLogOut}>Log Out</MenuItem>
