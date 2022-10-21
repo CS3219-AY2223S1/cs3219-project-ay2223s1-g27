@@ -85,7 +85,7 @@ function MatchingPage() {
   };
 
   const handleMatchFound = (room_id) => {
-    navigate("/room", { state: { user: location.state.user, room_id: room_id, difficultyLevel: location.state.difficultyLevel } });
+    navigate("/room", { state: { user: location.state.user, room_id: room_id, difficultyLevel: location.state.difficultyLevel, matched: 'true' } });
   }
 
   const handleNoMatchFound = () => {
@@ -110,9 +110,8 @@ function MatchingPage() {
   }
 
     const handleProceedWithoutMatch = () => {
-        setIsModalOpen(false);
-        console.log(location.state.difficultyLevel)
-        navigate("/room", {state: { user: location.state.user, difficultyLevel: location.state.difficultyLevel }});
+        setIsModalOpen(false); 
+        navigate("/room", {state: { user: location.state.user, difficultyLevel: location.state.difficultyLevel, matched: 'false' }});
         
         // Disconnect all listeners
         socket.disconnect(); 
