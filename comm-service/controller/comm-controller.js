@@ -6,7 +6,7 @@ const interviewerSwitchEvent = 'interviewer switch event';
 const interviewerSwitchRequestEvent = 'request interviewer switch';
 
 export function registerChatHandlers(io, clientSocket) {
-    clientSocket.on('join room', eventData => {
+    clientSocket.on('join room', function(eventData) {
         if (!eventData.room_id) {
             console.log("Join room event emitted without room_id");
             sendJoinRoomFail(clientSocket, { message: "missing room_id" });
@@ -25,13 +25,13 @@ export function registerChatHandlers(io, clientSocket) {
         }
     });
 
-    clientSocket.on('message', data => {
+    clientSocket.on('message', function(data) {
         console.log(data)
         io.to(data.room_id).emit('message response', data)
     });
 
     // assumes only the interviewee can request to become the interviewer
-    clientSocket.on(interviewerSwitchRequestEvent, data => {
+    clientSocket.on(interviewerSwitchRequestEvent, function(data) {
         const room_id = data.room_id;
         const newInterviewer = data.username;
         roomInterviewers[room_id] = newInterviewer;
@@ -46,7 +46,7 @@ export function registerChatHandlers(io, clientSocket) {
         console.log('The user has disconnected from chat due to ' + reason);
     });
 
-    clientSocket.on('leave room', data => {
+    clientSocket.on('leave room', function(data) {
         console.log(`A user ${data.username} has left the chat room`);
         const room_id = data.room_id;
         io.to(room_id).emit('user leave', data)
