@@ -114,7 +114,7 @@ function MatchingPage() {
             },
           });
         });
-    }, Math.random() * 1000); // set random time to prevent collision
+    }, Math.random() * 3000); // set random time to prevent collision
   };
 
   const handleNoMatchFound = () => {
