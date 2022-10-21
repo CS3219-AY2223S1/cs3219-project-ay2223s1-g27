@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Alert, Box, Button, Snackbar, Link } from "@mui/material";
 import { isUnauthorizedError } from "@thream/socketio-jwt/build/UnauthorizedError.js";
-import Editor from "@monaco-editor/react";
+import CodeMirror from '@uiw/react-codemirror';
 import QuestionWindow from "./QuestionWindow";
 import axiosApiInstance from "../../axiosApiInstance";
 import { languageOptions } from "../../constants/languageOptions";
@@ -10,7 +10,8 @@ import { URL_QUESTION_SVC_COMPILE } from "../../configs";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { defineTheme } from "../../lib/defineTheme";
+import { loadLanguage } from '@uiw/codemirror-extensions-langs';
+import * as themes from '@uiw/codemirror-themes-all';
 import useKeyPress from "../../hooks/useKeyPress";
 import OutputWindow from "./OutputWindow";
 import CustomInput from "./CustomInput";
@@ -147,12 +148,25 @@ const CodeEditorLanding = ({ socket, chatSocket, room_id, username }) => {
     setOutputDetails(payload.outputDetails);
   });
 
-  const handleEditorChange = (value) => {
+  const userEvents = ['input', 'delete', 'move', 'select', 'undo', 'redo'];
+
+  const isUserEvents = (transaction) => {
+    for (let i = 0; i < userEvents.length; i++) {
+      if (transaction.isUserEvent(userEvents[i])) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  const handleEditorChange = (value, update) => {
+    if (update.transactions && !isUserEvents(update.transactions[0])) {
+      return;
+    }
     socket.emit("coding event", {
       room_id: room_id,
       newCode: value,
     });
-    onChange("code", value);
   };
 
   socket.on("receive code", (payload) => {
@@ -162,18 +176,12 @@ const CodeEditorLanding = ({ socket, chatSocket, room_id, username }) => {
 
   function handleThemeChange(th) {
     const theme = th;
-
-    if (["light", "vs-dark"].includes(theme.value)) {
-      setTheme(theme);
-    } else {
-      defineTheme(theme.value).then((_) => setTheme(theme));
-    }
+    setTheme({ value: themes[theme.value], label: theme.label });
   }
 
   useEffect(() => {
-    defineTheme("oceanic-next").then((_) =>
-      setTheme({ value: "oceanic-next", label: "Oceanic Next" })
-    );
+    console.log(themes)
+    setTheme({ value: themes["atomone"], label: "Atomone" })
   }, []);
 
   const showErrorToast = (msg, timer) => {
@@ -265,14 +273,12 @@ const CodeEditorLanding = ({ socket, chatSocket, room_id, username }) => {
             style={{ paddingTop: "10px" }}
             className="overlay rounded-md overflow-hidden w-full h-full shadow-4xl"
           >
-            <Editor
-              height="85vh"
-              width={`100%`}
-              language={language?.value || "javascript"}
+            <CodeMirror
+              height="500px"
               value={code}
-              theme={theme.value}
-              defaultValue="// Start editing here"
               onChange={handleEditorChange}
+              theme={theme.value}
+              extensions={[loadLanguage(language?.value || "tsx")]}
             />
           </div>
         </Box>
