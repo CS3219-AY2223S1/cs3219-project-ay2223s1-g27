@@ -59,11 +59,13 @@ function RoomPage() {
 
   useEffect(() => {
     // Emit join room event here
-    chatSocket.emit("join room", { 
+    chatSocket.on('connect', () => {
+      chatSocket.emit("join room", { 
         room_id: room_id,
         username: username, 
-    });
-
+      });
+    })
+    
     chatSocket.on('user leave', () => {
         console.log("Other user has left")
     })
@@ -71,7 +73,7 @@ function RoomPage() {
     return () => { // component will unmount equivalent
         chatSocket.emit('leave room', { room_id: room_id, username: username });
     }
-  }, [chatSocket, room_id, username]);
+  }, []);
 
   const handleLeaveSession = () => {
     navigate("/landing", { state: { user: location.state.user } });
