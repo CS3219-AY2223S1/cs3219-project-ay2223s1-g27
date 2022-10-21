@@ -19,6 +19,7 @@ export async function questionHistory(req, res) {
             let questionHistory = await getQuestionHistory(room.room_id);
             if (!questionHistory) continue;
             data.push({
+                usernames: room.usernames,
                 difficulty_level: room.difficulty_level,
                 created_at: room.createdAt,
                 question_history: questionHistory
@@ -43,15 +44,19 @@ export async function questionHistory(req, res) {
 
 export async function saveSession(req, res) {
     try {
-        const { room_id, user_id, difficulty_level } = req.body;
+        const { room_id, user_id, username, difficulty_level } = req.body;
         let session = await getMatchHistory(room_id);
         if (!session) {
-            let newSession = await createMatchHistory(room_id, user_id, difficulty_level);
+            let newSession = await createMatchHistory(room_id, user_id, username, difficulty_level);
             return res.status(201).json(newSession);
         }
         let sessionUsers = session.users;
-        if (!sessionUsers.includes(user_id)) sessionUsers.push(user_id);
-        let updatedSession = await updateMatchHistory(room_id,  session.users);
+        let sessionUserNames = session.usernames;
+        if (!sessionUsers.includes(user_id)) {
+            sessionUsers.push(user_id);
+            sessionUserNames.push(username);
+        }
+        let updatedSession = await updateMatchHistory(room_id,  sessionUsers, sessionUserNames);
         return res.status(201).json(updatedSession);
     } catch (err) {
         console.log(`saveSession error, err=${err}`);

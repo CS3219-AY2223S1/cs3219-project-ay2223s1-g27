@@ -13,6 +13,10 @@ export let MatchHistorySchema = new Schema({
         type: String,
         required: true,
     }],
+    usernames: [{
+        type: String,
+        required: false,
+    }],
 }, { timestamps: true })
 
 export default mongoose.model('MatchHistoryModel', MatchHistorySchema)
