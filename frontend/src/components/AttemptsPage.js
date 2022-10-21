@@ -1,27 +1,29 @@
 import { useState, useEffect } from "react";
 import NavigationBar from "./NavigationBar";
 import { Box, Pagination, TableContainer, TableHead, TableRow, TableCell, TableBody, Paper, Table, Typography } from "@mui/material";
+import axiosApiInstance from "../axiosApiInstance";
+import { URL_USER_SVC_QUESTIONHISTORY } from "../configs";
+import { jwtDecode } from "../util/auth";
+import { useCookies } from "react-cookie";
 
-function createData(room_id, partner) {
-    return { room_id, partner };
-}
-
-const rows = [
-    createData('Frozen yoghurt', '123'),
-    createData('Frozen yoghurt', '123'),
-    createData('Frozen yoghurt', '123'),
-];
-
-  
 function AttemptsPage() {
+    const [cookies] = useCookies();
     const [page, setPage] = useState(1);
+    const [rows, setRows] = useState([]);
 
     const handlePagination = (_, value) => {
         setPage(value);
     }
 
     useEffect(() => {
-
+        axiosApiInstance.get(URL_USER_SVC_QUESTIONHISTORY, { params: { 
+            uid: jwtDecode(cookies["refresh_token"]).id,
+            limit: 10,
+            offset: (page - 1) * 10,
+            pageSize: 10,
+         } }).then(
+            res => setRows(res.data)
+        );
     }, [page]);
 
     return (
@@ -49,7 +51,7 @@ function AttemptsPage() {
                             <TableCell component="th" scope="row">
                                 {row.room_id}
                             </TableCell>
-                            <TableCell align="right">{row.partner}</TableCell>
+                            <TableCell align="right">{row._id}</TableCell>
                             </TableRow>
                         ))}
                         </TableBody>
