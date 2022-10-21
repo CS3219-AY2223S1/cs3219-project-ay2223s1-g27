@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import QuestionSelector from "./QuestionSelector"; 
 import { Button, Box, Chip } from '@mui/material';
 import { INTERVIEWER_SWITCH_EVENT, INTERVIEWER_SWITCH_REQUEST_EVENT } from "../../constants";
+import { URL_USER_SVC_MESSAGE } from "../../configs";
+import axiosApiInstance from "../../axiosApiInstance";
 
-const ChatBody = ({ chatSocket, username, room_id }) => {
+const ChatBody = ({ chatSocket, username, room_id, is_live }) => {
   const [isInterviewer, setIsInterviewer] = useState(); 
   const [messages, setMessages] = useState([]);
 
@@ -20,11 +22,20 @@ const ChatBody = ({ chatSocket, username, room_id }) => {
   chatSocket.on('message response', (data) => {
     console.log(data)
     setMessages([...messages, data])
+    if (is_live) {
+      axiosApiInstance.post(URL_USER_SVC_MESSAGE, {room_id: room_id, messages: messages})
+    }
   });
 
   useEffect(() => {
-    console.log(messages);
-  }, [messages]);
+    if (!is_live) {
+      axiosApiInstance.get(URL_USER_SVC_MESSAGE, {params: {room_id: room_id}}).then(x => {
+        if (x.data) {
+          setMessages(x.data.messages);
+        }
+      })
+    }
+  }, []);
 
   const handleSwitchRole = () => {
     if (!isInterviewer) {

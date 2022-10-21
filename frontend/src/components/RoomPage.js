@@ -90,7 +90,7 @@ function RoomPage() {
           <CodeEditorLanding socket={codeEditorSocket} chatSocket={chatSocket} room_id={room_id} username={username} cache={location.state.cache} is_live={location.state.is_live} />
           <div style={{ marginTop: '1%' }}></div>
           <h1 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '5px', color: '#0f172a' }}> Messenger </h1>
-          <ChatWindow chatSocket={chatSocket} room_id={room_id} username={username} />
+          <ChatWindow chatSocket={chatSocket} room_id={room_id} username={username} is_live={location.state.is_live} />
         </Box>
         <Box display={"flex"} flexDirection={"row"} justifyContent={"flex-end"} sx={{ marginRight: "3%", marginBottom: "10px" }}>
           <Button

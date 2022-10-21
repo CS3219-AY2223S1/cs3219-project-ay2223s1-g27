@@ -77,7 +77,8 @@ function AttemptsPage() {
                         state={{
                           cache: row.question_history.questions,
                           is_live: false,
-                          difficultyLevel: row.difficulty_level
+                          difficultyLevel: row.difficulty_level,
+                          room_id: row.question_history.room_id
                         }}
                       >
                         {row.question_history.room_id}
