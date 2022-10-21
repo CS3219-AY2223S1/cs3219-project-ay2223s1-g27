@@ -1,18 +1,25 @@
-import { getMatchHistory, createMatchHistory, updateMatchHistory, getQuestionHistory, createQuestionHistory, updateQuestionHistory, getRoomIDsFromUserID } from "../model/repository.js";
+import { getMatchHistory, createMatchHistory, updateMatchHistory, getQuestionHistory, createQuestionHistory, updateQuestionHistory, getRoomsFromUserID } from "../model/repository.js";
 
 export async function questionHistory(req, res) {
     try {
         const { uid, limit, offset } = req.query;
-        const room_ids = await getRoomIDsFromUserID(uid, limit, offset);
+        const rooms = await getRoomsFromUserID(uid, limit, offset);
         let data = [];
-        for (let room_id of room_ids) {
-            let questionHistory = await getQuestionHistory(room_id);
+        for (let room of rooms) {
+            let questionHistory = await getQuestionHistory(room.room_id);
             if (!questionHistory) continue;
             data.push(questionHistory);
         }
+        const allRooms = await getRoomsFromUserID(uid, 0, 0);
+        let cnt = 0;
+        for (let room of allRooms) {
+            let questionHistory = await getQuestionHistory(room.room_id);
+            if (!questionHistory) continue;
+            cnt++;
+        }
         return res.status(200).json({
             rows: data,
-            totalCount: (await getRoomIDsFromUserID(uid, 0, 0)).length
+            totalCount: cnt
         });
     } catch (err) {
         console.log(`questionHistory error, err=${err}`);
