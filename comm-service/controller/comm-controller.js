@@ -17,7 +17,10 @@ export function registerChatHandlers(io, clientSocket) {
         clientSocket.join(room_id);
         if (!(room_id in roomInterviewers)) {
             roomInterviewers[room_id] = username;
+        } else {
+            // second client socket fires "join room" event
             // fire event to all clients in a room TODO
+            console.log(`Fired to room ${room_id}`)
             io.to(room_id).emit(interviewerSwitchEvent, {
                 room_id: room_id,
                 interviewer: username,
