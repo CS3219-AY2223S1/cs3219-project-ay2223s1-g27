@@ -4,19 +4,19 @@ import { Button, Box, Chip } from '@mui/material';
 import { INTERVIEWER_SWITCH_EVENT, INTERVIEWER_SWITCH_REQUEST_EVENT } from "../../constants";
 
 const ChatBody = ({ chatSocket, username, room_id }) => {
-  const [isInterviewer, setIsInterviewer] = useState(); 
+  const [isInterviewer, setIsInterviewer] = useState();  
   const [messages, setMessages] = useState([]);
-
+  
   chatSocket.on(INTERVIEWER_SWITCH_EVENT, (data) => {
-    const interviewer = data.interviewer;
+    const interviewer = data.interviewer; 
     console.log(data)
     if (interviewer === username) {
-        setIsInterviewer(true);
+        setIsInterviewer(true); 
     } else {
         setIsInterviewer(false);
     } 
   })
-
+ 
   chatSocket.on('message response', (data) => {
     console.log(data)
     setMessages([...messages, data])
@@ -56,7 +56,7 @@ const ChatBody = ({ chatSocket, username, room_id }) => {
             </Box>
           }
       </header>
-
+      
       {/*This shows messages sent from you*/}
       <div className="message_container">
         {messages.map((message) => 

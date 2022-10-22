@@ -3,7 +3,7 @@ import { sendJoinRoomFail } from '../services/socket.js'
 
 var roomInterviewers = {};
 const interviewerSwitchEvent = 'interviewer switch event';
-const interviewerSwitchRequestEvent = 'request interviewer switch';
+const interviewerSwitchRequestEvent = 'request interviewer switch'; 
 
 export function registerChatHandlers(io, clientSocket) {
     clientSocket.on('join room', function(eventData) {
@@ -30,17 +30,18 @@ export function registerChatHandlers(io, clientSocket) {
         io.to(data.room_id).emit('message response', data)
     });
 
-    // assumes only the interviewee can request to become the interviewer
+    // assumes only the interviewee can request to become the interviewer 
     clientSocket.on(interviewerSwitchRequestEvent, function(data) {
         const room_id = data.room_id;
-        const newInterviewer = data.username;
-        roomInterviewers[room_id] = newInterviewer;
+        const newInterviewer = data.username; 
+        roomInterviewers[room_id] = newInterviewer; 
         // fire event to all clients in a room TODO
         io.to(room_id).emit(interviewerSwitchEvent, {
             room_id: room_id,
-            interviewer: newInterviewer,
+            interviewer: newInterviewer 
         });
     })
+ 
 
     clientSocket.on('disconnect', (reason) => {
         console.log('The user has disconnected from chat due to ' + reason);

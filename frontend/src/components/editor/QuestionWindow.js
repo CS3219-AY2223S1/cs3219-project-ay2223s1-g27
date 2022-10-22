@@ -1,5 +1,5 @@
-import { Box } from "@mui/system";
-import { FormHelperText } from "@mui/material";
+// import { Box } from "@mui/system";
+import { Box, FormHelperText } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import axiosApiInstance from "../../axiosApiInstance"
@@ -62,7 +62,11 @@ export default function QuestionWindow({socket, chatSocket, username, titleSlug,
   })
 
   return (
-    <>
+    <Box
+      display={"flex"} 
+      flexDirection={"column"}
+      sx={{marginRight:'5vh'}}
+    >
       {isInterviewer ? 
       <QuestionDropdown
       handleQuestionChange={handleQuestionChange}
@@ -75,20 +79,18 @@ export default function QuestionWindow({socket, chatSocket, username, titleSlug,
       :     
       null
       }
-      <FormHelperText>Selected Question</FormHelperText>
+      {!isInterviewer ? <FormHelperText>Selected Question</FormHelperText> : null}
       <div style={{
-        height: "90vh",
+        height: !isInterviewer ? "101vh" : "95vh", 
         width: "100%",
         marginRight: "10px",
         borderWidth: '1px',
         overflow: 'auto',
-        marginTop: "1%"
-      }}>
-        <Box display={"flex"} flexDirection={"column"}>
+        marginTop:  !isInterviewer ? "1%" : "16px"
+      }}> 
           <QuestionDisplay
-            content={content} />
-        </Box>
+            content={content} /> 
       </div>
-    </>
+    </Box>
   )
 }
