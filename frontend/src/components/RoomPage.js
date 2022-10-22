@@ -151,7 +151,7 @@ function RoomPage() {
             End Session
           </Button>
         </Box>
-      </div> 
+      </div>
     </>
   )
 }
