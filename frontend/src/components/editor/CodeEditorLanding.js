@@ -18,7 +18,7 @@ import CustomInput from "./CustomInput";
 import OutputDetails from "./OutputDetails";
 import ThemeDropdown from "./ThemeDropdown";
 import LanguagesDropdown from "./LanguagesDropdown";
-import ResizePanel from 'react-resize-panel';
+// import ResizePanel from 'react-resize-panel';
 
 const javascriptDefault = `// some comment`;
 

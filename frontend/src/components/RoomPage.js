@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   Box,
   Button, 
-  Popover,
-  Fab,
+  // Popover,
+  // Fab,
   Typography
 } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -23,19 +23,19 @@ function RoomPage() {
   const [cookies] = useCookies();
   const location = useLocation(); // Location contains username and selected difficulty level
   const navigate = useNavigate();
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [paneOpen, setPaneOpen] = useState(false);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  }
+  // const [anchorEl, setAnchorEl] = useState(null);
+  // const [paneOpen, setPaneOpen] = useState(false);
+  // const handleClick = (event) => {
+  //   setAnchorEl(event.currentTarget);
+  // }
 
-  const handleOpen = () => {
-    setPaneOpen(true);
-  }
+  // const handleOpen = () => {
+  //   setPaneOpen(true);
+  // }
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  }
+  // const handleClose = () => {
+  //   setAnchorEl(null);
+  // }
 
   console.log(location.state.difficultyLevel)
   const room_id = location.state.room_id;
@@ -99,8 +99,8 @@ function RoomPage() {
   const handleLeaveSession = () => {
     navigate("/landing", { state: { user: location.state.user } });
   }
-  const open = Boolean(anchorEl);
-  const id = open ? 'simple-popover' : undefined;
+  // const open = Boolean(anchorEl);
+  // const id = open ? 'simple-popover' : undefined;
   return (
     <>
       <NavigationBar isAuthenticated={true} user={location.state.user} />
