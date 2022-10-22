@@ -5,7 +5,7 @@ import CodeMirror from '@uiw/react-codemirror';
 import QuestionWindow from "./QuestionWindow";
 import axiosApiInstance from "../../axiosApiInstance";
 import { languageOptions } from "../../constants/languageOptions";
-import { URL_QUESTION_SVC_COMPILE } from "../../configs";
+import { URL_QUESTION_SVC_COMPILE, URL_USER_SVC_SAVEQUESTION } from "../../configs";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -22,7 +22,7 @@ import ResizePanel from 'react-resize-panel';
 
 const javascriptDefault = `// some comment`;
 
-const CodeEditorLanding = ({ socket, chatSocket, room_id, username }) => {
+const CodeEditorLanding = ({ socket, chatSocket, room_id, username, cache, is_live }) => {
   const [alertOpen, setAlertOpen] = useState(false);
   const [compileOpen, setCompileOpen] = useState(false);
   const [otherUser, setOtherUser] = useState("");
@@ -70,6 +70,16 @@ const CodeEditorLanding = ({ socket, chatSocket, room_id, username }) => {
   }, [language]);
 
   const updateCodeSnippet = (codeSnippets) => {
+    let found = false;
+    if (cache) {
+      cache.forEach(question => {
+        if (question.titleSlug === titleSlug) {
+          found = true;
+        }
+      })
+    }
+    if (found) return;
+    console.log('updating snippet')
     console.log(language);
     const codeSnippet = codeSnippets.find((codeSnippet) => {
       return codeSnippet.lang.toLowerCase() === language.value.toLowerCase();
@@ -86,6 +96,23 @@ const CodeEditorLanding = ({ socket, chatSocket, room_id, username }) => {
       }
     });
   });
+
+  useEffect(() => {
+    if (cache) {
+      cache.forEach(question => {
+        if (question.titleSlug === titleSlug) {
+          setCode(question.codeSegment);
+          languageOptions.forEach((x) => {
+            if (x.id === question.language) {
+              console.log(`setting language to${x.name}`);
+              setLanguage(x);
+            }
+          });
+        }
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [titleSlug])
 
   useEffect(() => {
     if (enterPress && ctrlPress) {
@@ -142,6 +169,9 @@ const CodeEditorLanding = ({ socket, chatSocket, room_id, username }) => {
         setProcessing(false);
         showErrorToast();
       });
+
+      // save this record
+      axiosApiInstance.post(URL_USER_SVC_SAVEQUESTION, { room_id: room_id, titleSlug: titleSlug, codeSegment: code, language: language.id });
   };
 
   socket.on("receive output", (payload) => {
@@ -161,6 +191,7 @@ const CodeEditorLanding = ({ socket, chatSocket, room_id, username }) => {
   }
 
   const handleEditorChange = (value, update) => {
+    setCode(value); // setCode here otherwise cannot compile when user is solo
     if (update.transactions && !isUserEvents(update.transactions[0])) {
       return;
     }

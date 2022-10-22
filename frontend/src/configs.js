@@ -22,13 +22,17 @@ const URI_COMM_SVC = process.env.REACT_APP_ENV === 'DEV' ? COMM_BACKEND : LIVE_B
 
 const PREFIX_USER_SVC = "/api/user";
 const PREFIX_CREATEUSER = "/createuser";
-const PREFIX_LOGIN = "/login"
-const PREFIX_LOGOUT = "/logout"
-const PREFIX_REFRESH_TOKEN = "/renewtokens"
-const PREFIX_RESETPASSWORD = "/resetpassword"
-const PREFIX_RESETLINK = "/sendresetlink"
-const PREFIX_UPDATEPASSWORD = "/updatepassword"
-const PREFIX_DELETEACCOUNT = "/delete"
+const PREFIX_LOGIN = "/login";
+const PREFIX_LOGOUT = "/logout";
+const PREFIX_REFRESH_TOKEN = "/renewtokens";
+const PREFIX_RESETPASSWORD = "/resetpassword";
+const PREFIX_RESETLINK = "/sendresetlink";
+const PREFIX_UPDATEPASSWORD = "/updatepassword";
+const PREFIX_DELETEACCOUNT = "/delete";
+const PREFIX_QUESTIONHISTORY = "/questionhistory";
+const PREFIX_SAVESESSION = "/savesession";
+const PREFIX_SAVEQUESTION = "/savequestion";
+const PREFIX_MESSAGE = "/message";
 
 export const URL_USER_SVC = URI_USER_SVC + PREFIX_USER_SVC;
 export const URL_USER_SVC_CREATEUSER = URL_USER_SVC + PREFIX_CREATEUSER;
@@ -39,6 +43,10 @@ export const URL_USER_SVC_RESETLINK = URL_USER_SVC + PREFIX_RESETLINK;
 export const URL_USER_SVC_LOGOUT = URL_USER_SVC + PREFIX_LOGOUT;
 export const URL_USER_SVC_REFRESH_TOKEN = URL_USER_SVC + PREFIX_REFRESH_TOKEN;
 export const URL_USER_SVC_DELETEACCOUNT = URL_USER_SVC + PREFIX_DELETEACCOUNT;
+export const URL_USER_SVC_QUESTIONHISTORY = URL_USER_SVC + PREFIX_QUESTIONHISTORY;
+export const URL_USER_SVC_SAVESESSION = URL_USER_SVC + PREFIX_SAVESESSION;
+export const URL_USER_SVC_SAVEQUESTION = URL_USER_SVC + PREFIX_SAVEQUESTION;
+export const URL_USER_SVC_MESSAGE = URL_USER_SVC + PREFIX_MESSAGE;
 
 export const PREFIX_MATCHING_SVC = "/api/matching";
 export const URL_MATCHING_SVC = URI_MATCHING_SVC;
@@ -63,6 +71,7 @@ export const PREFIX_FRONTEND_ROOT = "/";
 export const PREFIX_FRONTEND_SIGNUP = "/signup";
 export const PREFIX_FRONTEND_LOGIN = "/login";
 export const PREFIX_FRONTEND_LANDING = "/landing";
+export const PREFIX_FRONTEND_ATTEMPTS = "/attempts";
 export const PREFIX_FRONTEND_MATCHING = "/matching";
 export const PREFIX_FRONTEND_ROOM = "/room";
 export const PREFIX_FRONTEND_RESETPWD = "/resetpassword";

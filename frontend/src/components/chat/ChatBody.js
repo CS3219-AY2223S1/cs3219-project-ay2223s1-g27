@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import QuestionSelector from "./QuestionSelector"; 
 import { Button, Box, Chip } from '@mui/material';
 import { INTERVIEWER_SWITCH_EVENT, INTERVIEWER_SWITCH_REQUEST_EVENT } from "../../constants";
+import { URL_USER_SVC_MESSAGE } from "../../configs";
+import axiosApiInstance from "../../axiosApiInstance";
 
-const ChatBody = ({ chatSocket, username, room_id }) => {
-  const [isInterviewer, setIsInterviewer] = useState();  
+const ChatBody = ({ chatSocket, username, room_id, is_live }) => {
+  const [isInterviewer, setIsInterviewer] = useState(); 
   const [messages, setMessages] = useState([]);
   
   chatSocket.on(INTERVIEWER_SWITCH_EVENT, (data) => {
@@ -20,7 +22,21 @@ const ChatBody = ({ chatSocket, username, room_id }) => {
   chatSocket.on('message response', (data) => {
     console.log(data)
     setMessages([...messages, data])
+    if (is_live) {
+      axiosApiInstance.post(URL_USER_SVC_MESSAGE, {room_id: room_id, messages: messages})
+    }
   });
+
+  useEffect(() => {
+    if (!is_live) {
+      axiosApiInstance.get(URL_USER_SVC_MESSAGE, {params: {room_id: room_id}}).then(x => {
+        if (x.data) {
+          setMessages(x.data.messages);
+        }
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleSwitchRole = () => {
     if (!isInterviewer) {

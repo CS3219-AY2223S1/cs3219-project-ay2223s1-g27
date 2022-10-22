@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import SignupPage from './components/SignupPage';
 import LoginPage from './components/LoginPage';
 import LandingPage from './components/LandingPage'; 
+import AttemptsPage from './components/AttemptsPage';
 import MatchingPage from "./components/MatchingPage"; 
 import ResetPage from "./components/ResetPage"; 
 // import NavigationBar from "./components/NavigationBar"; 
@@ -10,7 +11,8 @@ import { PrivateRoute } from "./components/PrivateRoute";
 import RoomPage from "./components/RoomPage";
 import { initAxiosApiInstance } from "./axiosApiInstance";
 import { useCookies } from "react-cookie"; 
-import { 
+import {
+    PREFIX_FRONTEND_ATTEMPTS,
     PREFIX_FRONTEND_LANDING, 
     PREFIX_FRONTEND_LOGIN, 
     PREFIX_FRONTEND_MATCHING, 
@@ -34,6 +36,7 @@ function App() {
                         <Route path={PREFIX_FRONTEND_LOGIN} element={<LoginPage/>}/>
                         <Route path={PREFIX_FRONTEND_RESETPWD + '/:id'} element={<ResetPage/>}/>
                         <Route path={PREFIX_FRONTEND_LANDING} element={<PrivateRoute><LandingPage/></PrivateRoute>}/> 
+                        <Route path={PREFIX_FRONTEND_ATTEMPTS} element={<PrivateRoute><AttemptsPage/></PrivateRoute>}/> 
                         <Route path={PREFIX_FRONTEND_MATCHING} element={<MatchingPage/>}/>
                         <Route path={PREFIX_FRONTEND_ROOM} element={<RoomPage/>}/>
                     </Routes>
