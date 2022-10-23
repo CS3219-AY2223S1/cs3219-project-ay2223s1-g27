@@ -23,6 +23,7 @@ const ChatBody = ({ chatSocket, username, room_id, is_live }) => {
     if (is_live) {
       axiosApiInstance.post(URL_USER_SVC_MESSAGE, {room_id: room_id, messages: messages})
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages])
 
   chatSocket.on('message response', (data) => {
