@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import QuestionSelector from "./QuestionSelector"; 
 import { Button, Box, Chip } from '@mui/material';
 import { INTERVIEWER_SWITCH_REQUEST_EVENT } from "../../constants";
