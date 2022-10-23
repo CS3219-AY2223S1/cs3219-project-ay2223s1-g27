@@ -30,6 +30,8 @@ function RoomPage() {
   // ChatWindow Props
   const [isInterviewer, setIsInterviewer] = useState(); 
   const [messages, setMessages] = useState([]);
+  const [socketForChat, setSocketForChat] = useState();
+
   const [anchorEl, setAnchorEl] = useState(null);
   // const [paneOpen, setPaneOpen] = useState(false);
   // console.log(location.state.difficultyLevel)
@@ -60,14 +62,6 @@ function RoomPage() {
     }
   });
 
-  const chatSocket = io(URL_COMM_SVC, { 
-    transports: ['websocket'],
-    path: PREFIX_COMM_SVC_CHAT,
-    auth: {
-        token: `Bearer ${cookies['access_token']}`
-    }
-  });
-
   useEffect(() => {
     // console.log(location.state.difficultyLevel)
     codeEditorSocket.io.on("reconnection_attempt", () => {
@@ -89,6 +83,13 @@ function RoomPage() {
   }, [])
 
   useEffect(() => {
+    const chatSocket = io(URL_COMM_SVC, { 
+      transports: ['websocket'],
+      path: PREFIX_COMM_SVC_CHAT,
+      auth: {
+          token: `Bearer ${cookies['access_token']}`
+      }
+    });
     // Emit join room event here
     chatSocket.on('connect', () => {
       chatSocket.emit("join room", { 
@@ -112,22 +113,14 @@ function RoomPage() {
       } 
     })
   
-    chatSocket.on('message response', (data) => {
-      console.log(data)
-      console.log(messages)
-      const newMessageObjArr = [...messages, data]
-      setMessages(newMessageObjArr)
-      if (location.state.is_live) {
-        axiosApiInstance.post(URL_USER_SVC_MESSAGE, {room_id: room_id, messages: newMessageObjArr})
-      }
-    });
-  
     chatSocket.on("connect_error", (err) => {
       if (isUnauthorizedError(err)) {
           console.log('User token has expired')
       }
       console.log(`connect_error due to ${err.message}`);
     });
+
+    setSocketForChat(chatSocket)
 
     return () => { // component will unmount equivalent
         chatSocket.emit('leave room', { room_id: room_id, username: username });
@@ -138,7 +131,23 @@ function RoomPage() {
         chatSocket.off('connect_error');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chatSocket]);
+  }, []);
+
+  // Necessary useEffect for messages to be updated. using the listener. 
+  // Separated from above useEffect to prevent uneccesary re-renders
+  useEffect(() => {
+    if (socketForChat != undefined) {
+      socketForChat.on('message response', (data) => {
+        console.log(data)
+        console.log(messages)
+        const newMessageObjArr = [...messages, data]
+        setMessages(newMessageObjArr)
+        if (location.state.is_live) {
+          axiosApiInstance.post(URL_USER_SVC_MESSAGE, {room_id: room_id, messages: newMessageObjArr})
+        }
+      });
+    }
+  }, [socketForChat, messages])
 
   // Attempt history related useEffect
   useEffect(() => {
@@ -178,7 +187,7 @@ function RoomPage() {
             horizontal:'left'
           }}
         >
-          <ChatWindow chatSocket={chatSocket} room_id={room_id} username={username} isInterviewer={isInterviewer} messages={messages}/> 
+          <ChatWindow chatSocket={socketForChat} room_id={room_id} username={username} isInterviewer={isInterviewer} messages={messages}/> 
         </Popover>
 
         {/* <Fab style={{ left: 1800}} onClick={handleOpen}>
@@ -189,7 +198,7 @@ function RoomPage() {
           title="Messenger"
           onRequestClose={() => setPaneOpen(false)}
         > 
-          <ChatWindow chatSocket={chatSocket} room_id={room_id} username={username} isInterviewer={isInterviewer} messages={messages} />
+          <ChatWindow chatSocket={socketForChat} room_id={room_id} username={username} isInterviewer={isInterviewer} messages={messages} />
         </SlidingPane> */}
         <Box display={"flex"} flexDirection={"column"} style={{ marginTop: '3%', marginLeft: "3%", marginRight: "3%" }}>  
           <CodeEditorLanding socket={codeEditorSocket} isInterviewer={isInterviewer} room_id={room_id} username={username} cache={location.state.cache} is_live={location.state.is_live} />
