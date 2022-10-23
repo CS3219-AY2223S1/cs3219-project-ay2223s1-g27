@@ -136,7 +136,7 @@ function RoomPage() {
   // Necessary useEffect for messages to be updated. using the listener. 
   // Separated from above useEffect to prevent uneccesary re-renders
   useEffect(() => {
-    if (socketForChat != undefined) {
+    if (socketForChat !== undefined) {
       socketForChat.on('message response', (data) => {
         console.log(data)
         console.log(messages)
@@ -147,7 +147,8 @@ function RoomPage() {
         }
       });
     }
-  }, [socketForChat, messages])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [socketForChat, messages, location.state.is_live])
 
   // Attempt history related useEffect
   useEffect(() => {
