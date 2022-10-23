@@ -38,6 +38,8 @@ function RoomPage() {
   const username = jwtDecode(cookies['refresh_token']).username;
   const chatWindowOpen = Boolean(anchorEl);
 
+  console.log(location.state.is_live)
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   }
@@ -113,9 +115,10 @@ function RoomPage() {
     chatSocket.on('message response', (data) => {
       console.log(data)
       console.log(messages)
-      setMessages([...messages, data])
+      const newMessageObjArr = [...messages, data]
+      setMessages(newMessageObjArr)
       if (location.state.is_live) {
-        axiosApiInstance.post(URL_USER_SVC_MESSAGE, {room_id: room_id, messages: messages})
+        axiosApiInstance.post(URL_USER_SVC_MESSAGE, {room_id: room_id, messages: newMessageObjArr})
       }
     });
   
@@ -135,7 +138,7 @@ function RoomPage() {
         chatSocket.off('connect_error');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [messages]);
+  }, [chatSocket]);
 
   // Attempt history related useEffect
   useEffect(() => {
