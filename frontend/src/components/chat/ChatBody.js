@@ -20,10 +20,11 @@ const ChatBody = ({ chatSocket, username, room_id, is_live }) => {
   })
 
   chatSocket.on('message response', (data) => {
+    let newMessages = [...messages, data];
     if (is_live) {
-      axiosApiInstance.post(URL_USER_SVC_MESSAGE, {room_id: room_id, messages: [...messages, data]})
+      axiosApiInstance.post(URL_USER_SVC_MESSAGE, {room_id: room_id, messages: newMessages})
     }
-    setMessages([...messages, data])
+    setMessages(newMessages)
   });
 
   useEffect(() => {
