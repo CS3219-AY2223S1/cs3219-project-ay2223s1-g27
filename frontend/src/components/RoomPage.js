@@ -33,6 +33,7 @@ function RoomPage() {
   const [anchorEl, setAnchorEl] = useState(null);
   // const [paneOpen, setPaneOpen] = useState(false);
   // console.log(location.state.difficultyLevel)
+
   const room_id = location.state.room_id;
   const username = jwtDecode(cookies['refresh_token']).username;
   const chatWindowOpen = Boolean(anchorEl);
@@ -111,9 +112,10 @@ function RoomPage() {
   
     chatSocket.on('message response', (data) => {
       console.log(data)
+      console.log(messages)
       setMessages([...messages, data])
       if (location.state.is_live) {
-      axiosApiInstance.post(URL_USER_SVC_MESSAGE, {room_id: room_id, messages: messages})
+        axiosApiInstance.post(URL_USER_SVC_MESSAGE, {room_id: room_id, messages: messages})
       }
     });
   
@@ -126,20 +128,25 @@ function RoomPage() {
 
     return () => { // component will unmount equivalent
         chatSocket.emit('leave room', { room_id: room_id, username: username });
+        chatSocket.off('connect');
+        chatSocket.off('user leave');
+        chatSocket.off(INTERVIEWER_SWITCH_EVENT);
+        chatSocket.off('message response');
+        chatSocket.off('connect_error');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [messages]);
 
   // Attempt history related useEffect
   useEffect(() => {
     console.log(messages)
-    // if (!location.state.is_live) {
-    //   axiosApiInstance.get(URL_USER_SVC_MESSAGE, {params: {room_id: room_id}}).then(x => {
-    //     if (x.data) {
-    //       setMessages(x.data.messages);
-    //     }
-    //   })
-    // }
+    if (!location.state.is_live) {
+      axiosApiInstance.get(URL_USER_SVC_MESSAGE, {params: {room_id: room_id}}).then(x => {
+        if (x.data) {
+          setMessages(x.data.messages);
+        }
+      })
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -152,9 +159,9 @@ function RoomPage() {
       <div> 
         <Typography sx={{ marginLeft: "3%", marginTop: "1%", marginBottom: "-2%" }} variant={"h3"} marginBottom={"2rem"}>Coding Room</Typography>
         {/* Uncomment this for popover chat */}
-        <Fab style={{ left: 1200}} onClick={(e) => handleClick(e)}>
+        <Fab style={{ left: 1200 }} onClick={(e) => handleClick(e)}>
           <ChatIcon/>
-        </Fab>          
+        </Fab>
         <Popover
           id={'simple-popover'}
           open={chatWindowOpen}
@@ -182,10 +189,8 @@ function RoomPage() {
           <ChatWindow chatSocket={chatSocket} room_id={room_id} username={username} isInterviewer={isInterviewer} messages={messages} />
         </SlidingPane> */}
         <Box display={"flex"} flexDirection={"column"} style={{ marginTop: '3%', marginLeft: "3%", marginRight: "3%" }}>  
-          <CodeEditorLanding socket={codeEditorSocket} chatSocket={chatSocket} room_id={room_id} username={username} cache={location.state.cache} is_live={location.state.is_live} />
+          <CodeEditorLanding socket={codeEditorSocket} isInterviewer={isInterviewer} room_id={room_id} username={username} cache={location.state.cache} is_live={location.state.is_live} />
           <div style={{ marginTop: '1%' }}></div>
-          <h1 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '5px', color: '#0f172a' }}> Messenger </h1>
-          {/* <ChatWindow chatSocket={chatSocket} room_id={room_id} username={username} isInterviewer={isInterviewer} messages={messages} /> */}
         </Box>  
         <Box display={"flex"} flexDirection={"row"} justifyContent={"flex-end"} sx={{ marginRight: "3%", marginBottom: "10px" }}>
           <Button

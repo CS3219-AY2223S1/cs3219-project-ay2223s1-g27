@@ -30,6 +30,9 @@ export function registerChatHandlers(io, clientSocket) {
 
     clientSocket.on('message', function(data) {
         console.log(data)
+        console.log(`Number of clients in room ${data.room_id}: ${io.sockets.adapter.rooms.get(data.room_id).size}`)
+        console.log(io.sockets.adapter.rooms.get(data.room_id))
+        console.log(data.room_id)
         io.to(data.room_id).emit('message response', data)
     });
 

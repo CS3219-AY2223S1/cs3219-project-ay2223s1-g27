@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import QuestionSelector from "./QuestionSelector"; 
 import { Button, Box, Chip } from '@mui/material';
 import { INTERVIEWER_SWITCH_REQUEST_EVENT } from "../../constants";
@@ -45,6 +45,7 @@ const ChatBody = ({ chatSocket, username, room_id, isInterviewer, messages }) =>
       
       {/*This shows messages sent from you*/}
       <div className="message_container">
+        {console.log(messages)}
         {messages.map((message) => 
           message.username === username ?
           (<div className="message_chats">

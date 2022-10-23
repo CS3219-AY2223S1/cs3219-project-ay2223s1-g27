@@ -30,7 +30,7 @@ io.use(
 )
 
 io.on('connection', clientSocket => {
-  console.log(clientSocket.user)
+  console.log(`New Joiner: ${clientSocket.user}`)
   registerChatHandlers(io, clientSocket)
 });
 

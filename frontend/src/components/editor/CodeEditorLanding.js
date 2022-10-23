@@ -22,7 +22,7 @@ import LanguagesDropdown from "./LanguagesDropdown";
 
 const javascriptDefault = `// some comment`;
 
-const CodeEditorLanding = ({ socket, chatSocket, room_id, username, cache, is_live }) => {
+const CodeEditorLanding = ({ socket, isInterviewer, room_id, username, cache, is_live }) => {
   const [alertOpen, setAlertOpen] = useState(false);
   const [compileOpen, setCompileOpen] = useState(false);
   const [otherUser, setOtherUser] = useState("");
@@ -280,12 +280,13 @@ const CodeEditorLanding = ({ socket, chatSocket, room_id, username, cache, is_li
         > 
           <QuestionWindow
             socket={socket}
-            chatSocket={chatSocket}
+            isInterviewer={isInterviewer}
             username={username}
             titleSlug={titleSlug}
             setTitleSlug={setTitleSlug}
             setCodeSnippets={setCodeSnippets}
             updateCodeSnippet={updateCodeSnippet}
+            is_live={is_live}
           />    
             <Box
               display={"flex"}

@@ -6,14 +6,13 @@ import axiosApiInstance from "../../axiosApiInstance"
 import { URL_QUESTION_SVC_QUESTIONS, URL_QUESTION_SVC_QUESTION } from "../../configs";
 import QuestionDropdown from "./QuestionDropdown";
 import QuestionDisplay from "./QuestionDisplay";
-import { INTERVIEWER_SWITCH_EVENT } from "../../constants";
 
-export default function QuestionWindow({socket, chatSocket, username, titleSlug, setTitleSlug, setCodeSnippets, updateCodeSnippet, is_live}) {
+export default function QuestionWindow({socket, isInterviewer, username, titleSlug, setTitleSlug, setCodeSnippets, updateCodeSnippet, is_live}) {
   const location = useLocation();
   let [questions, setQuestions] = useState([]);
   let [questionName, setQuestionName] = useState("-");
   let [content, setContent] = useState("");
-  let [isInterviewer, setIsInterviewer] = useState(false);
+  let renderAsInterviewer = isInterviewer | !is_live;
 
   useEffect(() => {
     axiosApiInstance.get(`${URL_QUESTION_SVC_QUESTIONS}?difficulty=${location.state.difficultyLevel.toUpperCase()}&page=1`)
@@ -21,7 +20,6 @@ export default function QuestionWindow({socket, chatSocket, username, titleSlug,
         console.log(res.data.problemsetQuestionList.questions)
         setQuestions(res.data.problemsetQuestionList.questions)
       })
-    if (!is_live) setIsInterviewer(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -48,19 +46,6 @@ export default function QuestionWindow({socket, chatSocket, username, titleSlug,
     setTitleSlug(payload.titleSlug);
     setQuestionName(payload.questionName);
   })
-  
-  console.log(chatSocket.user)
-
-  chatSocket.on(INTERVIEWER_SWITCH_EVENT, (data) => {
-    const interviewer = data.interviewer;
-    console.log("Logging username from questionWindow!")
-    console.log(username)
-    if (interviewer === username) {
-        setIsInterviewer(true);
-    } else {
-        setIsInterviewer(false);
-    } 
-  })
 
   return (
     <Box
@@ -68,7 +53,7 @@ export default function QuestionWindow({socket, chatSocket, username, titleSlug,
       flexDirection={"column"}
       sx={{marginRight:'5vh'}}
     >
-      {isInterviewer ? 
+      {renderAsInterviewer ? 
       <QuestionDropdown
       handleQuestionChange={handleQuestionChange}
       questions={questions.map((q) => ({
@@ -80,14 +65,14 @@ export default function QuestionWindow({socket, chatSocket, username, titleSlug,
       :     
       null
       }
-      {!isInterviewer ? <FormHelperText>Selected Question</FormHelperText> : null}
+      {!renderAsInterviewer ? <FormHelperText>Selected Question</FormHelperText> : null}
       <div style={{
-        height: !isInterviewer ? "101vh" : "95vh", 
+        height: !renderAsInterviewer ? "101vh" : "95vh", 
         width: "100%",
         marginRight: "10px",
         borderWidth: '1px',
         overflow: 'auto',
-        marginTop:  !isInterviewer ? "1%" : "16px"
+        marginTop:  !renderAsInterviewer ? "1%" : "16px"
       }}> 
           <QuestionDisplay
             content={content} /> 
