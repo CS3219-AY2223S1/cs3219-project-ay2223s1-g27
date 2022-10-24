@@ -4,7 +4,8 @@ import {
   Button, 
   Popover,
   Fab,
-  Typography
+  Typography,
+  Tooltip
 } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
@@ -16,6 +17,7 @@ import { PREFIX_COLLAB_SVC, URL_COLLAB_SVC, URL_COMM_SVC, PREFIX_COMM_SVC_CHAT }
 import { INTERVIEWER_SWITCH_EVENT } from "../constants";
 import { jwtDecode } from "../util/auth";
 import LogoutIcon from '@mui/icons-material/Logout'; 
+import Draggable from 'react-draggable';
 
 // import ResizePanel from "react-resize-panel";
 import ChatIcon from '@mui/icons-material/Chat';
@@ -169,38 +171,35 @@ function RoomPage() {
   return (
     <>
       <NavigationBar isAuthenticated={true} user={location.state.user} />
-      <div> 
-        <Typography sx={{ marginLeft: "3%", marginTop: "1%", marginBottom: "-2%" }} variant={"h3"} marginBottom={"2rem"}>Coding Room</Typography>
-        {/* Uncomment this for popover chat */}
-        <Fab style={{ left: 1200 }} onClick={(e) => handleClick(e)}>
-          <ChatIcon/>
-        </Fab>
-        <Popover
-          id={'simple-popover'}
-          open={chatWindowOpen}
-          anchorEl={anchorEl}
-          onClose={handleClose}
-          PaperProps={{
-            style: { width: '50%' },
-          }}
-          anchorOrigin={{
-            vertical:'bottom',
-            horizontal:'left'
-          }}
-        >
-          <ChatWindow chatSocket={socketForChat} room_id={room_id} username={username} isInterviewer={isInterviewer} messages={messages}/> 
-        </Popover>
-
-        {/* <Fab style={{ left: 1800}} onClick={handleOpen}>
-          <ChatIcon/>
-        </Fab> 
-        <SlidingPane
-          isOpen={paneOpen}
-          title="Messenger"
-          onRequestClose={() => setPaneOpen(false)}
-        > 
-          <ChatWindow chatSocket={socketForChat} room_id={room_id} username={username} isInterviewer={isInterviewer} messages={messages} />
-        </SlidingPane> */}
+      <div style={{overflowX: 'hidden'}}> 
+        <Typography sx={{ marginLeft: "3%", marginTop: "1%", marginBottom: "-3%" }} variant={"h3"} marginBottom={"2rem"}>Coding Room</Typography>
+        {/* Uncomment this for popover chat left: 1600, top: 110 */}
+        {/* <Box display="flex" flexDirection="row" justifyContent={'flex-end'} sx={{marginRight: '3%'}}> */} 
+        <Draggable bounds={{right: 1600}}>
+          <div>
+            <Tooltip title="Open chatbox!" placement="bottom"> 
+              <Fab style={{ backgroundColor: '#1976d2', color: "#fff" }} onClick={(e) => handleClick(e)}>
+                  <ChatIcon/>
+              </Fab>
+            </Tooltip>
+            <Popover
+              id={'simple-popover'}
+              open={chatWindowOpen}
+              anchorEl={anchorEl}
+              onClose={handleClose}
+              PaperProps={{
+                style: { width: '27%' },
+              }}
+              anchorOrigin={{
+                vertical:'bottom',
+                horizontal:'left'
+              }}
+            >
+              <ChatWindow chatSocket={socketForChat} room_id={room_id} username={username} isInterviewer={isInterviewer} messages={messages}/> 
+            </Popover>
+          </div> 
+        </Draggable> 
+        {/* </Box>  */}
         <Box display={"flex"} flexDirection={"column"} style={{ marginTop: '3%', marginLeft: "3%", marginRight: "3%" }}>  
           <CodeEditorLanding socket={codeEditorSocket} isInterviewer={isInterviewer} room_id={room_id} username={username} cache={location.state.cache} is_live={location.state.is_live} />
           <div style={{ marginTop: '1%' }}></div>
