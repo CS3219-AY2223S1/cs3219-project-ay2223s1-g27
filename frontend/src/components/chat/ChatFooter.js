@@ -26,6 +26,7 @@ const ChatFooter = ({ chatSocket, username, room_id }) => {
           placeholder="Type your message here..."
           className="message"
           value={message}
+          
           onChange={(e) => setMessage(e.target.value)}
         /> 
         <Button onClick={handleSendMessage} 

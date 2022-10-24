@@ -43,6 +43,7 @@ export const customStyles = {
         color: "#000",
         fontSize: "1rem",
         lineHeight: "1.75rem",
+        maxWidth: "15rem",
       };
     },
   };
