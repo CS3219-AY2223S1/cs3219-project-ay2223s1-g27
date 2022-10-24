@@ -3,7 +3,7 @@ import { sendJoinRoomFail } from '../services/socket.js'
 
 var roomInterviewers = {};
 const interviewerSwitchEvent = 'interviewer switch event';
-const interviewerSwitchRequestEvent = 'request interviewer switch';
+const interviewerSwitchRequestEvent = 'request interviewer switch'; 
 
 export function registerChatHandlers(io, clientSocket) {
     clientSocket.on('join room', function(eventData) {
@@ -17,7 +17,10 @@ export function registerChatHandlers(io, clientSocket) {
         clientSocket.join(room_id);
         if (!(room_id in roomInterviewers)) {
             roomInterviewers[room_id] = username;
+        } else {
+            // second client socket fires "join room" event
             // fire event to all clients in a room TODO
+            console.log(`Fired to room ${room_id}`)
             io.to(room_id).emit(interviewerSwitchEvent, {
                 room_id: room_id,
                 interviewer: username,
@@ -27,20 +30,24 @@ export function registerChatHandlers(io, clientSocket) {
 
     clientSocket.on('message', function(data) {
         console.log(data)
+        console.log(`Number of clients in room ${data.room_id}: ${io.sockets.adapter.rooms.get(data.room_id).size}`)
+        console.log(io.sockets.adapter.rooms.get(data.room_id))
+        console.log(data.room_id)
         io.to(data.room_id).emit('message response', data)
     });
 
-    // assumes only the interviewee can request to become the interviewer
+    // assumes only the interviewee can request to become the interviewer 
     clientSocket.on(interviewerSwitchRequestEvent, function(data) {
         const room_id = data.room_id;
-        const newInterviewer = data.username;
-        roomInterviewers[room_id] = newInterviewer;
+        const newInterviewer = data.username; 
+        roomInterviewers[room_id] = newInterviewer; 
         // fire event to all clients in a room TODO
         io.to(room_id).emit(interviewerSwitchEvent, {
             room_id: room_id,
-            interviewer: newInterviewer,
+            interviewer: newInterviewer 
         });
     })
+ 
 
     clientSocket.on('disconnect', (reason) => {
         console.log('The user has disconnected from chat due to ' + reason);
