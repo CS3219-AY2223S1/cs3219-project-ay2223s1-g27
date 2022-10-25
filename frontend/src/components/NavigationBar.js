@@ -188,7 +188,7 @@ function NavigationBar({ isAuthenticated }) {
                 open={Boolean(anchorEl)}
                 onClose={handleCloseMenu}
               >
-                <MenuItem onClick={handlePastAttempts}>Past attempts</MenuItem>
+                <MenuItem onClick={handlePastAttempts}>Past Attempts</MenuItem>
                 <MenuItem onClick={handleChangePassword}>Change Password</MenuItem>
                 <MenuItem onClick={handleDeleteAccount}>Delete Account</MenuItem>
                 <MenuItem onClick={handleLogOut}>Log Out</MenuItem>
