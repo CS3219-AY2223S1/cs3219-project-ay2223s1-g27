@@ -85,7 +85,7 @@ function SignupPage() {
             />
             <div>
             Already have an account? Log in {' '}
-            <Link to="/login">here! </Link>
+            <Link style={{color: 'blue', textDecoration: 'underline'}} to="/login">here</Link>!
         </div>
             <Box display={"flex"} flexDirection={"row"} justifyContent={"flex-end"}>
                 <Button variant={"outlined"} onClick={handleSignup}>Sign up</Button>
