@@ -136,23 +136,7 @@ function MatchingPage() {
 
     // Disconnect all listeners
     socket.disconnect();
-  };
-
-  const handleProceedWithoutMatch = () => {
-    setIsModalOpen(false);
-    console.log(location.state.difficultyLevel);
-    navigate("/room", {
-      state: {
-        user: location.state.user,
-        difficultyLevel: location.state.difficultyLevel,
-        matched: "false",
-        is_live: true,
-      },
-    });
-
-    // Disconnect all listeners
-    socket.disconnect();
-  };
+  }; 
 
   const handleLeaveQueue = () => {
     setIsModalOpen(false);
@@ -235,16 +219,7 @@ function MatchingPage() {
               >
                 Select another difficulty level
               </Button>
-            </div>
-            <div style={{ marginBottom: "2%" }}>
-              <Button
-                style={buttonStyle}
-                variant={"outlined"}
-                onClick={handleProceedWithoutMatch}
-              >
-                Proceed without a match
-              </Button>
-            </div>
+            </div> 
           </Box>
         </Box>
       </Modal>
