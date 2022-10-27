@@ -20,7 +20,7 @@ jobs:
       id-token: 'write'
     
     steps:
-      - uses: actions/checkout@v0
+      - uses: actions/checkout@master
     
       - id: auth
         name: Authenticate to Google Cloud
