@@ -92,6 +92,11 @@ export async function getRoomsFromUserID(uid, limit, offset) {
   return matches;
 }
 
+export async function getRoomsCountFromUserID(uid) {
+  let cnt = await MatchHistoryModel.count({ users: uid });
+  return cnt;
+}
+
 export async function createMessageHistory(room_id, messages) {
   let message = await MessageHistoryModel.findOneAndUpdate(
     { room_id: room_id }, 

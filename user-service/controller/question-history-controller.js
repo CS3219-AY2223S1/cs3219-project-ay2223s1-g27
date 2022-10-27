@@ -6,6 +6,7 @@ import {
     createQuestionHistory, 
     updateQuestionHistory, 
     getRoomsFromUserID,
+    getRoomsCountFromUserID,
     createMessageHistory,
     getMessageHistory
 } from "../model/repository.js";
@@ -17,21 +18,15 @@ export async function questionHistory(req, res) {
         let data = [];
         for (let room of rooms) {
             let questionHistory = await getQuestionHistory(room.room_id);
-            if (!questionHistory) continue;
             data.push({
+                room_id: room.room_id,
                 usernames: room.usernames,
                 difficulty_level: room.difficulty_level,
                 created_at: room.createdAt,
                 question_history: questionHistory
             });
         }
-        const allRooms = await getRoomsFromUserID(uid, 0, 0);
-        let cnt = 0;
-        for (let room of allRooms) {
-            let questionHistory = await getQuestionHistory(room.room_id);
-            if (!questionHistory) continue;
-            cnt++;
-        }
+        const cnt = await getRoomsCountFromUserID(uid);
         return res.status(200).json({
             rows: data,
             totalCount: cnt

@@ -10,7 +10,7 @@ function getCookie(name) {
   if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
-const refreshAccessToken = async (setCookie) => {
+export const refreshAccessToken = async (setCookie) => {
   const refresh_token = getCookie('refresh_token');
   if (!refresh_token) return;
 
