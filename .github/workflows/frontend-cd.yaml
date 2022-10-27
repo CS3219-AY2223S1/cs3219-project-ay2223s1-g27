@@ -14,7 +14,6 @@ jobs:
     defaults:
       run:
         working-directory: ./frontend
-
     permissions:
       contents: 'read'
       id-token: 'write'
@@ -31,6 +30,6 @@ jobs:
       - id: 'upload-folder'
         uses: 'google-github-actions/upload-cloud-storage@v0'
         with:
-          path: 'public'
+          path: 'frontend/public'
           destination: 'cs3219g27-frontend'
 
