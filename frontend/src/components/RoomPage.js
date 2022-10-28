@@ -33,6 +33,7 @@ function RoomPage() {
   const [isInterviewer, setIsInterviewer] = useState(); 
   const [messages, setMessages] = useState([]);
   const [socketForChat, setSocketForChat] = useState();
+  const [codeEditorSocket, setCodeEditorSocket] = useState();
 
   const [anchorEl, setAnchorEl] = useState(null);
   // const [paneOpen, setPaneOpen] = useState(false);
@@ -55,36 +56,41 @@ function RoomPage() {
   const handleClose = () => {
     setAnchorEl(null);
   }
-
-  const codeEditorSocket = io(URL_COLLAB_SVC, {
-    transports: ['websocket'],
-    path: PREFIX_COLLAB_SVC,
-    auth: {
-      token: `Bearer ${cookies['access_token']}`
-    }
-  });
-
   useEffect(() => {
+    if (!location.state.is_live) return;
     // console.log(location.state.difficultyLevel)
-    codeEditorSocket.io.on("reconnection_attempt", () => {
+
+    const codeSocket = io(URL_COLLAB_SVC, {
+      transports: ['websocket'],
+      path: PREFIX_COLLAB_SVC,
+      auth: {
+        token: `Bearer ${cookies['access_token']}`
+      }
+    });
+
+    codeSocket.io.on("reconnection_attempt", () => {
       console.log('reconnection attempt')
     });
 
-    codeEditorSocket.io.on("reconnect", () => {
+    codeSocket.io.on("reconnect", () => {
       console.log('reconnect')
     });
 
-    codeEditorSocket.on('connect', () => {
-      codeEditorSocket.emit('room', { room_id: location.state.room_id });
+    codeSocket.on('connect', () => {
+      codeSocket.emit('room', { room_id: location.state.room_id });
     })
 
+    setCodeEditorSocket(codeSocket);
+
     return () => { // component will unmount equivalent
-      codeEditorSocket.emit('leave room', { room_id: location.state.room_id, username: jwtDecode(cookies['refresh_token']).username });
+      codeSocket.emit('leave room', { room_id: location.state.room_id, username: jwtDecode(cookies['refresh_token']).username });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
+    if (!location.state.is_live) return;
+    
     const chatSocket = io(URL_COMM_SVC, { 
       transports: ['websocket'],
       path: PREFIX_COMM_SVC_CHAT,

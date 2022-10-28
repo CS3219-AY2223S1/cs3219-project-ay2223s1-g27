@@ -10,7 +10,7 @@ const ChatBody = ({ chatSocket, username, room_id, isInterviewer, messages }) =>
     console.log(isInterviewer)
 
     if (!isInterviewer) {
-      chatSocket.emit(INTERVIEWER_SWITCH_REQUEST_EVENT, {
+      chatSocket?.emit(INTERVIEWER_SWITCH_REQUEST_EVENT, {
         room_id: room_id,
         username: username,
       })
@@ -46,9 +46,9 @@ const ChatBody = ({ chatSocket, username, room_id, isInterviewer, messages }) =>
       {/*This shows messages sent from you*/}
       <div className="message_container">
         {console.log(messages)}
-        {messages.map((message) => 
+        {messages.map((message, idx) => 
           message.username === username ?
-          (<div className="message_chats">
+          (<div className="message_chats" key={idx}>
           <p className="sender_name">You</p>
           <div className="sender_message">
             <p>{message.text}</p>

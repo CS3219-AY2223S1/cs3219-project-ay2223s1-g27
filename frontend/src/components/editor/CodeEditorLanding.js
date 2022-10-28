@@ -35,7 +35,7 @@ const CodeEditorLanding = ({ socket, isInterviewer, room_id, username, cache, is
   const [language, setLanguage] = useState(languageOptions[0]);
   const [titleSlug, setTitleSlug] = useState("");
 
-  socket.on("connect_error", (error) => {
+  socket?.on("connect_error", (error) => {
     if (isUnauthorizedError(error)) {
       // TODO might need to handle the error here
       console.log("User token has expired");
@@ -43,11 +43,11 @@ const CodeEditorLanding = ({ socket, isInterviewer, room_id, username, cache, is
     console.log(error);
   });
 
-  socket.on("disconnect", (reason) => {
+  socket?.on("disconnect", (reason) => {
     console.log("disconnect", reason);
   });
 
-  socket.on("receive leave", (data) => {
+  socket?.on("receive leave", (data) => {
     console.log(`user ${data.username} has left the room`);
     setOtherUser(data.username);
     setAlertOpen(true);
@@ -57,7 +57,7 @@ const CodeEditorLanding = ({ socket, isInterviewer, room_id, username, cache, is
   const ctrlPress = useKeyPress("Control");
 
   const onSelectChange = (sl) => {
-    socket.emit("language event", {
+    socket?.emit("language event", {
       room_id: room_id,
       language_id: sl.id,
     });
@@ -87,7 +87,7 @@ const CodeEditorLanding = ({ socket, isInterviewer, room_id, username, cache, is
     setCode(codeSnippet?.code || "");
   };
 
-  socket.on("receive language", (payload) => {
+  socket?.on("receive language", (payload) => {
     console.log(payload);
     languageOptions.forEach((x) => {
       if (x.id === payload.language_id) {
@@ -158,7 +158,7 @@ const CodeEditorLanding = ({ socket, isInterviewer, room_id, username, cache, is
         setProcessing(false);
         setCompileOpen(true);
         setOutputDetails(response.data);
-        socket.emit("output event", {
+        socket?.emit("output event", {
           room_id: room_id,
           outputDetails: response.data,
         });
@@ -174,7 +174,7 @@ const CodeEditorLanding = ({ socket, isInterviewer, room_id, username, cache, is
       axiosApiInstance.post(URL_USER_SVC_SAVEQUESTION, { room_id: room_id, titleSlug: titleSlug, codeSegment: code, language: language.id });
   };
 
-  socket.on("receive output", (payload) => {
+  socket?.on("receive output", (payload) => {
     setCompileOpen(true);
     setOutputDetails(payload.outputDetails);
   });
@@ -195,13 +195,13 @@ const CodeEditorLanding = ({ socket, isInterviewer, room_id, username, cache, is
     if (update.transactions && !isUserEvents(update.transactions[0])) {
       return;
     }
-    socket.emit("coding event", {
+    socket?.emit("coding event", {
       room_id: room_id,
       newCode: value,
     });
   };
 
-  socket.on("receive code", (payload) => {
+  socket?.on("receive code", (payload) => {
     console.log("received code");
     onChange("code", payload.newCode);
   });

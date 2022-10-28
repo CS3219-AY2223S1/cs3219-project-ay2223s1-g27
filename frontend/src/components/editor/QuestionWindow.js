@@ -54,7 +54,7 @@ export default function QuestionWindow({
   }, [titleSlug]);
 
   const handleQuestionChange = (q) => {
-    socket.emit("question event", {
+    socket?.emit("question event", {
       room_id: location.state.room_id,
       titleSlug: q.value,
       questionName: q.label,
@@ -63,7 +63,7 @@ export default function QuestionWindow({
     setTitleSlug(q.value);
   };
 
-  socket.on("receive question", (payload) => {
+  socket?.on("receive question", (payload) => {
     console.log(
       `received question with titleSlug=${payload.titleSlug} and name=${payload.questionName}`
     );
