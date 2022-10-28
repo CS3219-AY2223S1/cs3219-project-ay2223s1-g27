@@ -27,7 +27,7 @@ spec:
           resources:
             limits:
               cpu: 40m
-              memory: 100Mi
+              memory: 300Mi
           volumeMounts:
           - name: google-cloud-key
             mountPath: /var/secrets/google

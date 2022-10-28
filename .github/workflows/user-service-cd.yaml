@@ -6,6 +6,7 @@ on:
       - "main"
     paths:
       - user-service/**
+  pull_request:
 
 jobs:
   build:
@@ -44,4 +45,4 @@ jobs:
           CLUSTER_NAME: cs3219g27
           ZONE_NAME: asia-southeast1-a
         with:
-          args: rollout restart -f gke/user-service-deployment.yaml
+          args: apply -f gke/user-service-deployment.yaml
