@@ -66,6 +66,15 @@ function RoomPage() {
     setAnchorEl(null);
   }
 
+  const unloadCallback = (event) => {
+    event.stopImmediatePropagation();
+    event.returnValue = "";
+    sendSocketLeave();
+    return "";
+  };
+
+  window.addEventListener("beforeunload", unloadCallback);
+
   const codeEditorSocket = io(URL_COLLAB_SVC, {
     transports: ['websocket'],
     path: PREFIX_COLLAB_SVC,
@@ -73,6 +82,10 @@ function RoomPage() {
       token: `Bearer ${cookies['access_token']}`
     }
   });
+
+  const sendSocketLeave = () => {
+    codeEditorSocket.emit('leave room', { room_id: location.state.room_id, username: jwtDecode(cookies['refresh_token']).username });
+  }
 
   useEffect(() => {
     // console.log(location.state.difficultyLevel)
@@ -89,7 +102,8 @@ function RoomPage() {
     })
 
     return () => { // component will unmount equivalent
-      codeEditorSocket.emit('leave room', { room_id: location.state.room_id, username: jwtDecode(cookies['refresh_token']).username });
+      sendSocketLeave();
+      window.removeEventListener('beforeunload', unloadCallback);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
