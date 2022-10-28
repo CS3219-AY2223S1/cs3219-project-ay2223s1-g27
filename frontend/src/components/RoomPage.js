@@ -179,6 +179,7 @@ function RoomPage() {
     return () => {
       if (location.state.is_live) clearInterval(refreshTokenInterval);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleLeaveSession = () => {
