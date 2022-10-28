@@ -4,6 +4,9 @@ import cors from 'cors';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import { authorize } from '@thream/socketio-jwt';
+import { initMQ } from './mq.js';
+
+initMQ();
 
 const app = express();
 app.use(express.urlencoded({ extended: true }))

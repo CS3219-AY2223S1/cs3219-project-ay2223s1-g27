@@ -1,7 +1,4 @@
 import { 
-    getMatchHistory, 
-    createMatchHistory, 
-    updateMatchHistory, 
     getQuestionHistory, 
     createQuestionHistory, 
     updateQuestionHistory, 
@@ -33,28 +30,6 @@ export async function questionHistory(req, res) {
         });
     } catch (err) {
         console.log(`questionHistory error, err=${err}`);
-        res.status(500).json({ success: false });
-    }
-}
-
-export async function saveSession(req, res) {
-    try {
-        const { room_id, user_id, username, difficulty_level } = req.body;
-        let session = await getMatchHistory(room_id);
-        if (!session) {
-            let newSession = await createMatchHistory(room_id, user_id, username, difficulty_level);
-            return res.status(201).json(newSession);
-        }
-        let sessionUsers = session.users;
-        let sessionUserNames = session.usernames;
-        if (!sessionUsers.includes(user_id)) {
-            sessionUsers.push(user_id);
-            sessionUserNames.push(username);
-        }
-        let updatedSession = await updateMatchHistory(room_id,  sessionUsers, sessionUserNames);
-        return res.status(201).json(updatedSession);
-    } catch (err) {
-        console.log(`saveSession error, err=${err}`);
         res.status(500).json({ success: false });
     }
 }

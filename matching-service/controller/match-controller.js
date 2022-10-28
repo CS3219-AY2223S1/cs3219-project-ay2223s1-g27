@@ -2,6 +2,7 @@ import { ormCreateMatch as _createMatch, ormDeleteMatchBySocketId as _deleteMatc
   from '../model/match-orm.js'
 import { sendMatchFail, sendMatchSuccess } from '../services/socket.js'
 import { Match } from '../model/repository.js'
+import { publishMatch } from '../mq.js';
 
 const WAITING_TIME = 30 * 1000;
 
@@ -9,10 +10,19 @@ const uid = function() {
   return Date.now().toString(36) + Math.random().toString(36).substring(2);
 }
 
-function matchUsers(socket1, socket2) {
+function matchUsers(socket1, socket2, difficulty) {
   const roomId = uid();
   sendMatchSuccess(socket1, { message: 'success', room_id: roomId });
   sendMatchSuccess(socket2, { message: 'success', room_id: roomId });
+  console.log("PUBLISHING MATCH >>>>>>>>>>")
+  publishMatch({
+    "room_id": roomId,
+    "difficulty_level": difficulty.toLowerCase(),
+    "username1": socket1.decodedToken.username,
+    "username2": socket2.decodedToken.username,
+    "user_id1": socket1.decodedToken.id,
+    "user_id2": socket2.decodedToken.id
+  });
 }
 
 async function matchTimeOut(before) {
@@ -63,7 +73,7 @@ export function registerHandlers(io, socket) {
       }
 
       const pendingSocket = io.sockets.sockets.get(resp.socket_id);
-      matchUsers(socket, pendingSocket);
+      matchUsers(socket, pendingSocket, difficulty);
       socket.disconnect();
       pendingSocket.disconnect();
       await resp.destroy();
