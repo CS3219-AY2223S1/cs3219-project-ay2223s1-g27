@@ -23,11 +23,11 @@ const QuestionSelector = ({ chatSocket, username, room_id }) => {
   const sendQuestion = (e, question) => {
     e.preventDefault();
     if (question.trim()) {
-      chatSocket.emit('message', {
+      chatSocket?.emit('message', {
           text: question,
           username: username,
-          id: `${chatSocket.id}${Math.random()}`,
-          socketID: chatSocket.id,
+          id: `${chatSocket?.id}${Math.random()}`,
+          socketID: chatSocket?.id,
           room_id: room_id,
       })
     }
