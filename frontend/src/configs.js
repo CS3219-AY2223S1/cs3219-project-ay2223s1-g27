@@ -1,4 +1,11 @@
-const LIVE_BACKEND = "http://34.160.41.4"
+let protocol;
+if (window.location.protocol !== 'https:') {
+  protocol = 'http://';
+} else {
+  protocol = 'https://';
+}
+
+const LIVE_BACKEND = protocol + "backend.peerprep.one"
 const DEV_BACKEND = "http://localhost:3001"
 
 // const USER_BACKEND = "http://localhost:8000"
