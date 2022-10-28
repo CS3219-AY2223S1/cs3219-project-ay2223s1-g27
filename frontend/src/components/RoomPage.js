@@ -4,10 +4,13 @@ import {
   Button, 
   Popover,
   Fab,
+  Modal,
+  IconButton,
   Typography,
   Tooltip
 } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
+import CloseIcon from '@mui/icons-material/Close';
 import { io } from "socket.io-client";
 import { useCookies } from 'react-cookie';
 import CodeEditorLanding from "./editor/CodeEditorLanding";
@@ -25,40 +28,56 @@ import { isUnauthorizedError } from '@thream/socketio-jwt/build/UnauthorizedErro
 import { URL_USER_SVC_MESSAGE } from "../configs";
 import axiosApiInstance from "../axiosApiInstance";
 
+const modalStyle = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  borderRadius: "5px",
+  boxShadow: 24,
+  p: 4,
+};
+
 function RoomPage() {
   const [cookies] = useCookies();
   const location = useLocation(); // Location contains username and selected difficulty level
   const navigate = useNavigate();
   // ChatWindow Props
   const [isInterviewer, setIsInterviewer] = useState(); 
+  const [endSession, setEndSession] = useState(false);
   const [messages, setMessages] = useState([]);
   const [socketForChat, setSocketForChat] = useState();
   const [codeEditorSocket, setCodeEditorSocket] = useState();
 
-  const [anchorEl, setAnchorEl] = useState(null);
-  // const [paneOpen, setPaneOpen] = useState(false);
-  // console.log(location.state.difficultyLevel)
+  const [anchorEl, setAnchorEl] = useState(null); 
 
   const room_id = location.state.room_id;
   const username = jwtDecode(cookies['refresh_token']).username;
   const chatWindowOpen = Boolean(anchorEl);
 
   console.log(location.state.is_live)
-
+ 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
-  }
-
-  // const handleOpen = () => {
-  //   setPaneOpen(true);
-  // }
+  } 
 
   const handleClose = () => {
     setAnchorEl(null);
   }
+
   useEffect(() => {
     if (!location.state.is_live) return;
     // console.log(location.state.difficultyLevel)
+    const unloadCallback = (event) => {
+      event.stopImmediatePropagation();
+      event.returnValue = "";
+      sendSocketLeave();
+      return "";
+    };
+  
+    window.addEventListener("beforeunload", unloadCallback);
 
     const codeSocket = io(URL_COLLAB_SVC, {
       transports: ['websocket'],
@@ -80,10 +99,15 @@ function RoomPage() {
       codeSocket.emit('room', { room_id: location.state.room_id });
     })
 
+    const sendSocketLeave = () => {
+      codeSocket.emit('leave room', { room_id: location.state.room_id, username: jwtDecode(cookies['refresh_token']).username });
+    }
+    
     setCodeEditorSocket(codeSocket);
 
     return () => { // component will unmount equivalent
-      codeSocket.emit('leave room', { room_id: location.state.room_id, username: jwtDecode(cookies['refresh_token']).username });
+      sendSocketLeave();
+      window.removeEventListener('beforeunload', unloadCallback);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -171,9 +195,10 @@ function RoomPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleLeaveSession = () => {
-    navigate("/landing", { state: { user: location.state.user } });
+  const handleEndSession = () => {
+    navigate("/landing", { state: { user: location.state.user } }); 
   }
+  
   return (
     <>
       <NavigationBar isAuthenticated={true} user={location.state.user} />
@@ -215,10 +240,35 @@ function RoomPage() {
             variant="contained"
             style={{ textTransform: "none", background: "#c61a09", fontSize: "15px", fontWeight: "bold", borderRadius: "7px" }}
             endIcon={<LogoutIcon />}
-            onClick={handleLeaveSession}>
+            onClick={() => setEndSession(true)}>
             End Session
           </Button>
         </Box>
+
+        <Modal
+          open={endSession}
+          onClose={() => setEndSession(false)} 
+          aria-labelledby="modal-modal-title"
+        >
+          <Box sx={modalStyle}>
+            <Box display={"flex"} flexDirection={"row"} justifyContent={"space-between"}>
+              <Typography id="modal-modal-title" variant="h6" component="h2" style={{ paddingTop: '1%'}}>
+                End Session
+              </Typography>
+              <IconButton onClick={() => setEndSession(false)}>
+                <CloseIcon />
+              </IconButton>
+            </Box>
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              Are you sure you want to end this session?
+            </Typography>
+            <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end'}}> 
+            <Box display={"flex"} flexDirection={"row"} justifyContent={"flexStart"} style={{ paddingTop: "5%", marginRight: "5%" }}>
+              <Button variant={"contained"} onClick={handleEndSession}>Back to Homepage</Button>
+            </Box> 
+            </div>
+          </Box>
+        </Modal>  
       </div>
     </>
   )
