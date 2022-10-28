@@ -14,6 +14,10 @@ spec:
       labels:
         app: matching-service
     spec:
+      volumes:
+      - name: google-cloud-key
+        secret:
+          secretName: pubsub-key
       containers:
         - name: matching-service-deployment
           image: cs3219g27/matching-service:latest
@@ -24,7 +28,12 @@ spec:
             limits:
               cpu: 60m
               memory: 150Mi
+          volumeMounts:
+          - name: google-cloud-key
+            mountPath: /var/secrets/google
           env: 
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /var/secrets/google/key.json
             - name: JWT_ACCESS_SECRET
               valueFrom:
                 secretKeyRef:
