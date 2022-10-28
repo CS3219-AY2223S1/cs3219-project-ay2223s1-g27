@@ -26,7 +26,7 @@ import Draggable from 'react-draggable';
 import ChatIcon from '@mui/icons-material/Chat';
 import { isUnauthorizedError } from '@thream/socketio-jwt/build/UnauthorizedError.js'
 import { URL_USER_SVC_MESSAGE } from "../configs";
-import axiosApiInstance from "../axiosApiInstance";
+import axiosApiInstance, { refreshAccessToken } from "../axiosApiInstance";
 
 const modalStyle = {
   position: "absolute",
@@ -41,7 +41,7 @@ const modalStyle = {
 };
 
 function RoomPage() {
-  const [cookies] = useCookies();
+  const [cookies, setCookies] = useCookies();
   const location = useLocation(); // Location contains username and selected difficulty level
   const navigate = useNavigate();
   // ChatWindow Props
@@ -195,8 +195,19 @@ function RoomPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // keep refreshing token when having sockets
+  useEffect(() => {
+    refreshAccessToken(setCookies);
+    let refreshTokenInterval;
+    if (location.state.is_live) refreshTokenInterval = setInterval(() => refreshAccessToken(setCookies), 5 * 60 * 1000); // every 5 min
+    return () => {
+      if (location.state.is_live) clearInterval(refreshTokenInterval);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleEndSession = () => {
-    navigate("/landing", { state: { user: location.state.user } }); 
+    navigate("/landing", { state: { user: location.state.user } });
   }
   
   return (
