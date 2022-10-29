@@ -151,15 +151,15 @@ function NavigationBar({ isAuthenticated }) {
               }}
             >
             <Link to="/landing">
-              <div style={{ margin: "1%" }}>
+              <h1 style={{ margin: "1%" }}>
                 PeerPrep              
-              </div>
+              </h1>
             </Link>
           </Typography>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            <div style={{ margin: "1%" }}>
+            <h1 style={{ margin: "1%" }}>
               Welcome, {jwtDecode(cookies["refresh_token"]).username}!
-            </div>
+            </h1>
           </Typography>
           <Toolbar>
             <div>

@@ -7,6 +7,7 @@ import { useState } from "react";
 import GroupIcon from '@mui/icons-material/Group'; 
 import NavigationBar from "./NavigationBar";  
 import { useNavigate } from "react-router-dom";
+import HistoryIcon from '@mui/icons-material/History';
 
 function LandingPage() {   
     const [difficultyLevel, setDifficultyLevel] = useState(""); 
@@ -47,18 +48,24 @@ function LandingPage() {
         navigate("/matching", {state: { difficultyLevel: difficultyLevel }}); 
     }
 
+    const handlePastAttempts = () => { 
+        // Navigates to AttemptsPage
+        navigate("/attempts"); 
+    }
     return (
         <>
         <NavigationBar isAuthenticated={true} />
         <Box display={"flex"} justifyContent={"center"} style={{marginTop: "3%"}}> 
             <Box display={"flex"} flexDirection={"column"} width={"50%"}>
-                <Typography variant={"h3"} display={"flex"} justifyContent={"center"} marginBottom={"2rem"}>Choose Your Difficulty Level</Typography>
+                <Box display={"flex"} flexDirection={"row"} justifyContent={"center"}> 
+                    <h1 style={{fontSize:'50px', marginBottom: "3%"}}>Choose Your Difficulty Level</h1>
+                </Box>
                 <div style={{marginTop:'10px', marginBottom: '10px'}}>
-                <Box display={"flex"} flexDirection={"row"} justifyContent={"space-evenly"}> 
+                <Box display={"flex"} flexDirection={"column"} justifyContent={"space-evenly"} alignItems={"center"}> 
                     <Button 
                         variant={selectBeginner ? "contained" : "outlined"} 
                         onClick={handleDifficultyLevel} 
-                        style={{borderRadius: "20%", maxWidth: '140px', minWidth: '140px', minHeight: '120px', maxHeight: '120px'}} 
+                        style={{borderRadius: "8px", marginBottom:'1%', maxWidth: '50%', minWidth: '50%', minHeight: '5%', maxHeight: '5%'}} 
                         value="beginner"
                     >
                         Beginner
@@ -66,7 +73,7 @@ function LandingPage() {
                     <Button 
                         variant={selectIntermediate ? "contained" : "outlined"} 
                         onClick={handleDifficultyLevel} 
-                        style={{borderRadius: "20%", maxWidth: '140px', minWidth: '140px', minHeight: '120px', maxHeight: '120px'}} 
+                        style={{borderRadius: "8px", marginBottom:'1%', maxWidth: '50%', minWidth: '50%', minHeight: '5%', maxHeight: '5%'}} 
                         value="intermediate"
                     >
                         Intermediate
@@ -74,7 +81,7 @@ function LandingPage() {
                     <Button 
                         variant={selectExpert ? "contained" : "outlined"} 
                         onClick={handleDifficultyLevel} 
-                        style={{borderRadius: "20%", maxWidth: '140px', minWidth: '140px', minHeight: '120px', maxHeight: '120px'}} 
+                        style={{borderRadius: "8px", maxWidth: '50%', minWidth: '50%', minHeight: '5%', maxHeight: '5%'}} 
                         value="expert"
                     >
                         Expert
@@ -91,6 +98,17 @@ function LandingPage() {
                         onClick={handleFindMatch}
                     >
                         Find Match
+                    </Button>
+                </Box>
+                <Box display={"flex"} flexDirection={"row"} justifyContent={"center"} style={{ paddingTop: "2%"}}>
+                    <Button  
+                        variant={"outlined"} 
+                        color="primary" 
+                        endIcon={<HistoryIcon/>} 
+                        style={{fontSize: '14px'}} 
+                        onClick={handlePastAttempts}
+                    >
+                        View Past Attempts
                     </Button>
                 </Box>
             </Box>

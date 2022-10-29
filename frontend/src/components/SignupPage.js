@@ -57,55 +57,59 @@ function SignupPage() {
     return (
         <>
         <NavigationBar isAuthenticated={false}/>
-        <Box display={"flex"} flexDirection={"column"} width={"30%"} style={{marginTop: "3%", marginLeft: "3%"}}>
-            <Typography variant={"h3"} marginBottom={"2rem"}>Sign Up</Typography>
-            <TextField
-                label="Email"
-                variant="standard"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                sx={{marginBottom: "1rem"}}
-                autoFocus
-            />
-            <TextField
-                label="Username"
-                variant="standard"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                sx={{marginBottom: "1rem"}}
-                autoFocus
-            />
-            <TextField
-                label="Password"
-                variant="standard"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                sx={{marginBottom: "2rem"}}
-            />
-            <div>
-            Already have an account? Log in {' '}
-            <Link style={{color: 'blue', textDecoration: 'underline'}} to="/login">here</Link>!
-        </div>
-            <Box display={"flex"} flexDirection={"row"} justifyContent={"flex-end"}>
-                <Button variant={"outlined"} onClick={handleSignup}>Sign up</Button>
-            </Box>
+        <Box display={"flex"} flexDirection={"row"} justifyContent={"center"}> 
+            <Box display={"flex"} flexDirection={"column"} width={"30%"} style={{marginTop: "3%"}}>
+                <Box display={"flex"} flexDirection={"row"} justifyContent={"center"}>
+                    <h1 style={{fontSize:'50px', marginBottom: "3%"}}>Sign Up</h1> 
+                </Box>
+                <TextField
+                    label="Email"
+                    variant="standard"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    sx={{marginBottom: "1rem"}}
+                    autoFocus
+                />
+                <TextField
+                    label="Username"
+                    variant="standard"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    sx={{marginBottom: "1rem"}}
+                    autoFocus
+                />
+                <TextField
+                    label="Password"
+                    variant="standard"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    sx={{marginBottom: "2rem"}}
+                />
+                <div>
+                Already have an account? Log in {' '}
+                <Link style={{color: 'blue', textDecoration: 'underline'}} to="/login">here</Link>!
+            </div>
+                <Box display={"flex"} flexDirection={"row"} justifyContent={"flex-end"}>
+                    <Button variant={"outlined"} onClick={handleSignup}>Sign up</Button>
+                </Box>
 
-            <Dialog
-                open={isDialogOpen}
-                onClose={closeDialog}
-            >
-                <DialogTitle>{dialogTitle}</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>{dialogMsg}</DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    {isSignupSuccess
-                        ? <Button component={Link} to="/login">Log in</Button>
-                        : <Button onClick={closeDialog}>Done</Button>
-                    }
-                </DialogActions>
-            </Dialog>
+                <Dialog
+                    open={isDialogOpen}
+                    onClose={closeDialog}
+                >
+                    <DialogTitle>{dialogTitle}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>{dialogMsg}</DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        {isSignupSuccess
+                            ? <Button component={Link} to="/login">Log in</Button>
+                            : <Button onClick={closeDialog}>Done</Button>
+                        }
+                    </DialogActions>
+                </Dialog>
+            </Box>
         </Box>
         </> 
     )
