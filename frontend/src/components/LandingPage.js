@@ -1,7 +1,6 @@
 import {
     Box,
-    Button,
-    Typography
+    Button
 } from "@mui/material";
 import { useState } from "react";
 import GroupIcon from '@mui/icons-material/Group'; 

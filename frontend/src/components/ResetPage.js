@@ -1,8 +1,7 @@
 import {
     Box,
     Button, 
-    TextField,
-    Typography
+    TextField, 
 } from "@mui/material"; 
 import {useState} from "react";  
 import {URL_USER_SVC_RESETPASSWORD} from "../configs";
