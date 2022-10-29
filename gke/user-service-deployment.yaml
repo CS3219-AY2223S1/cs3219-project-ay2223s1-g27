@@ -62,3 +62,9 @@ spec:
                 secretKeyRef:
                   name: user-service-secret
                   key: FRONTEND_URL
+            - name: REDIS_HOST
+              value: redis-refresh-token-store
+            - name: REDIS_PORT
+              value: 6379
+            - name: REDIS_PASSWORD
+              value: team27
