@@ -10,6 +10,7 @@ import {
 } from "../configs";
 import { Box, Button, Modal, Typography } from "@mui/material";
 import { useState } from "react";
+import { refreshAccessToken } from "../axiosApiInstance";
 
 const modalStyle = {
   position: "absolute",
@@ -32,7 +33,7 @@ const buttonStyle = {
 function MatchingPage() {
   const location = useLocation(); // Location contains username and selected difficulty level
   const navigate = useNavigate();
-  const [cookies] = useCookies();
+  const [cookies, setCookies] = useCookies();
   const socket = io(URL_MATCHING_SVC, {
     transports: ["websocket"],
     path: PREFIX_MATCHING_SVC,
@@ -43,7 +44,7 @@ function MatchingPage() {
 
   socket.on("connect_error", (error) => {
     if (isUnauthorizedError(error)) {
-      // TODO might need to handle this case
+      refreshAccessToken(setCookies);
       console.log("Unauthorised error");
     }
   });

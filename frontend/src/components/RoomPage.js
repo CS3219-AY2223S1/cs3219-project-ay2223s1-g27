@@ -26,7 +26,7 @@ import Draggable from 'react-draggable';
 import ChatIcon from '@mui/icons-material/Chat';
 import { isUnauthorizedError } from '@thream/socketio-jwt/build/UnauthorizedError.js'
 import { URL_USER_SVC_MESSAGE } from "../configs";
-import axiosApiInstance from "../axiosApiInstance";
+import axiosApiInstance, { refreshAccessToken } from "../axiosApiInstance";
 
 const modalStyle = {
   position: "absolute",
@@ -41,7 +41,7 @@ const modalStyle = {
 };
 
 function RoomPage() {
-  const [cookies] = useCookies();
+  const [cookies, setCookies] = useCookies();
   const location = useLocation(); // Location contains username and selected difficulty level
   const navigate = useNavigate();
   // ChatWindow Props
@@ -49,6 +49,7 @@ function RoomPage() {
   const [endSession, setEndSession] = useState(false);
   const [messages, setMessages] = useState([]);
   const [socketForChat, setSocketForChat] = useState();
+  const [codeEditorSocket, setCodeEditorSocket] = useState();
 
   const [anchorEl, setAnchorEl] = useState(null); 
 
@@ -66,40 +67,43 @@ function RoomPage() {
     setAnchorEl(null);
   }
 
-  const unloadCallback = (event) => {
-    event.stopImmediatePropagation();
-    event.returnValue = "";
-    sendSocketLeave();
-    return "";
-  };
-
-  window.addEventListener("beforeunload", unloadCallback);
-
-  const codeEditorSocket = io(URL_COLLAB_SVC, {
-    transports: ['websocket'],
-    path: PREFIX_COLLAB_SVC,
-    auth: {
-      token: `Bearer ${cookies['access_token']}`
-    }
-  });
-
-  const sendSocketLeave = () => {
-    codeEditorSocket.emit('leave room', { room_id: location.state.room_id, username: jwtDecode(cookies['refresh_token']).username });
-  }
-
   useEffect(() => {
+    if (!location.state.is_live) return;
     // console.log(location.state.difficultyLevel)
-    codeEditorSocket.io.on("reconnection_attempt", () => {
+    const unloadCallback = (event) => {
+      event.stopImmediatePropagation();
+      event.returnValue = "";
+      sendSocketLeave();
+      return "";
+    };
+  
+    window.addEventListener("beforeunload", unloadCallback);
+
+    const codeSocket = io(URL_COLLAB_SVC, {
+      transports: ['websocket'],
+      path: PREFIX_COLLAB_SVC,
+      auth: {
+        token: `Bearer ${cookies['access_token']}`
+      }
+    });
+
+    codeSocket.io.on("reconnection_attempt", () => {
       console.log('reconnection attempt')
     });
 
-    codeEditorSocket.io.on("reconnect", () => {
+    codeSocket.io.on("reconnect", () => {
       console.log('reconnect')
     });
 
-    codeEditorSocket.on('connect', () => {
-      codeEditorSocket.emit('room', { room_id: location.state.room_id });
+    codeSocket.on('connect', () => {
+      codeSocket.emit('room', { room_id: location.state.room_id });
     })
+
+    const sendSocketLeave = () => {
+      codeSocket.emit('leave room', { room_id: location.state.room_id, username: jwtDecode(cookies['refresh_token']).username });
+    }
+    
+    setCodeEditorSocket(codeSocket);
 
     return () => { // component will unmount equivalent
       sendSocketLeave();
@@ -109,6 +113,8 @@ function RoomPage() {
   }, [])
 
   useEffect(() => {
+    if (!location.state.is_live) return;
+    
     const chatSocket = io(URL_COMM_SVC, { 
       transports: ['websocket'],
       path: PREFIX_COMM_SVC_CHAT,
@@ -189,8 +195,19 @@ function RoomPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // keep refreshing token when having sockets
+  useEffect(() => {
+    refreshAccessToken(setCookies);
+    let refreshTokenInterval;
+    if (location.state.is_live) refreshTokenInterval = setInterval(() => refreshAccessToken(setCookies), 5 * 60 * 1000); // every 5 min
+    return () => {
+      if (location.state.is_live) clearInterval(refreshTokenInterval);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleEndSession = () => {
-    navigate("/landing", { state: { user: location.state.user } }); 
+    navigate("/landing", { state: { user: location.state.user } });
   }
   
   return (
