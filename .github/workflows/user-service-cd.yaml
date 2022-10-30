@@ -3,7 +3,8 @@ name: user-service-cd
 on:
   push:
     branches:
-      - [main, 'feat/user-service/add-redis']
+      - "main"
+      - "feat/user-service/add-redis"
     paths:
       - user-service/**
 
