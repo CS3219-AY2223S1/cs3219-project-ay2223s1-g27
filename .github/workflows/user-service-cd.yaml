@@ -3,11 +3,7 @@ name: user-service-cd
 on:
   push:
     branches:
-      - "main"
-    paths:
-      - user-service/**
-  pull_request:
-    branches: [main]
+      - [main, feat/user-service/add-redis]
     paths:
       - user-service/**
 
