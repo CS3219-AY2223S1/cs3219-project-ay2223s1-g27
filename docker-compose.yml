@@ -66,7 +66,7 @@ services:
     env_file:
       - ./user-service/.env
 
-  redis-refresh-token-store:
+  redis-token-store-service:
     command: redis-server --requirepass team27
     image: redis
     ports:

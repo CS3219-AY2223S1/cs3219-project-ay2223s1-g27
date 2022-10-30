@@ -2,19 +2,11 @@ import jwt from "jsonwebtoken"
 import redis from "redis";
 import { getJWTTokenFromAuthHeader } from './user-controller.js'
 
-// bad practice but for the initial phases we shall leave the jwt secret key as a variable here
-// these will be ported to environment variables when being deployed.
 const jwtAccessSecretKey = process.env.JWT_ACCESS_SECRET
 const jwtRefreshSecretKey = process.env.JWT_REFRESH_SECRET
 
 const ACCESS_TOKEN_EXPIRE_TIME = 900000
 const REFRESH_TOKEN_EXPIRE_TIME = 1200000
-
-// const redisClient = redis.createClient({
-//   host: process.env.REDIS_HOST,
-//   port: parseInt(process.env.REDIS_PORT),
-//   password: process.env.REDIS_PASSWORD,
-// });
 
 const redisUrl = 'redis://default:' + process.env.REDIS_PASSWORD + '@' + process.env.REDIS_HOST + ':' + process.env.REDIS_PORT
 
@@ -29,20 +21,8 @@ redisClient.on('error', (err) => console.log('Redis Client Error', err));
 await redisClient.connect();
 
 const allRedisKeys = await redisClient.keys("*")
+console.log("All existing refresh tokens")
 console.log(allRedisKeys)
-
-// const balonglong = await redisClient.get("balonglong")
-// console.log(balonglong)
-
-// const bashortshort = await redisClient.set("bashortshort", "drink")
-// console.log(bashortshort === 'OK')
-
-// const dontExist = await redisClient.get("dontExist")
-// console.log(!dontExist)
-
-// const deleteStatus = await redisClient.del("balonglong")
-// console.log(deleteStatus == 1)
-// console.log(deleteStatus == 0)
 
 // Cleanup happens every 20 minutes
 var refreshTokensCleanupTimer = setInterval(cleanupRefreshTokens, 1200000)
@@ -174,20 +154,6 @@ export async function invalidateRefreshToken(req, res) {
     return res.status(400).json({ message: "Problem invalidating refresh token, make sure you passed the refresh token.", success: false })
   }
 }
-
-// function cleanupRefreshTokens() {
-//   let newRefreshTokens = []
-//   for (var i = 0; i < refreshTokens.length; i++) {
-//     const refreshToken = refreshTokens[i]
-//     try {
-//       jwt.verify(refreshToken, jwtRefreshSecretKey)
-//       newRefreshTokens.push(refreshToken)
-//     } catch (err) {
-//       continue
-//     }
-//   }
-//   refreshTokens = newRefreshTokens
-// }
 
 async function cleanupRefreshTokens() {
   const allRedisKeys = await redisClient.keys("*")
