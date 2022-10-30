@@ -5,12 +5,7 @@ on:
     branches:
       - "main"
     paths:
-      - user-service/**
-  pull_request:
-    branches: [main]
-    paths:
-      - user-service/**
-  
+      - user-service/**  
 
 jobs:
   build:
