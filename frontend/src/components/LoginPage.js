@@ -105,12 +105,15 @@ function LoginPage() {
         <Box display={'flex'} flexDirection={"row"} sx={{height: "100%", width: "100%", position:'absolute'}}>
             {/* Description of Application */}
             <Box style={{width: "65%", height: "100%", background: "#1976d2"}}>
-                <Box style={{marginTop: "20%", marginLeft: "3%"}}> 
-                    <h1 style={{fontSize: '40px', color: '#FFFFFF'}}> 
-                        Welcome to PeerPrep!
+                <Box style={{marginTop: "25%", marginLeft: "3%"}}> 
+                    <h1 style={{fontSize: '40px', color: '#FFFFFF', fontWeight: 'bold'}}> 
+                        Welcome to PeerPrep.
                     </h1>
                     <p style={{ color: '#FFFFFF'}}>
-                        This application aims to fjhlashdflajhflahlhfjslshdjhflahjlahhl
+                        PeerPrep aims to help job seekers boost their technical interview skills to land their dream job. <br/>
+                        In PeerPrep, users can expect to challenge questions of different difficulty levels, engage with <br/> 
+                        other users in real-time, and utilise a collaborative programming tool to enhance their familiarity<br/> 
+                        with technical interviews. 
                     </p>
                 </Box>
             </Box>
