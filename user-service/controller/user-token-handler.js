@@ -1,17 +1,35 @@
 import jwt from "jsonwebtoken"
+import redis from "redis";
 import { getJWTTokenFromAuthHeader } from './user-controller.js'
 
-// bad practice but for the initial phases we shall leave the jwt secret key as a variable here
-// these will be ported to environment variables when being deployed.
 const jwtAccessSecretKey = process.env.JWT_ACCESS_SECRET
 const jwtRefreshSecretKey = process.env.JWT_REFRESH_SECRET
 
 const ACCESS_TOKEN_EXPIRE_TIME = 900000
 const REFRESH_TOKEN_EXPIRE_TIME = 1200000
 
-let refreshTokens = []
+const redisUrl = 'redis://default:' + process.env.REDIS_PASSWORD + '@' + process.env.REDIS_HOST + ':' + process.env.REDIS_PORT
+
+const redisClient = redis.createClient({
+  url: redisUrl
+});
+
+console.log(process.env.REDIS_HOST)
+console.log(process.env.REDIS_PORT)
+console.log(process.env.REDIS_PASSWORD)
+redisClient.on('error', (err) => console.log('Redis Client Error', err));
+await redisClient.connect();
+
+const allRedisKeys = await redisClient.keys("*")
+console.log("All existing refresh tokens")
+console.log(allRedisKeys)
+
 // Cleanup happens every 20 minutes
 var refreshTokensCleanupTimer = setInterval(cleanupRefreshTokens, 1200000)
+
+function convertMongooseObjectToString(obj) {
+  return obj.toString();
+}
 
 // requestbody is of the format: {"username":"<username>", "password":"<password>"}
 export function generateAccessToken(username, id) {
@@ -25,10 +43,14 @@ export function generateAccessToken(username, id) {
   }
 }
 
-export function generateRefreshToken(username, id) {
+export async function generateRefreshToken(username, id) {
   try {
     const refreshToken = jwt.sign({ username: username, id: id }, jwtRefreshSecretKey, { expiresIn: "24h" })
-    refreshTokens.push(refreshToken)
+    const idStr = convertMongooseObjectToString(id)
+    console.log(idStr)
+    const setResult = await redisClient.set(idStr, refreshToken)
+    console.log("setResult")
+    console.log(setResult)
     return refreshToken
   } catch (err) {
     console.log(err)
@@ -58,7 +80,7 @@ export function validateAccessToken(req, res) {
   }
 }
 
-export function renewAccessAndRefreshTokens(req, res) {
+export async function renewAccessAndRefreshTokens(req, res) {
   const username = req.body.username
   const refreshToken = getJWTTokenFromAuthHeader(req.headers.authorization)
   if (refreshToken == undefined) {
@@ -69,15 +91,21 @@ export function renewAccessAndRefreshTokens(req, res) {
   try {
     const decodedPayload = jwt.verify(refreshToken, jwtRefreshSecretKey)
     const decodedUsername = decodedPayload.username
+    const decodedId = decodedPayload.id
+    const decodedIdStr = convertMongooseObjectToString(decodedId)
     if (decodedUsername != username) {
       return res.status(400).json({ message: "Username and JWT token do not match.", success: false })
     }
-    if (!refreshTokens.includes(refreshToken)) {
-      return res.status(401).json({ message: "JWT refresh Token invalid.", success: false })
+    const existingRefreshToken = await redisClient.get(decodedIdStr)
+    if (!existingRefreshToken) {
+      return res.status(401).json({ message: "User has not logged in yet", success: false })
+    } else {
+      if (existingRefreshToken !== refreshToken) {
+        return res.status(401).json({ message: "JWT refresh Token invalid.", success: false })
+      }
     }
-    refreshTokens.filter((token) => token != refreshToken)
     const newAccessToken = generateAccessToken(decodedPayload.username, decodedPayload.id)
-    const newRefreshToken = generateRefreshToken(decodedPayload.username, decodedPayload.id)
+    const newRefreshToken = await generateRefreshToken(decodedPayload.username, decodedPayload.id)
     return res.status(200).json({ username: decodedPayload.username, accessToken: newAccessToken, refreshToken: newRefreshToken, success: true })
   } catch (err) {
     if (err instanceof jwt.TokenExpiredError) {
@@ -89,7 +117,7 @@ export function renewAccessAndRefreshTokens(req, res) {
   }
 }
 
-export function invalidateRefreshToken(req, res) {
+export async function invalidateRefreshToken(req, res) {
   const username = req.body.username
   const refreshToken = req.body.refresh_token
   if (refreshToken == undefined) {
@@ -99,30 +127,49 @@ export function invalidateRefreshToken(req, res) {
   try {
     const decodedPayload = jwt.verify(refreshToken, jwtRefreshSecretKey)
     const decodedUsername = decodedPayload.username
+    const decodedId = decodedPayload.id
+    const decodedIdStr = convertMongooseObjectToString(decodedId)
     if (decodedUsername != username) {
       return res.status(400).json({ message: "Username and JWT token do not match.", success: false })
     }
-    if (!refreshTokens.includes(refreshToken)) {
-      return res.status(401).json({ message: "JWT refresh Token invalid.", success: false })
+    const existingRefreshToken = await redisClient.get(decodedIdStr)
+    if (!existingRefreshToken) {
+      return res.status(401).json({ message: "User has not logged in yet", success: false })
+    } else {
+      if (existingRefreshToken !== refreshToken) {
+        return res.status(401).json({ message: "JWT refresh Token invalid.", success: false })
+      }
     }
-    refreshTokens.filter((token) => token != refreshToken)
-
+    const removeRefreshToken = await redisClient.del(decodedIdStr)
+    console.log(removeRefreshToken)
+    if (removeRefreshToken == 1) {
+      console.log("Successfully deleted refresh token")
+    } else if (removeRefreshToken > 1) {
+      console.log("Deleted more than 1 refresh tokens")
+    } else {
+      console.log("Failed to delete refresh token")
+    }
     return res.status(200).json({ username: decodedPayload.username, message: "Successfully logged out", success: true })
   } catch (err) {
     return res.status(400).json({ message: "Problem invalidating refresh token, make sure you passed the refresh token.", success: false })
   }
 }
 
-function cleanupRefreshTokens() {
-  let newRefreshTokens = []
-  for (var i = 0; i < refreshTokens.length; i++) {
-    const refreshToken = refreshTokens[i]
+async function cleanupRefreshTokens() {
+  const allRedisKeys = await redisClient.keys("*")
+  console.log(allRedisKeys)
+  for (var i = 0; i < allRedisKeys.length; i++) {
+    const key = allRedisKeys[i]
+    const refreshToken = await redisClient.get(key)
     try {
       jwt.verify(refreshToken, jwtRefreshSecretKey)
-      newRefreshTokens.push(refreshToken)
     } catch (err) {
-      continue
+      const deleteStatus = await redisClient.del(key)
+      if (deleteStatus == 0) {
+        console.log("Successfully deleted refresh token")
+      } else {
+        console.log("Failed to delete refresh token")
+      }
     }
   }
-  refreshTokens = newRefreshTokens
 }

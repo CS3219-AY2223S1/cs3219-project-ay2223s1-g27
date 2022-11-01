@@ -71,3 +71,12 @@ spec:
                 secretKeyRef:
                   name: user-service-secret
                   key: FRONTEND_URL
+            - name: REDIS_HOST
+              value: redis-token-store-service
+            - name: REDIS_PORT
+              value: '6379'
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: user-service-secret
+                  key: REDIS_PASSWORD

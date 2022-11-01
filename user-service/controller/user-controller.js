@@ -70,7 +70,8 @@ export async function loginUser(req, res) {
                 if (passwordValid) {
                     // generate and return JWT token
                     const accessToken = generateAccessToken(username, existing_user._id);
-                    const refreshToken = generateRefreshToken(username, existing_user._id);
+                    const refreshToken = await generateRefreshToken(username, existing_user._id);
+
                     return res.status(200).json({username: username, accessToken: accessToken, refreshToken: refreshToken, success:true})
                 } else {
                     return res.status(401).json({message: 'Incorrect password!', success:false});

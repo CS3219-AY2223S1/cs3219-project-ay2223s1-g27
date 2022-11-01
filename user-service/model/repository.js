@@ -10,6 +10,9 @@ import mongoose from 'mongoose';
 
 let mongoDB = process.env.ENV == "PROD" ? process.env.DB_CLOUD_URI : process.env.DB_LOCAL_URI;
 
+console.log("MongoDB URL:")
+console.log(mongoDB)
+
 mongoose.connect(mongoDB, { useNewUrlParser: true , useUnifiedTopology: true});
 
 let db = mongoose.connection;
@@ -17,7 +20,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 // Returns the user document, if username does not exist, throws an error
 export async function getUser(username) {
-  let user = await UserModel.findOne({username: username}).exec()
+  let user = await UserModel.findOne({username: username})
   return user
 }
 
@@ -44,7 +47,7 @@ export async function createPwdResetRequest(params) {
 }
 
 export async function getPwdResetRequest(documentId) {
-  let pwdResetRequest = await PwdResetModel.findOneAndDelete({_id: documentId}).exec()
+  let pwdResetRequest = await PwdResetModel.findOneAndDelete({_id: documentId})
   return pwdResetRequest
 }
 
