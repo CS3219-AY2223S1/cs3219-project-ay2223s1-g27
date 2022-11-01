@@ -8,7 +8,7 @@ const DifficultyCard = ({ difficulty, selected, handleDifficultyLevel }) => {
 
     var bgColor = '#A7A7A7'
     if (difficulty === "Beginner") {
-        bgColor = '#E5E8E8'
+        bgColor = '#E1E1E1'
     } else if (difficulty === "Intermediate") {
         bgColor = '#CCD1D1'
     } else {

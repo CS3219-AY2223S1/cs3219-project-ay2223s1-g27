@@ -13,6 +13,7 @@ import {
   Paper,
   Table,
   Typography,
+  Container,
 } from "@mui/material";
 import axiosApiInstance from "../axiosApiInstance";
 import { URL_USER_SVC_QUESTIONHISTORY } from "../configs";
@@ -70,13 +71,25 @@ function AttemptsPage() {
         flexDirection={"column"}
         justifyContent={"center"}
         alignItems={"center"}
-        style={{ marginTop: "3%" }}
+        width={"100%"}
       >
-        <Typography variant="h4">
-          <h1 style={{fontSize:'50px', marginBottom: "3%"}}> Past Attempts </h1>
-        </Typography>
+        <Container disableGutters maxWidth="sm" component="main" sx={{ pt: 8, pb: 6 }}>
+            <Typography
+                component="h1"
+                variant="h4"
+                align="center"
+                color="text.primary"
+                gutterBottom
+            >
+                Past Attempts
+            </Typography>
+            <Typography variant="h6" align="center" color="text.secondary" component="p">
+                View the history of your attempts here!
+            </Typography>
+            {/* <h1 style={{fontSize:'50px', marginBottom: "3%"}}>Choose Your Difficulty Level</h1> */}
+        </Container>
         <Box>
-          <TableContainer component={Paper}>
+          <TableContainer component={Paper} sx={{ mb: 2, borderRadius: 3 }}>
             <Table sx={{ minWidth: 500 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
