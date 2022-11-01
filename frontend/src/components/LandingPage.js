@@ -7,7 +7,8 @@ import GroupIcon from '@mui/icons-material/Group';
 import NavigationBar from "./NavigationBar";  
 import { useNavigate } from "react-router-dom";
 import HistoryIcon from '@mui/icons-material/History';
-import { Typography, Container } from '@mui/material';
+import { Typography, Container, Grid } from '@mui/material';
+import DifficultyCard from "./landingPage/DifficultyCard";
 
 function LandingPage() {   
     const [difficultyLevel, setDifficultyLevel] = useState(""); 
@@ -73,8 +74,16 @@ function LandingPage() {
                     </Typography>
                     {/* <h1 style={{fontSize:'50px', marginBottom: "3%"}}>Choose Your Difficulty Level</h1> */}
                 </Container>
+                <Container maxWidth="md" component="main">
+                    <Grid container spacing={5} alignItems="flex-end">
+                        <DifficultyCard difficulty="Easy"/>
+                        <DifficultyCard difficulty="Medium"/>
+                        <DifficultyCard difficulty="Hard"/>
+                    </Grid>
+                </Container>
                 {/* </Box> */}
-                <div style={{marginTop:'10px', marginBottom: '10px'}}>
+                {/* Old set of btns */}
+                {/* <div style={{marginTop:'10px', marginBottom: '10px'}}>
                 <Box display={"flex"} flexDirection={"column"} justifyContent={"space-evenly"} alignItems={"center"}> 
                     <Button 
                         variant={selectBeginner ? "contained" : "outlined"} 
@@ -101,7 +110,8 @@ function LandingPage() {
                         Expert
                     </Button>
                 </Box>
-                </div>
+                </div> */}
+                {/* Old set of btns */}
                 <Box display={"flex"} flexDirection={"row"} justifyContent={"center"} style={{ paddingTop: "5%"}}>
                     <Button 
                         disabled={!isDifficultySelected()} 
