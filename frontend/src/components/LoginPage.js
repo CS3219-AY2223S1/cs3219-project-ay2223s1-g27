@@ -154,7 +154,7 @@ function LoginPage() {
                         <Link style={{color: 'blue', textDecoration: 'underline'}} onClick={handleDialog} to="">here</Link>!
                     </div>
 
-                    <Box display={"flex"} flexDirection={"row"} justifyContent={"flex-end"}>
+                    <Box display={"flex"} flexDirection={"row"} justifyContent={"flex-end"} sx={{ my: 2 }}>
                         <div> 
                             {loginProcessing 
                             ? <CircularProgress/> 
