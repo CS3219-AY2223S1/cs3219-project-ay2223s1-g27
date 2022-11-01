@@ -5,7 +5,8 @@ import {
     DialogActions,
     DialogContent, 
     DialogTitle,
-    TextField, 
+    TextField,
+    CircularProgress,
 } from "@mui/material";
 import {useCookies} from 'react-cookie'
 import {useState} from "react"; 
@@ -33,6 +34,7 @@ function LoginPage() {
     const [isEmailValid, setIsEmailValid] = useState(null); 
     const [resetEmailSent, setResetEmailSent] = useState(null);  
     const [resetPasswordMessage, setResetPasswordMessage] = useState(""); 
+    const [loginProcessing, setloginProcessing] = useState(false); 
     const [cookies, setCookie] = useCookies();
 
     /** Reset Password Logic */
@@ -76,9 +78,11 @@ function LoginPage() {
     const handleLogin = async(event) => {  
         event.preventDefault(); 
         setIsLoggedIn(false); 
+        setloginProcessing(true)
 
         const res = await axios.post(URL_USER_SVC_LOGIN, { username, password })
             .catch((err) => {
+                setloginProcessing(false)
                 if (err.response.status === STATUS_CODE_INCORRECT_PASSWORD || 
                     err.response.status === STATUS_CODE_INVALID_USER ||
                     err.response.status === STATUS_CODE_MISSING_FIELD ||
@@ -96,6 +100,7 @@ function LoginPage() {
             setCookie('refresh_token', refreshToken, {path: '/', expires: new Date(jwtDecode(refreshToken).exp * 1000)});
             navigate("/landing");
         } 
+        setloginProcessing(false)
     }
 
     return cookies["refresh_token"]
@@ -109,7 +114,7 @@ function LoginPage() {
                     <h1 style={{fontSize: '40px', color: '#FFFFFF', fontWeight: 'bold'}}> 
                         Welcome to PeerPrep.
                     </h1>
-                    <p style={{ color: '#FFFFFF'}}>
+                    <p style={{ color: '#FFFFFF', marginTop: "2%"}}>
                         PeerPrep aims to help job seekers boost their technical interview skills to land their dream job. <br/>
                         In PeerPrep, users can expect to challenge questions of different difficulty levels, engage with <br/> 
                         other users in real-time, and utilise a collaborative programming tool to enhance their familiarity<br/> 
@@ -151,7 +156,9 @@ function LoginPage() {
 
                     <Box display={"flex"} flexDirection={"row"} justifyContent={"flex-end"}>
                         <div> 
-                            <Button variant={"outlined"} onClick={handleLogin}>Login</Button>
+                            {loginProcessing 
+                            ? <CircularProgress/> 
+                            : <Button variant={"outlined"} onClick={handleLogin}>Login</Button>}
                         </div>
                     </Box>
 

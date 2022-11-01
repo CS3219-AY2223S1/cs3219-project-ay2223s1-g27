@@ -24,7 +24,9 @@ const DifficultyCard = ({ difficulty, selected, handleDifficultyLevel }) => {
         sm={6}
         md={4}
         >
-        <Card> 
+        <Card sx={{
+                borderRadius: 3,
+            }}> 
             <CardHeader
             title={difficulty}
             titleTypographyProps={{ align: 'center', variant:'h6' }}

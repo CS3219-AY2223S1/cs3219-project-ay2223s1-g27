@@ -139,7 +139,7 @@ function NavigationBar({ isAuthenticated }) {
   }
 
   return (
-    <AppBar style={{ margin: 0 }} position="static">
+    <AppBar sx={{ m: 0, background: "#1976d2" }} position="static">
       {isAuthenticated && (
         <Box display={"flex"} flexDirection={"row"} sx={{ flexGrow: 1 }} alignItems={"center"}>
           <Typography
@@ -188,7 +188,7 @@ function NavigationBar({ isAuthenticated }) {
                 open={Boolean(anchorEl)}
                 onClose={handleCloseMenu}
               >
-                <MenuItem onClick={handlePastAttempts}>Past Attempts</MenuItem>
+                {/* <MenuItem onClick={handlePastAttempts}>Past Attempts</MenuItem> */}
                 <MenuItem onClick={handleChangePassword}>Change Password</MenuItem>
                 <MenuItem onClick={handleDeleteAccount}>Delete Account</MenuItem>
                 <MenuItem onClick={handleLogOut}>Log Out</MenuItem>
