@@ -40,6 +40,6 @@ jobs:
           echo ENV=${{ secrets.USER_SERVICE_ENV }} >> .env
           echo DB_LOCAL_URI=${{ secrets.USER_SERVICE_DB_LOCAL_URI }} >> .env
           echo DB_CLOUD_URI=${{ secrets.USER_SERVICE_DB_CLOUD_URI }} >> .env
-      - run: npm ci --no-optional
+      - run: npm ci
       - run: npm run build --if-present
       - run: npm test
