@@ -1,6 +1,19 @@
-import { Typography, Grid, Card, CardHeader, CardContent, CardActions } from '@mui/material';
+import { 
+    Typography, Grid, Card, CardHeader, CardContent, CardActions, Box, Button
+} from '@mui/material';
+import { beginnerQuestions, intermediateQuestions, expertQuestions } from './CommonQuestions';  
 
-const DifficultyCard = ({ difficulty }) => {
+
+const DifficultyCard = ({ difficulty, selected, handleDifficultyLevel }) => {
+
+    var bgColor = '#A7A7A7'
+    if (difficulty === "Beginner") {
+        bgColor = '#E5E8E8'
+    } else if (difficulty === "Intermediate") {
+        bgColor = '#CCD1D1'
+    } else {
+        bgColor = '#A7A7A7'
+    }
 
     return (
         // Enterprise card is full width at sm breakpoint
@@ -11,22 +24,19 @@ const DifficultyCard = ({ difficulty }) => {
         sm={6}
         md={4}
         >
-        <Card>
+        <Card> 
             <CardHeader
             title={difficulty}
-            titleTypographyProps={{ align: 'center' }}
+            titleTypographyProps={{ align: 'center', variant:'h6' }}
             subheaderTypographyProps={{
                 align: 'center',
             }}
             sx={{
-                backgroundColor: (theme) =>
-                theme.palette.mode === 'light'
-                    ? theme.palette.grey[200]
-                    : theme.palette.grey[700],
+                backgroundColor: bgColor,
             }}
             />
             <CardContent>
-            {/* <Box
+            <Box
                 sx={{
                 display: 'flex',
                 justifyContent: 'center',
@@ -34,29 +44,81 @@ const DifficultyCard = ({ difficulty }) => {
                 mb: 2,
                 }}
             >
-                <Typography component="h2" variant="h3" color="text.primary">
-                {difficulty}
+                {/* <Typography component="h2" variant="h6" color="text.primary">
+                Questions Like...
+                </Typography> */}
+                <Typography variant="subtitle1">
+                Questions Like...
                 </Typography>
-                <Typography variant="h6" color="text.secondary">
-                /mo
-                </Typography>
-            </Box> */}
+            </Box>
             <ul>
-                
-                <Typography
-                    component="li"
-                    variant="subtitle1"
-                    align="center"
-                    key="TwoSum"
-                >
-                    TwoSum
-                </Typography>
+                {difficulty === "Beginner" ? 
+                beginnerQuestions.map((qnsTitle) => {
+                    return (
+                        <Typography
+                            component="li"
+                            variant="subtitle2" 
+                            color="text.secondary"
+                            align="center"
+                            key={qnsTitle}
+                            sx={{
+                                my: 1,
+                            }}
+                        >
+                            {qnsTitle}
+                        </Typography>
+                    )
+                })
+                :
+                difficulty === "Intermediate" ?
+                intermediateQuestions.map((qnsTitle) => {
+                    return (
+                        <Typography
+                            component="li"
+                            variant="subtitle2" 
+                            color="text.secondary"
+                            align="center"
+                            key={qnsTitle}
+                            sx={{
+                                my: 1,
+                            }}
+                        >
+                            {qnsTitle}
+                        </Typography>
+                    )
+                })
+                :
+                expertQuestions.map((qnsTitle) => {
+                    return (
+                        <Typography
+                            component="li"
+                            variant="subtitle2" 
+                            color="text.secondary"
+                            align="center"
+                            key={qnsTitle}
+                            sx={{
+                                my: 1,
+                            }}
+                        >
+                            {qnsTitle}
+                        </Typography>
+                    )
+                })
+                }
             </ul>
             </CardContent>
             <CardActions>
             {/* <Button fullWidth variant={tier.buttonVariant}>
                 {tier.buttonText}
             </Button> */}
+            <Button 
+                fullWidth
+                variant={selected ? "contained" : "outlined"} 
+                onClick={e => handleDifficultyLevel(e)} 
+                value={difficulty.toLowerCase()}
+            >
+                {difficulty.toLowerCase()}
+            </Button>
             </CardActions>
         </Card>
         </Grid>

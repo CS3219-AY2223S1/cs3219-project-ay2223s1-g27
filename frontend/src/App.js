@@ -36,7 +36,7 @@ function App() {
     return (
         <div className="App" style={{ 
             backgroundImage: `url(${background})`,
-            height:'100vh',
+            height:'120vh',
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
             }}>

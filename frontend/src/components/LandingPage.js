@@ -76,9 +76,10 @@ function LandingPage() {
                 </Container>
                 <Container maxWidth="md" component="main">
                     <Grid container spacing={5} alignItems="flex-end">
-                        <DifficultyCard difficulty="Easy"/>
-                        <DifficultyCard difficulty="Medium"/>
-                        <DifficultyCard difficulty="Hard"/>
+                        {console.log(selectBeginner)}
+                        <DifficultyCard difficulty="Beginner" selected={selectBeginner} handleDifficultyLevel={e => handleDifficultyLevel(e)}/>
+                        <DifficultyCard difficulty="Intermediate" selected={selectIntermediate} handleDifficultyLevel={e => handleDifficultyLevel(e)}/>
+                        <DifficultyCard difficulty="Expert" selected={selectExpert} handleDifficultyLevel={e => handleDifficultyLevel(e)}/>
                     </Grid>
                 </Container>
                 {/* </Box> */}
