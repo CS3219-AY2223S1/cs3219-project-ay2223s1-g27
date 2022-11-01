@@ -1,4 +1,3 @@
-
 // Imports the Google Cloud client library
 import { PubSub } from "@google-cloud/pubsub";
 
@@ -10,13 +9,13 @@ export function initMQ(
   subscriptionName = 'match-found-sub' // Name for the new subscription to create
 ) {
   // Instantiates a client
-  pubsub = new PubSub({projectId});
-  
+  pubsub = new PubSub({ projectId });
+
   topic = pubsub.topic(topicNameOrId);
 
   subscription = topic.subscription(subscriptionName);
 }
 
 export function publishMatch(msg) {
-    topic.publish(Buffer.from(JSON.stringify(msg)));
+  topic.publish(Buffer.from(JSON.stringify(msg)));
 }
