@@ -5,8 +5,7 @@ import {
     DialogActions,
     DialogContent, 
     DialogTitle,
-    TextField,
-    Typography
+    TextField, 
 } from "@mui/material";
 import {useCookies} from 'react-cookie'
 import {useState} from "react"; 
@@ -19,8 +18,7 @@ import {
     STATUS_CODE_MISSING_FIELD,
     STATUS_DATABASE_FAILURE,
 } from "../constants";
-import {Link, Navigate, useNavigate} from "react-router-dom";
-import NavigationBar from "./NavigationBar";
+import {Link, Navigate, useNavigate} from "react-router-dom"; 
 import {jwtDecode} from "../util/auth"
 
 function LoginPage() { 
@@ -103,75 +101,104 @@ function LoginPage() {
     return cookies["refresh_token"]
         ? <Navigate to="/landing" /> 
         : (  
-        <>
-        <NavigationBar isAuthenticated={false} /> 
-        <Box display={"flex"} flexDirection={"column"} width={"30%"} style={{marginTop: "3%", marginLeft: "3%"}}>
-            <Typography variant={"h3"} marginBottom={"2rem"}>Login</Typography>
-            <TextField
-                label="Username"
-                variant="standard"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                sx={{ marginBottom: "1rem" }}
-                autoFocus />
-            <TextField
-                label="Password"
-                variant="standard"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                sx={{ marginBottom: "2rem" }} /> 
-            <div style={{ marginBottom: "5px" }} >
-                Do not have an account? Sign up {' '}
-                <Link style={{color: 'blue', textDecoration: 'underline'}} to="/signup">here</Link>!
-            </div>
-
-            <div>
-                Forget your password? Reset it {' '}
-                <Link style={{color: 'blue', textDecoration: 'underline'}} onClick={handleDialog} to="">here</Link>!
-            </div>
-
-            <Box display={"flex"} flexDirection={"row"} justifyContent={"flex-end"}>
-                <Button variant={"outlined"} onClick={handleLogin}>Login</Button>
+        <> 
+        <Box display={'flex'} flexDirection={"row"} sx={{height: "100%", width: "100%", position:'absolute'}}>
+            {/* Description of Application */}
+            <Box style={{width: "65%", height: "100%", background: "#1976d2"}}>
+                <Box style={{marginTop: "25%", marginLeft: "3%"}}> 
+                    <h1 style={{fontSize: '40px', color: '#FFFFFF', fontWeight: 'bold'}}> 
+                        Welcome to PeerPrep.
+                    </h1>
+                    <p style={{ color: '#FFFFFF'}}>
+                        PeerPrep aims to help job seekers boost their technical interview skills to land their dream job. <br/>
+                        In PeerPrep, users can expect to challenge questions of different difficulty levels, engage with <br/> 
+                        other users in real-time, and utilise a collaborative programming tool to enhance their familiarity<br/> 
+                        with technical interviews. 
+                    </p>
+                </Box>
             </Box>
-
-            <div>
-                {isLoggedIn ? <div> Login success! </div> : <div style={{ color: "red" }}>{loginMessage}</div>}
-            </div>
-
-            <Dialog open={isDialogOpen} onClose={closeDialog} fullWidth maxWidth={"xs"}>
-                <DialogTitle>Reset Password</DialogTitle>
-                <DialogContent>
+            <Box style={{width: "35%", height: "100%", background: "#FFFFFF"}}>
+                <Box style={{marginTop: "35%", marginLeft: "20%", width: "60%"}}> 
+                    <Box display={"flex"} flexDirection={"row"} justifyContent={"center"}> 
+                        <h1 style={{fontSize:'50px', marginBottom: "3%"}}>Login</h1>
+                    </Box>
+                    <Box display={'flex'} flexDirection={"column"}>
                     <TextField
-                        autoFocus
-                        label="Username" 
-                        value={resetUsername}
-                        onChange={(e) => setResetUsername(e.target.value)}
-                        fullWidth
+                        label="Username"
                         variant="standard"
-                        sx={{ marginBottom: "1rem" }} />
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        sx={{ marginBottom: "1rem" }}
+                        autoFocus />
                     <TextField
-                        autoFocus
-                        label="Email Address"
-                        type="email"
-                        value={resetEmail}
-                        onChange={(e) => setResetEmail(e.target.value)}
-                        fullWidth
+                        label="Password"
                         variant="standard"
-                        sx={{ marginBottom: "1rem" }} /> 
-                    <div>
-                        {resetEmailSent ? <div style={{ color: "blue" }}> {resetPasswordMessage} </div>
-                                : resetEmailSent === false ? <div style={{ color: "red" }}>{resetPasswordMessage}</div>
-                                    : <div></div>} 
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        sx={{ marginBottom: "2rem" }} /> 
+                    </Box>
+
+                    <div style={{ marginBottom: "5px" }} >
+                        Do not have an account? Sign up {' '}
+                        <Link style={{color: 'blue', textDecoration: 'underline'}} to="/signup">here</Link>!
                     </div>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={closeDialog}>Cancel</Button>
-                    {/* Click on "Reset Password" triggers sending of email and success message as well */}
-                    <Button onClick={handleResetPassword}>Send Reset Link</Button>
-                </DialogActions>
-            </Dialog>
-        </Box>
+
+                    <div>
+                        Forget your password? Reset it {' '}
+                        <Link style={{color: 'blue', textDecoration: 'underline'}} onClick={handleDialog} to="">here</Link>!
+                    </div>
+
+                    <Box display={"flex"} flexDirection={"row"} justifyContent={"flex-end"}>
+                        <div> 
+                            <Button variant={"outlined"} onClick={handleLogin}>Login</Button>
+                        </div>
+                    </Box>
+
+                    <div>
+                        {isLoggedIn ? <div> Login success! </div> : <div style={{ color: "red" }}>{loginMessage}</div>}
+                    </div>
+
+                    <Dialog open={isDialogOpen} onClose={closeDialog} fullWidth maxWidth={"xs"}>
+                        <DialogTitle>Reset Password</DialogTitle>
+                        <DialogContent>
+                            <TextField
+                                autoFocus
+                                label="Username" 
+                                value={resetUsername}
+                                onChange={(e) => setResetUsername(e.target.value)}
+                                fullWidth
+                                variant="standard"
+                                sx={{ marginBottom: "1rem" }} />
+                            <TextField
+                                autoFocus
+                                label="Email Address"
+                                type="email"
+                                value={resetEmail}
+                                onChange={(e) => setResetEmail(e.target.value)}
+                                fullWidth
+                                variant="standard"
+                                sx={{ marginBottom: "1rem" }} /> 
+                            <div>
+                                {resetEmailSent ? <div style={{ color: "blue" }}> {resetPasswordMessage} </div>
+                                        : resetEmailSent === false ? <div style={{ color: "red" }}>{resetPasswordMessage}</div>
+                                            : <div></div>} 
+                            </div>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={closeDialog}>Cancel</Button>
+                            {/* Click on "Reset Password" triggers sending of email and success message as well */}
+                            <Button onClick={handleResetPassword}>Send Reset Link</Button>
+                        </DialogActions>
+                    </Dialog>
+
+                </Box> 
+            </Box> 
+
+            
+        </Box> 
+        
+        
         </>  
     )
 }

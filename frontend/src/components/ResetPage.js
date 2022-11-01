@@ -1,8 +1,7 @@
 import {
     Box,
     Button, 
-    TextField,
-    Typography
+    TextField, 
 } from "@mui/material"; 
 import {useState} from "react";  
 import {URL_USER_SVC_RESETPASSWORD} from "../configs";
@@ -51,41 +50,46 @@ function ResetPage() {
     }
 
     return (
-        <Box display={"flex"} flexDirection={"column"} width={"30%"} style={{marginTop: "3%", marginLeft: "3%"}}>
-            <Typography variant={"h3"} marginBottom={"2rem"}>Reset Password</Typography> 
-            <TextField
-                label="Username"
-                variant="standard"
-                type="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                sx={{ marginBottom: "1rem" }} />  
-            <TextField
-                label="New Password"
-                variant="standard"
-                type="password"
-                value={passwordOne}
-                onChange={(e) => setPasswordOne(e.target.value)}
-                sx={{ marginBottom: "1rem" }} />  
-            <TextField
-                label="Confirm New Password"
-                variant="standard"
-                type="password"
-                value={passwordTwo}
-                onChange={(e) => setPasswordTwo(e.target.value)}
-                sx={{ marginBottom: "2rem" }} />  
-            <div style={{ marginBottom: "5px" }} > 
-                <Link to="/login">Back to Login</Link>
-            </div>
-            <Box display={"flex"} flexDirection={"row"} justifyContent={"flex-end"}>
-                <Button variant={"outlined"} onClick={handleResetPassword}>Reset</Button>
-            </Box> 
-            <div> 
-                {resetPasswordSuccess ? <div style={{ color: "blue" }}> {message} </div>
-                        : resetPasswordSuccess === false ? <div style={{ color: "red" }}>{message}</div>
-                            : <div></div>} 
-            </div>
+        <Box display={"flex"} flexDirection={"row"} justifyContent={"center"}> 
+            <Box display={"flex"} flexDirection={"column"} width={"30%"} style={{marginTop: "3%"}}>
+                <Box display={"flex"} flexDirection={"row"} justifyContent={"center"}> 
+                    <h1 style={{fontSize:'50px', marginBottom: "3%"}}>Reset Password</h1> 
+                </Box>
+                <TextField
+                    label="Username"
+                    variant="standard"
+                    type="username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    sx={{ marginBottom: "1rem" }} />  
+                <TextField
+                    label="New Password"
+                    variant="standard"
+                    type="password"
+                    value={passwordOne}
+                    onChange={(e) => setPasswordOne(e.target.value)}
+                    sx={{ marginBottom: "1rem" }} />  
+                <TextField
+                    label="Confirm New Password"
+                    variant="standard"
+                    type="password"
+                    value={passwordTwo}
+                    onChange={(e) => setPasswordTwo(e.target.value)}
+                    sx={{ marginBottom: "2rem" }} />  
+                <div style={{ marginBottom: "5px" }} > 
+                    <Link style={{color: 'blue', textDecoration: 'underline'}} to="/login">Back to Login</Link>
+                </div>
+                <Box display={"flex"} flexDirection={"row"} justifyContent={"flex-end"}>
+                    <Button variant={"outlined"} onClick={handleResetPassword}>Reset</Button>
+                </Box> 
+                <div> 
+                    {resetPasswordSuccess ? <div style={{ color: "blue" }}> {message} </div>
+                            : resetPasswordSuccess === false ? <div style={{ color: "red" }}>{message}</div>
+                                : <div></div>} 
+                </div>
+            </Box>
         </Box>
+       
     );
 }
 
