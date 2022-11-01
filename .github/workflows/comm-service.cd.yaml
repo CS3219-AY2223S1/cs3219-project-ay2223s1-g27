@@ -6,7 +6,6 @@ on:
       - "main"
     paths:
       - comm-service/**
-  pull_request:
 
 jobs:
   build:
