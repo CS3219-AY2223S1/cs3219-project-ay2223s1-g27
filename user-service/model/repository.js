@@ -56,14 +56,9 @@ export async function getMatchHistory(room_id) {
   return session;
 }
 
-export async function createMatchHistory(room_id, user_id, username, difficulty_level) {
-  let session = new MatchHistoryModel({room_id: room_id, users: [ user_id ], usernames: [username], difficulty_level: difficulty_level});
+export async function createMatchHistory(room_id, user_id1, user_id2, username1, username2, difficulty_level) {
+  let session = new MatchHistoryModel({room_id: room_id, users: [ user_id1, user_id2 ], usernames: [ username1, username2 ], difficulty_level: difficulty_level});
   await session.save();
-  return session;
-}
-
-export async function updateMatchHistory(room_id, users, usernames) {
-  let session = await MatchHistoryModel.findOneAndUpdate({room_id: room_id}, {users: users, usernames: usernames}, {new: true});
   return session;
 }
 

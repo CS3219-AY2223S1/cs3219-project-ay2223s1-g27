@@ -7,12 +7,10 @@ import { useCookies } from "react-cookie";
 import {
   URL_MATCHING_SVC,
   PREFIX_MATCHING_SVC,
-  URL_USER_SVC_SAVESESSION,
 } from "../configs";
 import { Box, Button, Modal, Typography } from "@mui/material";
 import { useState } from "react";
-import axiosApiInstance, { refreshAccessToken } from "../axiosApiInstance";
-import { jwtDecode } from "../util/auth";
+import { refreshAccessToken } from "../axiosApiInstance";
 
 const modalStyle = {
   position: "absolute",
@@ -95,26 +93,15 @@ function MatchingPage() {
   };
 
   const handleMatchFound = (room_id) => {
-    setTimeout(() => {
-      axiosApiInstance
-        .post(URL_USER_SVC_SAVESESSION, {
-          room_id: room_id,
-          user_id: jwtDecode(cookies["refresh_token"]).id,
-          username: jwtDecode(cookies["refresh_token"]).username,
-          difficulty_level: location.state.difficultyLevel,
-        })
-        .then((x) => {
-          navigate("/room", {
-            state: {
-              user: location.state.user,
-              room_id: room_id,
-              difficultyLevel: location.state.difficultyLevel,
-              matched: true,
-              is_live: true,
-            },
-          });
-        });
-    }, Math.random() * 5000); // set random time to prevent collision
+    navigate("/room", {
+      state: {
+        user: location.state.user,
+        room_id: room_id,
+        difficultyLevel: location.state.difficultyLevel,
+        matched: true,
+        is_live: true,
+      },
+    });
   };
 
   const handleNoMatchFound = () => {
