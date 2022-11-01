@@ -7,6 +7,7 @@ import GroupIcon from '@mui/icons-material/Group';
 import NavigationBar from "./NavigationBar";  
 import { useNavigate } from "react-router-dom";
 import HistoryIcon from '@mui/icons-material/History';
+import { Typography, Container } from '@mui/material';
 
 function LandingPage() {   
     const [difficultyLevel, setDifficultyLevel] = useState(""); 
@@ -54,11 +55,25 @@ function LandingPage() {
     return (
         <>
         <NavigationBar isAuthenticated={true} />
-        <Box display={"flex"} justifyContent={"center"} style={{marginTop: "3%"}}> 
+        <Box display={"flex"} justifyContent={"center"}> 
             <Box display={"flex"} flexDirection={"column"} width={"50%"}>
-                <Box display={"flex"} flexDirection={"row"} justifyContent={"center"}> 
-                    <h1 style={{fontSize:'50px', marginBottom: "3%"}}>Choose Your Difficulty Level</h1>
-                </Box>
+                {/* <Box display={"flex"} flexDirection={"row"} justifyContent={"center"}>  */}
+                <Container disableGutters maxWidth="sm" component="main" sx={{ pt: 8, pb: 6 }}>
+                    <Typography
+                        component="h1"
+                        variant="h4"
+                        align="center"
+                        color="text.primary"
+                        gutterBottom
+                    >
+                        Choose Your Difficulty Level
+                    </Typography>
+                    <Typography variant="h6" align="center" color="text.secondary" component="p">
+                        You will be matched with a random user who desires the same difficulty level!
+                    </Typography>
+                    {/* <h1 style={{fontSize:'50px', marginBottom: "3%"}}>Choose Your Difficulty Level</h1> */}
+                </Container>
+                {/* </Box> */}
                 <div style={{marginTop:'10px', marginBottom: '10px'}}>
                 <Box display={"flex"} flexDirection={"column"} justifyContent={"space-evenly"} alignItems={"center"}> 
                     <Button 

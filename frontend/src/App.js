@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import SignupPage from './components/SignupPage';
 import LoginPage from './components/LoginPage';
@@ -21,12 +22,24 @@ import {
     PREFIX_FRONTEND_SIGNUP,
     PREFIX_FRONTEND_RESETPWD
 } from "./configs";
+import background from "./img/background-img.png";
  
 function App() {
     const [, setCookie] = useCookies();
     initAxiosApiInstance(setCookie);
+
+    useEffect(() => {
+        document.title = "PeerPrep"; 
+    }, []);
+
+    // Background image from <a href="https://www.freepik.com/free-vector/white-gray-geometric-pattern-background-vector_18240979.htm#query=white%20texture%20background&position=4&from_view=search&track=sph">Image by rawpixel.com</a> on Freepik
     return (
-        <div className="App">
+        <div className="App" style={{ 
+            backgroundImage: `url(${background})`,
+            height:'100vh',
+            backgroundSize: 'cover',
+            backgroundRepeat: 'no-repeat',
+            }}>
             {/* <NavigationBar isAuthenticated={true}/> */}
             <Box display={"flex"} flexDirection={"column"} >
                 <Router>
