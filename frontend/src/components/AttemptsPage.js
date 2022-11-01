@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import NavigationBar from "./NavigationBar";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
+  Button,
   Pagination,
   TableContainer,
   TableHead,
@@ -17,12 +19,14 @@ import { URL_USER_SVC_QUESTIONHISTORY } from "../configs";
 import { jwtDecode } from "../util/auth";
 import { useCookies } from "react-cookie";
 import { Link } from "react-router-dom";
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
 function AttemptsPage() {
   const [cookies] = useCookies();
   const [page, setPage] = useState(1);
   const [rows, setRows] = useState([]);
   const [count, setCount] = useState(1);
+  const navigate = useNavigate();
 
   const handlePagination = (_, value) => {
     setPage(value);
@@ -43,9 +47,24 @@ function AttemptsPage() {
       });
   }, [page, cookies]);
 
+  const handleBackOnClick = () => {
+    navigate("/landing"); 
+  }
+
   return (
     <div>
       <NavigationBar isAuthenticated={true} />
+      <Box display={"flex"}
+        flexDirection={"row"}
+        justifyContent={"flex-start"} 
+        style={{ marginLeft:"2%", marginTop:"2%" }}>
+        <Button  
+          startIcon={<ArrowBackIosIcon/>} 
+          onClick={handleBackOnClick}
+        >
+          Back
+        </Button>
+      </Box>
       <Box
         display={"flex"}
         flexDirection={"column"}
@@ -53,7 +72,9 @@ function AttemptsPage() {
         alignItems={"center"}
         style={{ marginTop: "3%" }}
       >
-        <Typography variant="h4">Past Attempts</Typography>
+        <Typography variant="h4">
+          <h1 style={{fontSize:'50px', marginBottom: "3%"}}> Past Attempts </h1>
+        </Typography>
         <Box>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 500 }} aria-label="simple table">

@@ -214,7 +214,9 @@ function RoomPage() {
     <>
       <NavigationBar isAuthenticated={true} user={location.state.user} />
       <div style={{overflowX: 'hidden'}}> 
-        <Typography sx={{ marginLeft: "3%", marginTop: "1%", marginBottom: "-3%" }} variant={"h3"} marginBottom={"2rem"}>Coding Room</Typography>
+        <Box sx={{marginTop: "3%", marginBottom:"-4%", marginLeft: "3%"}}>
+          <h1 style={{fontSize:'50px'}}>Coding Room</h1>
+        </Box>
         {/* Uncomment this for popover chat left: 1600, top: 110 */}
         {/* <Box display="flex" flexDirection="row" justifyContent={'flex-end'} sx={{marginRight: '3%'}}> */} 
         <Draggable bounds={{right: 1600}}>
