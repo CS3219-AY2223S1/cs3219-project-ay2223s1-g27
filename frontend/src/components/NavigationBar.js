@@ -141,13 +141,13 @@ function NavigationBar({ isAuthenticated, inCodingRoom }) {
       {isAuthenticated && (
         <Box display={"flex"} flexDirection={"row"} sx={{ flexGrow: 1 }} alignItems={"center"}>
           <Typography
-              variant="h6" 
-              component="div"
-              sx={{
-                ml: 3,
-                flexGrow: 1
-              }}
-            >
+            variant="h6"
+            component="div"
+            sx={{
+              ml: 3,
+              flexGrow: 1
+            }}
+          >
             <Link to="/landing">
               <Box sx={{ display: 'flex', flexDirection: 'row' }}>
                 <Box
@@ -161,20 +161,20 @@ function NavigationBar({ isAuthenticated, inCodingRoom }) {
                   src={require("../img/PeerPrepLogo.png")}
                 />
                 <h1>
-                  PeerPrep              
+                  PeerPrep
                 </h1>
               </Box>
             </Link>
           </Typography>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1, ml: "8%"}}>
-            {inCodingRoom ? 
-            <h1 style={{ margin: "1%" }}>
-              Coding Room
-            </h1>
-            : 
-            <h1 style={{ margin: "1%" }}>
-              Welcome, {jwtDecode(cookies["refresh_token"]).username}!
-            </h1>}
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1, ml: "8%" }}>
+            {inCodingRoom ?
+              <h1 style={{ margin: "1%" }}>
+                Coding Room
+              </h1>
+              :
+              <h1 style={{ margin: "1%" }}>
+                Welcome, {jwtDecode(cookies["refresh_token"]).username}!
+              </h1>}
           </Typography>
           <Toolbar>
             <div>
@@ -188,13 +188,13 @@ function NavigationBar({ isAuthenticated, inCodingRoom }) {
               >
                 <AccountCircleIcon />
               </IconButton>
-              <Button 
-                variant={"outlined"} 
-                color="inherit" 
-                endIcon={<LogoutIcon/>} 
-                sx={{fontSize: '14px', ml: 2}} 
+              <Button
+                variant={"outlined"}
+                color="inherit"
+                endIcon={<LogoutIcon />}
+                sx={{ fontSize: '14px', ml: 2 }}
                 onClick={handleLogOut}
-                >
+              >
                 Log Out
               </Button>
               <Menu
@@ -220,13 +220,13 @@ function NavigationBar({ isAuthenticated, inCodingRoom }) {
                 </Box>
                 {/* <MenuItem onClick={handlePastAttempts}>Past Attempts</MenuItem> */}
                 <MenuItem onClick={handleChangePassword}>
-                  <ChangeCircleIcon sx={{ mr: 1 }}/>
+                  <ChangeCircleIcon sx={{ mr: 1 }} />
                   <Typography variant="subtitle2">
                     Change Password
                   </Typography>
                 </MenuItem>
                 <MenuItem onClick={handleDeleteAccount} sx={{ color: "red" }}>
-                  <DeleteIcon sx={{ mr: 1 }}/>
+                  <DeleteIcon sx={{ mr: 1 }} />
                   <Typography variant="subtitle2">
                     Delete Account
                   </Typography>
@@ -286,7 +286,7 @@ function NavigationBar({ isAuthenticated, inCodingRoom }) {
                     This action is permanent and cannot be undone. If you're sure that you want to delete your account, please press "Confirm".
                   </Typography>
                   <Box display={"flex"} flexDirection={"row"} justifyContent={"flexStart"} style={{ paddingTop: "5%" }}>
-                    <Button variant={"contained"} onClick={handleDeleteAccountOnClick}>Confirm</Button>
+                    <Button variant={"contained"} sx={{ backgroundColor: 'error.main' }} onClick={handleDeleteAccountOnClick}>Confirm</Button>
                   </Box>
                 </Box>
               </Modal>

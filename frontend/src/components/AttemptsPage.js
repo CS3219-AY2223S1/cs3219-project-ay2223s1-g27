@@ -33,8 +33,9 @@ function AttemptsPage() {
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: theme.palette.primary.light,
-      color: theme.palette.common.black,
+      //backgroundColor: theme.palette.primary.light,
+      backgroundColor: '#EAEEFF',
+      //color: theme.palette.common.black,
       fontWeight: "bold"
     },
   }));
@@ -59,7 +60,7 @@ function AttemptsPage() {
   }, [page, cookies]);
 
   const handleBackOnClick = () => {
-    navigate("/landing"); 
+    navigate("/landing");
   }
 
   return (
@@ -67,10 +68,10 @@ function AttemptsPage() {
       <NavigationBar isAuthenticated={true} />
       <Box display={"flex"}
         flexDirection={"row"}
-        justifyContent={"flex-start"} 
-        style={{ marginLeft:"2%", marginTop:"2%" }}>
-        <Button  
-          startIcon={<ArrowBackIosIcon/>} 
+        justifyContent={"flex-start"}
+        style={{ marginLeft: "2%", marginTop: "2%" }}>
+        <Button
+          startIcon={<ArrowBackIosIcon />}
           onClick={handleBackOnClick}
         >
           Back
@@ -84,23 +85,23 @@ function AttemptsPage() {
         width={"100%"}
       >
         <Container disableGutters maxWidth="sm" component="main" sx={{ pt: 1, pb: 1 }}>
-            <Typography
-                component="h1"
-                variant="h4"
-                align="center"
-                color="text.primary"
-                gutterBottom
-            >
-                Past Attempts
-            </Typography>
-            <Typography variant="h6" align="center" color="text.secondary" component="p" sx={{ mb: 1 }}>
-                View the history of your attempts here!
-            </Typography>
+          <Typography
+            component="h1"
+            variant="h4"
+            align="center"
+            color="text.primary"
+            gutterBottom
+          >
+            Past Attempts
+          </Typography>
+          <Typography variant="h6" align="center" color="text.secondary" component="p" sx={{ mb: 1 }}>
+            View the history of your attempts here!
+          </Typography>
         </Container>
         <Box>
           <TableContainer component={Paper} sx={{ mb: 2, borderRadius: 3 }}>
             <Table sx={{ minWidth: 500 }} aria-label="simple table">
-              <TableHead sx={{fontWeight: 'bold'}}>
+              <TableHead sx={{ fontWeight: 'bold' }}>
                 <TableRow>
                   <StyledTableCell>Room ID</StyledTableCell>
                   <StyledTableCell align="right">Partner</StyledTableCell>
@@ -128,8 +129,8 @@ function AttemptsPage() {
                     </TableCell>
                     <TableCell align="right">
                       {
-                        row.usernames[0] === jwtDecode(cookies["refresh_token"]).username 
-                          ? row.usernames[1] 
+                        row.usernames[0] === jwtDecode(cookies["refresh_token"]).username
+                          ? row.usernames[1]
                           : row.usernames[0]
                       }
                     </TableCell>

@@ -170,8 +170,8 @@ const CodeEditorLanding = ({ socket, isInterviewer, room_id, username, cache, is
         showErrorToast();
       });
 
-      // save this record
-      axiosApiInstance.post(URL_USER_SVC_SAVEQUESTION, { room_id: room_id, titleSlug: titleSlug, codeSegment: code, language: language.id });
+    // save this record
+    axiosApiInstance.post(URL_USER_SVC_SAVEQUESTION, { room_id: room_id, titleSlug: titleSlug, codeSegment: code, language: language.id });
   };
 
   socket?.on("receive output", (payload) => {
@@ -213,7 +213,7 @@ const CodeEditorLanding = ({ socket, isInterviewer, room_id, username, cache, is
 
   useEffect(() => {
     console.log(themes)
-    setTheme({ value: themes["atomone"], label: "Atomone" })
+    setTheme({ value: themes["githubLight"], label: "GitHub Light" })
   }, []);
 
   const showErrorToast = (msg, timer) => {
@@ -277,7 +277,7 @@ const CodeEditorLanding = ({ socket, isInterviewer, room_id, username, cache, is
           flexDirection={"row"}
           justifyContent={"center"}
           style={{ marginBottom: "1%" }}
-        > 
+        >
           <QuestionWindow
             socket={socket}
             isInterviewer={isInterviewer}
@@ -287,76 +287,76 @@ const CodeEditorLanding = ({ socket, isInterviewer, room_id, username, cache, is
             setCodeSnippets={setCodeSnippets}
             updateCodeSnippet={updateCodeSnippet}
             is_live={is_live}
-          />    
+          />
+          <Box
+            display={"flex"}
+            flexDirection={"column"}
+            style={{ marginBottom: "1%", maxWidth: '45vw', minWidth: '45vw' }}
+          >
+            {/* Dropdown */}
             <Box
               display={"flex"}
-              flexDirection={"column"} 
-              style={{ marginBottom: "1%", maxWidth:'45vw', minWidth: '45vw'}}
-              >
-              {/* Dropdown */}
-              <Box
-                display={"flex"}
-                flexDirection={"row"}
-                style={{ marginTop: "1%" }}
-              >
-                <LanguagesDropdown
-                  language={language}
-                  onSelectChange={onSelectChange}
-                />
-                <div style={{ marginRight: "15px" }}></div>
-                <ThemeDropdown
-                  handleThemeChange={handleThemeChange}
-                  theme={theme}
-                />
-              </Box> 
-              {/* Editor */} 
-              <div
-                style={{ paddingTop: "10px", maxWidth:'45vw', minWidth: '45vw', maxHeight: '50vh', minHeight: '50vh'}}
-                className="overlay rounded-md overflow-hidden w-full h-full shadow-4xl"
-              >
-                <CodeMirror
-                  height="500px"
-                  value={code}
-                  onChange={handleEditorChange}
-                  theme={theme.value}
-                  extensions={[loadLanguage(language?.value || "tsx")]}
-                />
-              </div> 
-              {/* Output */}
-              <OutputWindow outputDetails={outputDetails} />
-              <CustomInput
-                customInput={customInput}
-                setCustomInput={setCustomInput}
+              flexDirection={"row"}
+              style={{ marginTop: "1%" }}
+            >
+              <LanguagesDropdown
+                language={language}
+                onSelectChange={onSelectChange}
               />
-              <Box
+              <div style={{ marginRight: "15px" }}></div>
+              <ThemeDropdown
+                handleThemeChange={handleThemeChange}
+                theme={theme}
+              />
+            </Box>
+            {/* Editor */}
+            <div
+              style={{ paddingTop: "10px", maxWidth: '45vw', minWidth: '45vw', maxHeight: '50vh', minHeight: '50vh' }}
+              className="overlay rounded-md overflow-hidden w-full h-full shadow-4xl"
+            >
+              <CodeMirror
+                height="500px"
+                value={code}
+                onChange={handleEditorChange}
+                theme={theme.value}
+                extensions={[loadLanguage(language?.value || "tsx")]}
+              />
+            </div>
+            {/* Output */}
+            <OutputWindow outputDetails={outputDetails} />
+            <CustomInput
+              customInput={customInput}
+              setCustomInput={setCustomInput}
+            />
+            <Box
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "flex-end",
+                marginBottom: "10px",
+                marginTop: '1%'
+              }}
+            >
+              <Button
+                onClick={handleCompile}
+                disabled={!code}
+                variant="contained"
                 style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "flex-end",
-                  marginBottom: "10px",
-                  marginTop:'1%'
+                  textTransform: "none",
+                  borderWidth: "2px",
+                  borderRadius: "7px",
+                  backgroundColor: !code ? "#bcbcbc" : "#1e293b",
+                  fontSize: "15px",
+                  fontWeight: "bold",
                 }}
               >
-                <Button
-                  onClick={handleCompile}
-                  disabled={!code}
-                  variant="contained"
-                  style={{
-                    textTransform: "none",
-                    borderWidth: "2px",
-                    borderRadius: "7px",
-                    backgroundColor: !code ? "#bcbcbc" : "#1e293b",
-                    fontSize: "15px",
-                    fontWeight: "bold",
-                  }}
-                >
-                  {" "}
-                  {processing ? "Processing..." : "Compile & Execute"}
-                </Button>
-                {outputDetails && <OutputDetails outputDetails={outputDetails} />}
-              </Box> 
-            </Box>  
-        </Box> 
+                {" "}
+                {processing ? "Processing..." : "Compile & Execute"}
+              </Button>
+              {outputDetails && <OutputDetails outputDetails={outputDetails} />}
+            </Box>
+          </Box>
+        </Box>
       </Box>
     </>
   );
