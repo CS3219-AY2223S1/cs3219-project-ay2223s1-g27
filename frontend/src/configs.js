@@ -8,20 +8,19 @@ if (window.location.protocol !== 'https:') {
 const LIVE_BACKEND = protocol + "backend.peerprep.one"
 const DEV_BACKEND = "http://localhost:3001"
 
-const USER_BACKEND = "http://localhost:8000"
+// const USER_BACKEND = "http://localhost:8000"
 // const MATCHING_BACKEND = "http://localhost:8001"
 // const COLLAB_BACKEND = "http://localhost:8003"
 // const COMM_BACKEND = "http://localhost:8004"
 // const QUESTION_BACKEND = "http://localhost:8002"
 
-// const URI_USER_SVC = process.env.REACT_APP_ENV === 'DEV' ? DEV_BACKEND : LIVE_BACKEND;
+const URI_USER_SVC = process.env.REACT_APP_ENV === 'DEV' ? DEV_BACKEND : LIVE_BACKEND;
 const URI_MATCHING_SVC = process.env.REACT_APP_ENV === 'DEV' ? DEV_BACKEND : LIVE_BACKEND;
 const URI_QUESTION_SVC = process.env.REACT_APP_ENV === 'DEV' ? DEV_BACKEND : LIVE_BACKEND;
 const URI_COLLAB_SVC = process.env.REACT_APP_ENV === 'DEV' ? DEV_BACKEND : LIVE_BACKEND;
 const URI_COMM_SVC = process.env.REACT_APP_ENV === 'DEV' ? DEV_BACKEND : LIVE_BACKEND;
 
 // const URI_USER_SVC = process.env.REACT_APP_ENV === 'DEV' ? USER_BACKEND : LIVE_BACKEND;
-const URI_USER_SVC = LIVE_BACKEND;
 // const URI_MATCHING_SVC = process.env.REACT_APP_ENV === 'DEV' ? MATCHING_BACKEND : LIVE_BACKEND;
 // const URI_QUESTION_SVC = process.env.REACT_APP_ENV === 'DEV' ? QUESTION_BACKEND : LIVE_BACKEND;
 // const URI_COLLAB_SVC = process.env.REACT_APP_ENV === 'DEV' ? COLLAB_BACKEND : LIVE_BACKEND;
