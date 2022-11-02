@@ -9,11 +9,9 @@ import {
   Menu,
   Modal,
   TextField,
-  Grid,
 } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import CloseIcon from '@mui/icons-material/Close';
-import GroupIcon from '@mui/icons-material/Group'; 
 import DeleteIcon from '@mui/icons-material/Delete';
 import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -54,11 +52,6 @@ function NavigationBar({ isAuthenticated, inCodingRoom }) {
   const handleCloseMenu = () => {
     setAnchorEl(null);
   };
-
-  const handlePastAttempts = () => {
-    navigate("/attempts");
-    setAnchorEl(null);
-  }
 
   const handleChangePassword = () => {
     setAnchorEl(null);

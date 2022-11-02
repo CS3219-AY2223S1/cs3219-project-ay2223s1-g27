@@ -63,7 +63,7 @@ function AttemptsPage() {
   }
 
   return (
-    <div>
+    <div style={{ height: "100%" }}>
       <NavigationBar isAuthenticated={true} />
       <Box display={"flex"}
         flexDirection={"row"}
@@ -83,7 +83,7 @@ function AttemptsPage() {
         alignItems={"center"}
         width={"100%"}
       >
-        <Container disableGutters maxWidth="sm" component="main" sx={{ pt: 8, pb: 6 }}>
+        <Container disableGutters maxWidth="sm" component="main" sx={{ pt: 1, pb: 1 }}>
             <Typography
                 component="h1"
                 variant="h4"
@@ -93,10 +93,9 @@ function AttemptsPage() {
             >
                 Past Attempts
             </Typography>
-            <Typography variant="h6" align="center" color="text.secondary" component="p">
+            <Typography variant="h6" align="center" color="text.secondary" component="p" sx={{ mb: 1 }}>
                 View the history of your attempts here!
             </Typography>
-            {/* <h1 style={{fontSize:'50px', marginBottom: "3%"}}>Choose Your Difficulty Level</h1> */}
         </Container>
         <Box>
           <TableContainer component={Paper} sx={{ mb: 2, borderRadius: 3 }}>
