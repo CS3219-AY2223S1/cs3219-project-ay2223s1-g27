@@ -1,6 +1,6 @@
 import React from "react";
 import QuestionSelector from "./QuestionSelector";
-import { Button, Box, Chip, backdropClasses } from '@mui/material';
+import { Button, Box, Chip } from '@mui/material';
 import { INTERVIEWER_SWITCH_REQUEST_EVENT } from "../../constants";
 
 const ChatBody = ({ chatSocket, username, room_id, isInterviewer, messages }) => {
