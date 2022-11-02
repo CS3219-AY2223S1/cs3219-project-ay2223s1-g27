@@ -8,10 +8,15 @@ import {
   MenuItem,
   Menu,
   Modal,
-  TextField
+  TextField,
+  Grid,
 } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import CloseIcon from '@mui/icons-material/Close';
+import GroupIcon from '@mui/icons-material/Group'; 
+import DeleteIcon from '@mui/icons-material/Delete';
+import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
+import LogoutIcon from '@mui/icons-material/Logout';
 import { useState } from 'react';
 import { useCookies } from 'react-cookie';
 import axiosApiInstance from "../axiosApiInstance"
@@ -139,7 +144,7 @@ function NavigationBar({ isAuthenticated }) {
   }
 
   return (
-    <AppBar sx={{ m: 0, background: "#1976d2" }} position="static">
+    <AppBar sx={{ m: 0, bgcolor: 'primary.main' }} position="static">
       {isAuthenticated && (
         <Box display={"flex"} flexDirection={"row"} sx={{ flexGrow: 1 }} alignItems={"center"}>
           <Typography
@@ -151,12 +156,24 @@ function NavigationBar({ isAuthenticated }) {
               }}
             >
             <Link to="/landing">
-              <h1 style={{ margin: "1%" }}>
-                PeerPrep              
-              </h1>
+              <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+                <Box
+                  component="img"
+                  sx={{
+                    height: 30,
+                    width: 40,
+                    mr: 1,
+                  }}
+                  alt="Peer Prep Logo"
+                  src={require("../img/PeerPrepLogo.png")}
+                />
+                <h1>
+                  PeerPrep              
+                </h1>
+              </Box>
             </Link>
           </Typography>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1, ml: "8%"}}>
             <h1 style={{ margin: "1%" }}>
               Welcome, {jwtDecode(cookies["refresh_token"]).username}!
             </h1>
@@ -173,6 +190,15 @@ function NavigationBar({ isAuthenticated }) {
               >
                 <AccountCircleIcon />
               </IconButton>
+              <Button 
+                variant={"outlined"} 
+                color="inherit" 
+                endIcon={<LogoutIcon/>} 
+                sx={{fontSize: '14px', ml: 2}} 
+                onClick={handleLogOut}
+                >
+                Log Out
+              </Button>
               <Menu
                 id="menu-appbar"
                 anchorEl={anchorEl}
@@ -187,11 +213,26 @@ function NavigationBar({ isAuthenticated }) {
                 }}
                 open={Boolean(anchorEl)}
                 onClose={handleCloseMenu}
+                alignItems={"center"}
               >
+                <Box display={"flex"} flexDirection={"row"} justifyContent={"center"} sx={{ m: 1 }}>
+                  <Typography variant="subtitle1">
+                    Manage Account
+                  </Typography>
+                </Box>
                 {/* <MenuItem onClick={handlePastAttempts}>Past Attempts</MenuItem> */}
-                <MenuItem onClick={handleChangePassword}>Change Password</MenuItem>
-                <MenuItem onClick={handleDeleteAccount}>Delete Account</MenuItem>
-                <MenuItem onClick={handleLogOut}>Log Out</MenuItem>
+                <MenuItem onClick={handleChangePassword}>
+                  <ChangeCircleIcon sx={{ mr: 1 }}/>
+                  <Typography variant="subtitle2">
+                    Change Password
+                  </Typography>
+                </MenuItem>
+                <MenuItem onClick={handleDeleteAccount} sx={{ color: "red" }}>
+                  <DeleteIcon sx={{ mr: 1 }}/>
+                  <Typography variant="subtitle2">
+                    Delete Account
+                  </Typography>
+                </MenuItem>
               </Menu>
               {/* Change Password Modal */}
               <Modal

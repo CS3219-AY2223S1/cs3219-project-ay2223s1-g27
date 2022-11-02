@@ -15,6 +15,8 @@ import {
   Typography,
   Container,
 } from "@mui/material";
+import { styled } from '@mui/material/styles';
+import { tableCellClasses } from '@mui/material/TableCell';
 import axiosApiInstance from "../axiosApiInstance";
 import { URL_USER_SVC_QUESTIONHISTORY } from "../configs";
 import { jwtDecode } from "../util/auth";
@@ -28,6 +30,14 @@ function AttemptsPage() {
   const [rows, setRows] = useState([]);
   const [count, setCount] = useState(1);
   const navigate = useNavigate();
+
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: theme.palette.primary.light,
+      color: theme.palette.common.black,
+      fontWeight: "bold"
+    },
+  }));
 
   const handlePagination = (_, value) => {
     setPage(value);
@@ -91,11 +101,11 @@ function AttemptsPage() {
         <Box>
           <TableContainer component={Paper} sx={{ mb: 2, borderRadius: 3 }}>
             <Table sx={{ minWidth: 500 }} aria-label="simple table">
-              <TableHead>
+              <TableHead sx={{fontWeight: 'bold'}}>
                 <TableRow>
-                  <TableCell>Room ID</TableCell>
-                  <TableCell align="right">Partner</TableCell>
-                  <TableCell align="right">Created at</TableCell>
+                  <StyledTableCell>Room ID</StyledTableCell>
+                  <StyledTableCell align="right">Partner</StyledTableCell>
+                  <StyledTableCell align="right">Created at</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
