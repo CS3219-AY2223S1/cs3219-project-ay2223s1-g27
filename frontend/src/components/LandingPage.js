@@ -130,7 +130,7 @@ function LandingPage() {
                         variant={"outlined"} 
                         color="primary" 
                         endIcon={<HistoryIcon/>} 
-                        style={{fontSize: '14px'}} 
+                        style={{fontSize: '14px', m: 2}} 
                         onClick={handlePastAttempts}
                     >
                         View Past Attempts

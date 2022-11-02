@@ -28,10 +28,6 @@ function App() {
     const [, setCookie] = useCookies();
     initAxiosApiInstance(setCookie);
 
-    useEffect(() => {
-        document.title = "PeerPrep"; 
-    }, []);
-
     // Background image from <a href="https://www.freepik.com/free-vector/white-gray-geometric-pattern-background-vector_18240979.htm#query=white%20texture%20background&position=4&from_view=search&track=sph">Image by rawpixel.com</a> on Freepik
     return (
         <div className="App" style={{ 
@@ -41,7 +37,7 @@ function App() {
             backgroundRepeat: 'no-repeat',
             }}>
             {/* <NavigationBar isAuthenticated={true}/> */}
-            <Box display={"flex"} flexDirection={"column"} >
+            <Box display={"flex"} style={{ height: "100%" }} flexDirection={"column"} >
                 <Router>
                     <Routes>
                         <Route exact path={PREFIX_FRONTEND_ROOT} element={<Navigate replace to="/login"/>}></Route>

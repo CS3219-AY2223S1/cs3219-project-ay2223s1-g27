@@ -20,7 +20,7 @@ const ChatBody = ({ chatSocket, username, room_id, isInterviewer, messages }) =>
   return (
     <> 
       <header className="chat_mainHeader"> 
-          <Chip label={isInterviewer ? 'Interviewer' : 'Interviewee' } sx={{backgroundColor: '#a2acbd', color: '#fff'}}/>   
+          <Chip label={isInterviewer ? 'Interviewer' : 'Interviewee' } sx={{backgroundColor: 'primary.main', color: '#fff'}}/>   
           {isInterviewer ?  
             <QuestionSelector chatSocket={chatSocket} username={username} room_id={room_id}/> 
           : 

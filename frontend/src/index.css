@@ -128,7 +128,7 @@ code {
 .chat_footer { 
   display: flex;
   padding: 10px;
-  background-color: #1976d2;
+  background-color: white;
   height: 100%;
   width: 100%;
 }

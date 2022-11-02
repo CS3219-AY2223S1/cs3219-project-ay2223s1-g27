@@ -36,7 +36,7 @@ const modalStyle = {
   p: 4,
 };
 
-function NavigationBar({ isAuthenticated }) {
+function NavigationBar({ isAuthenticated, inCodingRoom }) {
   const navigate = useNavigate();
   const [cookies, , removeCookie] = useCookies();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -174,9 +174,14 @@ function NavigationBar({ isAuthenticated }) {
             </Link>
           </Typography>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1, ml: "8%"}}>
+            {inCodingRoom ? 
+            <h1 style={{ margin: "1%" }}>
+              Coding Room
+            </h1>
+            : 
             <h1 style={{ margin: "1%" }}>
               Welcome, {jwtDecode(cookies["refresh_token"]).username}!
-            </h1>
+            </h1>}
           </Typography>
           <Toolbar>
             <div>

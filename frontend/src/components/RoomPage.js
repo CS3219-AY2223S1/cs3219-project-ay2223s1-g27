@@ -212,11 +212,8 @@ function RoomPage() {
   
   return (
     <>
-      <NavigationBar isAuthenticated={true} user={location.state.user} />
+      <NavigationBar isAuthenticated={true} user={location.state.user} inCodingRoom={true} />
       <div style={{overflowX: 'hidden'}}> 
-        <Box sx={{marginTop: "3%", marginBottom:"-4%", marginLeft: "3%"}}>
-          <h1 style={{fontSize:'50px'}}>Coding Room</h1>
-        </Box>
         {/* Uncomment this for popover chat left: 1600, top: 110 */}
         {/* <Box display="flex" flexDirection="row" justifyContent={'flex-end'} sx={{marginRight: '3%'}}> */} 
         <Draggable bounds={{right: 1600}}>
@@ -244,7 +241,7 @@ function RoomPage() {
           </div> 
         </Draggable> 
         {/* </Box>  */}
-        <Box display={"flex"} flexDirection={"column"} style={{ marginTop: '3%', marginLeft: "3%", marginRight: "3%" }}>  
+        <Box display={"flex"} flexDirection={"column"} style={{ marginLeft: "3%", marginRight: "3%" }}>  
           <CodeEditorLanding socket={codeEditorSocket} isInterviewer={isInterviewer} room_id={room_id} username={username} cache={location.state.cache} is_live={location.state.is_live} />
           <div style={{ marginTop: '1%' }}></div>
         </Box>  
