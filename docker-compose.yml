@@ -39,6 +39,7 @@ services:
       - gateway 
     env_file:
       - ./user-service/.env
+      - ./collab-service/.env
 
   comm-service-service:
     build: ./comm-service
@@ -47,6 +48,7 @@ services:
       - gateway 
     env_file:
       - ./user-service/.env
+      - ./comm-service/.env
 
   mongodb:
     image: mongo:5.0
