@@ -6,8 +6,8 @@ const app = express();
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 const corsOptions = {
-    origin: '*',
-    optionsSuccessStatus: 200
+  origin: '*',
+  optionsSuccessStatus: 200
 }
 app.use(cors(corsOptions)) // config cors so that front-end can use
 
@@ -19,7 +19,7 @@ import { sendPasswordResetEmail } from './controller/pwd-reset-controller.js';
 import { questionHistory, saveQuestion, saveMessage, getMessage } from './controller/question-history-controller.js';
 import { initMQ } from './mq.js';
 
-initMQ();
+//initMQ();
 
 const router = express.Router()
 
