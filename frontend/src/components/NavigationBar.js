@@ -225,8 +225,8 @@ function NavigationBar({ isAuthenticated, inCodingRoom }) {
                     Change Password
                   </Typography>
                 </MenuItem>
-                <MenuItem onClick={handleDeleteAccount} sx={{ color: "red" }}>
-                  <DeleteIcon sx={{ mr: 1 }} />
+                <MenuItem onClick={handleDeleteAccount} sx={{ color: "#c61a09" }}>
+                  <DeleteIcon sx={{ mr: 1, color: "#c61a09" }} />
                   <Typography variant="subtitle2">
                     Delete Account
                   </Typography>

@@ -122,7 +122,7 @@ function LoginPage() {
                 sequence={[
                   'boost your technical interview skills',
                   1000,
-                  'level up your proramming skills',
+                  'level up your programming skills',
                   1000,
                   'enhance your familiarity with technical interviews',
                   1000,

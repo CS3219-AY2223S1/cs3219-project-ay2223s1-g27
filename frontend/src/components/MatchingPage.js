@@ -171,7 +171,7 @@ function MatchingPage() {
         justifyContent={"center"}
         style={{ marginTop: "2%" }}
       >
-        <h2 className="text-xl font-normal leading-normal mt-0 mb-2 text-slate-500">Matching you with another student</h2>
+        <h2 className="text-xl font-normal leading-normal mt-0 mb-2 text-slate-500">Matching you with another student...</h2>
       </Box>
       <Box
         display={"flex"}

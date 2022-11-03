@@ -58,7 +58,7 @@ function ResetPage() {
         <Box display={"flex"} flexDirection={"row"} justifyContent={"center"}> 
             <Box display={"flex"} flexDirection={"column"} width={"30%"} style={{marginTop: "3%"}}>
                 <Box display={"flex"} flexDirection={"row"} justifyContent={"center"}> 
-                    <h1 style={{fontSize:'50px', marginBottom: "3%"}}>Reset Password</h1> 
+                    <h1 style={{fontSize:'50px', marginBottom: "3%", color: "#5465FF"}}>Reset Password</h1> 
                 </Box>
                 <TextField
                     label="Username"
@@ -82,7 +82,7 @@ function ResetPage() {
                     onChange={(e) => setPasswordTwo(e.target.value)}
                     sx={{ marginBottom: "2rem" }} />  
                 <div style={{ marginBottom: "5px" }} > 
-                    <Link style={{color: 'blue', textDecoration: 'underline'}} to="/login">Back to Login</Link>
+                    <Link className="text-blue-600 hover:text-blue-800 visited:text-purple-600" style={{ textDecoration: 'underline'}} to="/login">Back to Login</Link>
                 </div>
                 <Box display={"flex"} flexDirection={"row"} justifyContent={"flex-end"}>
                     {resetProcessing
