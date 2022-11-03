@@ -137,7 +137,7 @@ function NavigationBar({ isAuthenticated, inCodingRoom }) {
   }
 
   return (
-    <AppBar sx={{ m: 0, bgcolor: 'primary.main' }} position="static">
+    <AppBar sx={{ m: 0, bgcolor: 'primary.light' }} position="static">
       {isAuthenticated && (
         <Box display={"flex"} flexDirection={"row"} sx={{ flexGrow: 1 }} alignItems={"center"}>
           <Typography

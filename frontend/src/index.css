@@ -162,14 +162,14 @@ code {
   background-color: rgb(129, 201, 129);
 }
 .recipient_message {
-  background-color: #d8daff;
+  background-color: rgb(248 250 252);
   width: 300px;
   padding: 10px;
   border-radius: 10px;
   font-size: 15px;
 }
 .sender_message {
-  background-color: rgb(214, 214, 214);
+  background-color: #d8daff;
   max-width: 300px;
   padding: 10px;
   border-radius: 10px;

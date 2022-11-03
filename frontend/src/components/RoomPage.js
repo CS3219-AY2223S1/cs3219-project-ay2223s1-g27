@@ -60,6 +60,10 @@ function RoomPage() {
   console.log(location.state.is_live)
 
   const handleClick = (event) => {
+    if (chatWindowOpen) {
+      setAnchorEl(null);
+      return;
+    }
     setAnchorEl(event.currentTarget);
   }
 
