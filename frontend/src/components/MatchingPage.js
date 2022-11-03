@@ -82,12 +82,12 @@ function MatchingPage() {
           alignItems: "center",
         }}
       >
-        <div style={{ color: "#b3b3b3" }}> Remaining </div>
-        <div style={{ fontSize: "60px", fontWeight: "bold" }}>
+        <div style={{ color: "#64748B" }}> Remaining </div>
+        <div style={{ fontSize: "60px", fontWeight: "bold", color: "#5465FF" }}>
           {" "}
           {remainingTime}{" "}
         </div>
-        <div style={{ color: "#b3b3b3" }}> seconds </div>
+        <div style={{ color: "#64748B" }}> seconds </div>
       </div>
     );
   };
@@ -123,7 +123,7 @@ function MatchingPage() {
 
     // Disconnect all listeners
     socket.disconnect();
-  }; 
+  };
 
   const handleLeaveQueue = () => {
     setIsModalOpen(false);
@@ -144,9 +144,10 @@ function MatchingPage() {
           key={key}
           isPlaying
           duration={30}
-          colors={"#1B7CED"}
+          colors={["#5465FF", "#E2FDFF"]}
+          colorsTime={[30, 0]}
           size={300}
-          strokeWidth={25}
+          strokeWidth={10}
           onComplete={handleNoMatchFound}
         >
           {renderTime}
@@ -157,15 +158,15 @@ function MatchingPage() {
         justifyContent={"center"}
         style={{ marginTop: "2%" }}
       >
-        <h2 style={{ fontWeight: "bold" }}>Finding a match...</h2>
+        <h2 className="text-xl font-normal leading-normal mt-0 mb-2 text-slate-500">Matching you with another student...</h2>
       </Box>
       <Box
         display={"flex"}
         justifyContent={"center"}
         style={{ marginTop: "1%" }}
       >
-        <Button variant="contained" onClick={handleLeaveQueue}>
-          Leave queue
+        <Button variant="outlined" onClick={handleLeaveQueue}>
+          Cancel
         </Button>
       </Box>
 
@@ -206,7 +207,7 @@ function MatchingPage() {
               >
                 Select another difficulty level
               </Button>
-            </div> 
+            </div>
           </Box>
         </Box>
       </Modal>

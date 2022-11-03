@@ -8,18 +8,18 @@ const ChatFooter = ({ chatSocket, username, room_id }) => {
   const handleSendMessage = (e) => {
     e.preventDefault();
     if (message.trim()) {
-        chatSocket?.emit('message', {
-            text: message,
-            username: username,
-            id: `${chatSocket?.id}${Math.random()}`,
-            socketID: chatSocket?.id,
-            room_id: room_id,
-        })
+      chatSocket?.emit('message', {
+        text: message,
+        username: username,
+        id: `${chatSocket?.id}${Math.random()}`,
+        socketID: chatSocket?.id,
+        room_id: room_id,
+      })
     }
     setMessage('');
   };
   return (
-    <div className="chat_footer"> 
+    <div className="chat_footer">
       <form className="form" onSubmit={handleSendMessage}>
         <input
           type="text"
@@ -28,19 +28,21 @@ const ChatFooter = ({ chatSocket, username, room_id }) => {
           value={message}
           disabled={!chatSocket}
           onChange={(e) => setMessage(e.target.value)}
-        /> 
-        <Button onClick={handleSendMessage} 
-          sx={{ backgroundColor: '#0f172a', 
-          color: '#fff', 
-          borderRadius: '7px', 
-          textTransform: 'none',   
-          paddingLeft: '15px',
-          paddingRight: '15px',
-          fontWeight: 'bold', 
-          '&:hover': {
-            backgroundColor: '#1e293b'
-          }}}   
-          endIcon={<SendIcon/>}
+        />
+        <Button onClick={handleSendMessage}
+          sx={{
+            backgroundColor: 'primary.main',
+            color: '#fff',
+            borderRadius: '7px',
+            textTransform: 'none',
+            paddingLeft: '15px',
+            paddingRight: '15px',
+            fontWeight: 'bold',
+            '&:hover': {
+              backgroundColor: 'primary.dark'
+            }
+          }}
+          endIcon={<SendIcon />}
         >SEND</Button>
       </form>
     </div>

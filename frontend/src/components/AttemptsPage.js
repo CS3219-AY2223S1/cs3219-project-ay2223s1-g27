@@ -13,7 +13,10 @@ import {
   Paper,
   Table,
   Typography,
+  Container,
 } from "@mui/material";
+import { styled } from '@mui/material/styles';
+import { tableCellClasses } from '@mui/material/TableCell';
 import axiosApiInstance from "../axiosApiInstance";
 import { URL_USER_SVC_QUESTIONHISTORY } from "../configs";
 import { jwtDecode } from "../util/auth";
@@ -27,6 +30,15 @@ function AttemptsPage() {
   const [rows, setRows] = useState([]);
   const [count, setCount] = useState(1);
   const navigate = useNavigate();
+
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      //backgroundColor: theme.palette.primary.light,
+      backgroundColor: '#EAEEFF',
+      //color: theme.palette.common.black,
+      fontWeight: "bold"
+    },
+  }));
 
   const handlePagination = (_, value) => {
     setPage(value);
@@ -48,18 +60,18 @@ function AttemptsPage() {
   }, [page, cookies]);
 
   const handleBackOnClick = () => {
-    navigate("/landing"); 
+    navigate("/landing");
   }
 
   return (
-    <div>
+    <div style={{ height: "100%" }}>
       <NavigationBar isAuthenticated={true} />
       <Box display={"flex"}
         flexDirection={"row"}
-        justifyContent={"flex-start"} 
-        style={{ marginLeft:"2%", marginTop:"2%" }}>
-        <Button  
-          startIcon={<ArrowBackIosIcon/>} 
+        justifyContent={"flex-start"}
+        style={{ marginLeft: "2%", marginTop: "2%" }}>
+        <Button
+          startIcon={<ArrowBackIosIcon />}
           onClick={handleBackOnClick}
         >
           Back
@@ -70,19 +82,30 @@ function AttemptsPage() {
         flexDirection={"column"}
         justifyContent={"center"}
         alignItems={"center"}
-        style={{ marginTop: "3%" }}
+        width={"100%"}
       >
-        <Typography variant="h4">
-          <h1 style={{fontSize:'50px', marginBottom: "3%"}}> Past Attempts </h1>
-        </Typography>
+        <Container disableGutters maxWidth="sm" component="main" sx={{ pt: 1, pb: 1 }}>
+          <Typography
+            component="h1"
+            variant="h4"
+            align="center"
+            color="text.primary"
+            gutterBottom
+          >
+            Past Attempts
+          </Typography>
+          <Typography variant="h6" align="center" color="text.secondary" component="p" sx={{ mb: 1 }}>
+            View the history of your attempts here!
+          </Typography>
+        </Container>
         <Box>
-          <TableContainer component={Paper}>
+          <TableContainer component={Paper} sx={{ mb: 2, borderRadius: 3 }}>
             <Table sx={{ minWidth: 500 }} aria-label="simple table">
-              <TableHead>
+              <TableHead sx={{ fontWeight: 'bold' }}>
                 <TableRow>
-                  <TableCell>Room ID</TableCell>
-                  <TableCell align="right">Partner</TableCell>
-                  <TableCell align="right">Created at</TableCell>
+                  <StyledTableCell>Room ID</StyledTableCell>
+                  <StyledTableCell align="right">Partner</StyledTableCell>
+                  <StyledTableCell align="right">Created at</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -106,8 +129,8 @@ function AttemptsPage() {
                     </TableCell>
                     <TableCell align="right">
                       {
-                        row.usernames[0] === jwtDecode(cookies["refresh_token"]).username 
-                          ? row.usernames[1] 
+                        row.usernames[0] === jwtDecode(cookies["refresh_token"]).username
+                          ? row.usernames[1]
                           : row.usernames[0]
                       }
                     </TableCell>
