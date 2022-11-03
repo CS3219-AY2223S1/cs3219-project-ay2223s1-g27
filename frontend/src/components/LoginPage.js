@@ -21,6 +21,7 @@ import {
 } from "../constants";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { jwtDecode } from "../util/auth"
+import { TypeAnimation } from 'react-type-animation'
 
 function LoginPage() {
 
@@ -109,35 +110,48 @@ function LoginPage() {
       <>
         <Box display={'flex'} flexDirection={"row"} sx={{ height: "100%", width: "100%", position: 'absolute' }}>
           {/* Description of Application */}
-          <Box style={{ width: "65%", height: "100%", background: "#5465FF" }}>
-            <Box style={{ marginTop: "25%", marginLeft: "3%" }}>
-              <h1 style={{ fontSize: '40px', color: '#FFFFFF', fontWeight: 'bold' }}>
-                Welcome to PeerPrep.
+          <Box style={{ width: "50%", height: "100%" }}>
+            <Box style={{ marginTop: "25%", marginLeft: "10%" }}>
+              <h1 className="font-extrabold text-transparent text-5xl bg-clip-text bg-gradient-to-r from-blue-400 to-teal-200 leading-normal mt-2 mb-2 mx-2">
+                Prepare for coding interviews
               </h1>
-              <p style={{ color: '#FFFFFF', marginTop: "2%" }}>
-                PeerPrep aims to help job seekers boost their technical interview skills to land their dream job. <br />
-                In PeerPrep, users can expect to challenge questions of different difficulty levels, engage with <br />
-                other users in real-time, and utilise a collaborative programming tool to enhance their familiarity<br />
-                with technical interviews.
-              </p>
+              <h2 className="text-2xl font-normal leading-normal mt-5 mb-0 mx-2 text-slate-400">
+                PeerPrep aims to help you
+              </h2>
+              <TypeAnimation
+                sequence={[
+                  'boost your technical interview skills',
+                  1000,
+                  'level up your proramming skills',
+                  1000,
+                  'enhance your familiarity with technical interviews',
+                  1000,
+                  'land your dream jobs',
+                  1000
+                ]}
+                speed={70}
+                repeat={Infinity}
+                wrapper="h2"
+                className="text-2xl font-normal leading-normal mt-0 mb-2 mx-2 text-slate-400"
+              />
             </Box>
           </Box>
-          <Box style={{ width: "35%", height: "100%", background: "#FFFFFF" }}>
-            <Box style={{ marginTop: "35%", marginLeft: "20%", width: "60%" }}>
+          <Box style={{ width: "50%", height: "100%" }}>
+            <Box style={{ marginTop: "20%", marginLeft: "20%", width: "60%" }} sx={{ boxShadow: 1, px: 5, py: 8, borderRadius: 5 }}>
               <Box display={"flex"} flexDirection={"row"} justifyContent={"center"}>
-                <h1 style={{ fontSize: '50px', marginBottom: "3%" }}>Login</h1>
+                <h1 style={{ fontSize: '50px', marginBottom: "3%", color: '#5465FF' }} >Login</h1>
               </Box>
               <Box display={'flex'} flexDirection={"column"}>
                 <TextField
                   label="Username"
-                  variant="standard"
+                  variant="outlined"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   sx={{ marginBottom: "1rem" }}
                   autoFocus />
                 <TextField
                   label="Password"
-                  variant="standard"
+                  variant="outlined"
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -146,12 +160,12 @@ function LoginPage() {
 
               <div style={{ marginBottom: "5px" }} >
                 Do not have an account? Sign up {' '}
-                <Link style={{ color: 'blue', textDecoration: 'underline' }} to="/signup">here</Link>!
+                <Link className="text-blue-600 hover:text-blue-800 visited:text-purple-600" to="/signup">here</Link>!
               </div>
 
               <div>
                 Forget your password? Reset it {' '}
-                <Link style={{ color: 'blue', textDecoration: 'underline' }} onClick={handleDialog} to="">here</Link>!
+                <Link className="text-blue-600 hover:text-blue-800 visited:text-purple-600" onClick={handleDialog} to="">here</Link>!
               </div>
 
               <Box display={"flex"} flexDirection={"row"} justifyContent={"flex-end"} sx={{ my: 2 }}>
@@ -178,7 +192,6 @@ function LoginPage() {
                     variant="standard"
                     sx={{ marginBottom: "1rem" }} />
                   <TextField
-                    autoFocus
                     label="Email Address"
                     type="email"
                     value={resetEmail}

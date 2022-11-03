@@ -30,7 +30,7 @@ export default function QuestionWindow({
   useEffect(() => {
     axiosApiInstance
       .get(
-        `${URL_QUESTION_SVC_QUESTIONS}?difficulty=${location.state.difficultyLevel.toUpperCase()}&page=1`
+        `${URL_QUESTION_SVC_QUESTIONS}?difficulty=${location.state.difficultyLevel.toUpperCase()}&page=1&pageSize=50`
       )
       .then((res) => {
         console.log(res.data.problemsetQuestionList.questions);
