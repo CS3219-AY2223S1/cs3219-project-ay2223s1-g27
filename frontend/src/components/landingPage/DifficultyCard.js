@@ -119,7 +119,7 @@ const DifficultyCard = ({ difficulty, selected, handleDifficultyLevel }) => {
             onClick={e => handleDifficultyLevel(e)}
             value={difficulty.toLowerCase()}
           >
-            {difficulty.toLowerCase()}
+            Select
           </Button>
         </CardActions>
       </Card>
