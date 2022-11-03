@@ -2,6 +2,7 @@ import {
     Box,
     Button, 
     TextField, 
+    CircularProgress,
 } from "@mui/material"; 
 import {useState} from "react";  
 import {URL_USER_SVC_RESETPASSWORD} from "../configs";
@@ -15,8 +16,10 @@ function ResetPage() {
     const [passwordTwo, setPasswordTwo] = useState("");
     const [message, setMessage] = useState(""); 
     const [resetPasswordSuccess, setResetPasswordSuccess] = useState(null);
+    const [resetProcessing, setResetProcessing] = useState(false);
 
     const handleResetPassword = async(event) => { 
+        setResetProcessing(true)
         if (passwordOne === "" || passwordTwo === "") { 
             setMessage("Please fill in both fields."); 
             setResetPasswordSuccess(false);
@@ -36,6 +39,7 @@ function ResetPage() {
         // const resetId = '63359616bb634f2cbee5ec0c'; // username: johndoe, email: johndoe.cs3219@gmail.com
         const res = await axios.put(URL_USER_SVC_RESETPASSWORD, { username, resetId, newPassword })
             .catch((err) => {
+                setResetProcessing(false)
                 if (err.response.status === 400 || err.response.status === 401 || err.response.status === 500) {
                     setResetPasswordSuccess(false);  
                     setMessage(err.response.data.message); 
@@ -47,6 +51,7 @@ function ResetPage() {
             setMessage(res.data.message);
             console.log(res.data.message);
         } 
+        setResetProcessing(false)
     }
 
     return (
@@ -80,7 +85,10 @@ function ResetPage() {
                     <Link style={{color: 'blue', textDecoration: 'underline'}} to="/login">Back to Login</Link>
                 </div>
                 <Box display={"flex"} flexDirection={"row"} justifyContent={"flex-end"}>
-                    <Button variant={"outlined"} onClick={handleResetPassword}>Reset</Button>
+                    {resetProcessing
+                    ? <CircularProgress />
+                    :
+                    <Button variant={"outlined"} onClick={handleResetPassword}>Reset</Button>}
                 </Box> 
                 <div> 
                     {resetPasswordSuccess ? <div style={{ color: "blue" }}> {message} </div>
