@@ -20,22 +20,30 @@ const io = new Server(httpServer, {
   path: "/api/comm/chat"
 });
 
-io.use(
-  authorize({
-    secret: process.env.JWT_ACCESS_SECRET,
-    onAuthentication: async (decodedToken) => {
-      return decodedToken.username;
-    }
-  })
-)
+import { createAdapter } from "@socket.io/redis-adapter";
+import { createClient } from "redis";
 
-io.on('connection', clientSocket => {
-  console.log(`New Joiner: ${clientSocket.user}`)
-  registerChatHandlers(io, clientSocket)
+const redisUrl = 'redis://default:' + process.env.REDIS_PASSWORD + '@' + process.env.REDIS_HOST + ':' + process.env.REDIS_PORT
+
+const pubClient = createClient({ url: redisUrl });
+const subClient = pubClient.duplicate();
+
+Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
+  io.adapter(createAdapter(pubClient, subClient));
+
+  io.use(
+    authorize({
+      secret: process.env.JWT_ACCESS_SECRET,
+      onAuthentication: async (decodedToken) => {
+        return decodedToken.username;
+      }
+    })
+  )
+
+  io.on('connection', clientSocket => {
+    console.log(`New Joiner: ${clientSocket.user}`)
+    registerChatHandlers(io, clientSocket)
+  });
+
+  httpServer.listen(PORT, () => console.log(`communication-service listening on port ${PORT}`));
 });
-
-
-
-httpServer.listen(PORT, () => console.log(`communication-service listening on port ${PORT}`));
-
-

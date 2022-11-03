@@ -19,6 +19,24 @@ const io = new Server(httpServer, {
   path: "/api/collab"
 });
 
+import { createAdapter } from "@socket.io/redis-adapter";
+import { createClient } from "redis";
+
+const redisUrl = 'redis://default:' + process.env.REDIS_PASSWORD + '@' + process.env.REDIS_HOST + ':' + process.env.REDIS_PORT
+
+const pubClient = createClient({ url: redisUrl });
+const subClient = pubClient.duplicate();
+
+console.log(process.env.REDIS_HOST)
+console.log(process.env.REDIS_PORT)
+console.log(process.env.REDIS_PASSWORD)
+pubClient.on('error', (err) => console.log('Redis Client Error', err));
+
+Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
+  console.log(pubClient, subClient);
+  io.adapter(createAdapter(pubClient, subClient));
+});
+
 io.use(
   authorize({
     secret: process.env.JWT_ACCESS_SECRET,

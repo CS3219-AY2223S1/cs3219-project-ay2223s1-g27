@@ -5,7 +5,7 @@ metadata:
   labels:
     app: collab-service
 spec:
-  replicas: 1 
+  replicas: 2 
   selector:
     matchLabels:
       app: collab-service
@@ -30,3 +30,18 @@ spec:
                 secretKeyRef:
                   name: user-service-secret
                   key: JWT_ACCESS_SECRET
+            - name: REDIS_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: collab-service-secret
+                  key: REDIS_HOST
+            - name: REDIS_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: collab-service-secret
+                  key: REDIS_PORT
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: collab-service-secret
+                  key: REDIS_PASSWORD
