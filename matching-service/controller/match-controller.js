@@ -1,10 +1,8 @@
-import { ormCreateMatch as _createMatch, ormDeleteMatchBySocketId as _deleteMatch, ormDeleteOutdatedMatch as _deleteOutdatedMatch, ormFindMatch as _findMatch }
-  from '../model/match-orm.js'
+import { DIFFICULTIES, TIMEOUT, findMatches, createMatch, getMatch, deleteIfExist } from '../services/redis.js'
 import { sendMatchFail, sendMatchSuccess } from '../services/socket.js'
-import { Match } from '../model/repository.js'
 import { publishMatch } from '../mq.js';
 
-const WAITING_TIME = 30 * 1000;
+const WAITING_TIME = TIMEOUT * 1000;
 
 const uid = function() {
   return Date.now().toString(36) + Math.random().toString(36).substring(2);
@@ -25,13 +23,6 @@ function matchUsers(socket1, socket2, difficulty) {
   });
 }
 
-async function matchTimeOut(before) {
-  const resp = await _deleteOutdatedMatch(before);
-  if (resp.err) {
-    console.log(`Could not remove time out matches; err=${err}`);
-  }
-}
-
 export function registerHandlers(io, socket) {
   async function findMatch({ difficulty }) {
     try {
@@ -42,42 +33,38 @@ export function registerHandlers(io, socket) {
       }
 
       difficulty = difficulty.toUpperCase();
-      const difficulties = Match.getAttributes().difficulty.values;
-      if (!difficulties.includes(difficulty)) {
+      if (!DIFFICULTIES.includes(difficulty)) {
         console.log(`Incorrect match request argument format! difficulty=${difficulty}`);
         sendMatchFail(socket, { message: `Incorrect match request argument format! difficulty=${difficulty}` });
         return;
       }
 
-      var resp = await _findMatch(username, difficulty, Date.now() - WAITING_TIME);
-      if (resp && resp.err) {
-        console.log(`Could not find a match; err=${resp.err}`);
-        sendMatchFail(socket, { message: 'Database failure: could not find a match!' });
-        return;
-      }
+      await deleteIfExist(username);
+      const keys = await findMatches(difficulty);
 
-      if (!resp) {
-        resp = await _createMatch(username, socket.id, difficulty);
-        if (resp.err) {
-          console.log(`Could not create a new match, err=${resp.err}`);
-          sendMatchFail(socket, { message: 'Database failure: could not create a new match!' });
-        } else {
-          console.log(`Created new match for ${socket.id} successfully!`);
-          setTimeout(function() {
-            matchTimeOut(Date.now());
-            sendMatchFail(socket, { message: 'Could not find a match!' });
-            socket.disconnect();
-          }, WAITING_TIME);
+      if (keys.length === 0) {
+        const resp = await createMatch(username, socket.id, difficulty);
+        if (!resp) {
+          console.log(`create match failed`);
+          return;
         }
+        setTimeout(function() {
+          sendMatchFail(socket, { message: 'Could not find a match!' });
+          socket.disconnect();
+        }, WAITING_TIME);
         return;
       }
 
-      const pendingSocket = io.sockets.sockets.get(resp.socket_id);
+      let [match, success] = await getMatch(keys[0]);
+      if (!success) {
+        findMatch({ difficulty: difficulty });
+        return;
+      }
+      match = JSON.parse(match)
+      const pendingSocket = io.sockets.sockets.get(match.socketId);
       matchUsers(socket, pendingSocket, difficulty);
       socket.disconnect();
       pendingSocket.disconnect();
-      await resp.destroy();
-
     } catch (err) {
       console.log(`Error finding match; err=${err}`);
       sendMatchFail(socket, { message: 'Error when finding match' });
@@ -85,11 +72,7 @@ export function registerHandlers(io, socket) {
   }
 
   async function disconnect() {
-    try {
-      _deleteMatch(socket.id);
-    } catch (err) {
-      console.log(`Database failure when disconnecting; err=${err}`);
-    }
+    await deleteIfExist(socket.user);
   }
 
   socket.on('match', findMatch);

@@ -19,7 +19,7 @@ import { sendPasswordResetEmail } from './controller/pwd-reset-controller.js';
 import { questionHistory, saveQuestion, saveMessage, getMessage } from './controller/question-history-controller.js';
 import { initMQ } from './mq.js';
 
-//initMQ();
+initMQ();
 
 const router = express.Router()
 
