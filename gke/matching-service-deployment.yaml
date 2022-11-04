@@ -39,3 +39,18 @@ spec:
                 secretKeyRef:
                   name: user-service-secret
                   key: JWT_ACCESS_SECRET
+            - name: REDIS_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: matching-service-secret
+                  key: REDIS_HOST
+            - name: REDIS_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: matching-service-secret
+                  key: REDIS_PORT
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: matching-service-secret
+                  key: REDIS_PASSWORD
