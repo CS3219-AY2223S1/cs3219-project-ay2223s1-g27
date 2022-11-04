@@ -6,7 +6,6 @@ on:
       - "main"
     paths:
       - matching-service/**
-
 jobs:
   build:
     runs-on: ubuntu-latest

@@ -25,6 +25,7 @@ services:
       - gateway 
     env_file:
       - ./user-service/.env
+      - ./matching-service/.env
 
   question-service-service:
     build: ./question-service
@@ -85,3 +86,9 @@ services:
     image: redis
     ports:
       - 6381:6379
+  
+  redis-matching:
+    command: redis-server --requirepass team27 
+    image: redis
+    ports:
+      - 6382:6379

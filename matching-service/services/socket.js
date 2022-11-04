@@ -1,13 +1,13 @@
-function sendMatch(socket, data) {
-  socket.emit('match', data);
+function sendMatch(io, socket, data) {
+  io.to(socket).emit('match', data);
 }
 
-function sendMatchFail(socket, data) {
-  socket.emit('matchFail', data);
-} 
+function sendMatchFail(io, socket, data) {
+  io.to(socket).emit('matchFail', data);
+}
 
-function sendMatchSuccess(socket, data) {
-  socket.emit('matchSuccess', data);
+function sendMatchSuccess(io, socket, data) {
+  io.to(socket).emit('matchSuccess', data);
 }
 
 export {

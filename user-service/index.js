@@ -6,8 +6,8 @@ const app = express();
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 const corsOptions = {
-    origin: '*',
-    optionsSuccessStatus: 200
+  origin: '*',
+  optionsSuccessStatus: 200
 }
 app.use(cors(corsOptions)) // config cors so that front-end can use
 
