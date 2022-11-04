@@ -38,9 +38,9 @@ async function getMatch(key) {
 }
 
 async function deleteIfExist(username) {
-  const keys = await redisClient.keys('*:' + getPostfix(username))
-  for (let i = 0; i < keys.length; i++) {
-    await redisClient.del(keys[i]);
+  for (let i = 0; i < DIFFICULTIES.length; i++) {
+    const key = getPrefix(DIFFICULTIES[i]) + ':' + getPostfix(username);
+    await redisClient.del(key);
   }
   return true;
 }
