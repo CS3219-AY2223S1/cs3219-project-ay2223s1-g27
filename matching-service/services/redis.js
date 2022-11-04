@@ -25,6 +25,7 @@ async function createMatch(username, userId, socketId, difficulty) {
   const key = getPrefix(difficulty) + ':' + getPostfix(username);
   return await redisClient.set(key, JSON.stringify({
     userId: userId,
+    username: username,
     socketId: socketId,
   }), { EX: TIMEOUT })
 }

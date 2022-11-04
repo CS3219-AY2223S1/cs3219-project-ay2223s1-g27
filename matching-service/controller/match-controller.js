@@ -19,7 +19,7 @@ function matchUsers(io, socket1, match, difficulty) {
     "username1": socket1.decodedToken.username,
     "username2": match.username,
     "user_id1": socket1.decodedToken.id,
-    "user_id2": match.userId.toString()
+    "user_id2": match.userId
   });
 }
 
@@ -61,6 +61,7 @@ export function registerHandlers(io, socket) {
         return;
       }
       match = JSON.parse(match)
+      console.log(match)
       matchUsers(io, socket, match, difficulty);
       socket.disconnect();
     } catch (err) {
