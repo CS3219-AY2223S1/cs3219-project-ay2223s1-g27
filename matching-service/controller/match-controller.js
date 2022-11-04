@@ -19,7 +19,7 @@ function matchUsers(io, socket1, match, difficulty) {
     "username1": socket1.decodedToken.username,
     "username2": match.username,
     "user_id1": socket1.decodedToken.id,
-    "user_id2": match.userId
+    "user_id2": match.userId.toString()
   });
 }
 
@@ -63,7 +63,6 @@ export function registerHandlers(io, socket) {
       match = JSON.parse(match)
       matchUsers(io, socket, match, difficulty);
       socket.disconnect();
-      pendingSocket.disconnect();
     } catch (err) {
       console.log(`Error finding match; err=${err}`);
       sendMatchFail(socket, { message: 'Error when finding match' });
