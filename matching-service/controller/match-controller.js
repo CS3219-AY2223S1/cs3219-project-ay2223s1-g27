@@ -8,18 +8,18 @@ const uid = function() {
   return Date.now().toString(36) + Math.random().toString(36).substring(2);
 }
 
-function matchUsers(socket1, socket2, difficulty) {
+function matchUsers(io, socket1, match, difficulty) {
   const roomId = uid();
-  sendMatchSuccess(socket1, { message: 'success', room_id: roomId });
-  sendMatchSuccess(socket2, { message: 'success', room_id: roomId });
+  sendMatchSuccess(io, socket1.id, { message: 'success', room_id: roomId });
+  sendMatchSuccess(io, match.socketId, { message: 'success', room_id: roomId });
   console.log("PUBLISHING MATCH >>>>>>>>>>")
   publishMatch({
     "room_id": roomId,
     "difficulty_level": difficulty.toLowerCase(),
     "username1": socket1.decodedToken.username,
-    "username2": socket2.decodedToken.username,
+    "username2": match.username,
     "user_id1": socket1.decodedToken.id,
-    "user_id2": socket2.decodedToken.id
+    "user_id2": match.userId
   });
 }
 
@@ -43,7 +43,7 @@ export function registerHandlers(io, socket) {
       const keys = await findMatches(difficulty);
 
       if (keys.length === 0) {
-        const resp = await createMatch(username, socket.id, difficulty);
+        const resp = await createMatch(username, socket.decodedToken.id, socket.id, difficulty);
         if (!resp) {
           console.log(`create match failed`);
           return;
@@ -61,8 +61,7 @@ export function registerHandlers(io, socket) {
         return;
       }
       match = JSON.parse(match)
-      const pendingSocket = io.sockets.sockets.get(match.socketId);
-      matchUsers(socket, pendingSocket, difficulty);
+      matchUsers(io, socket, match, difficulty);
       socket.disconnect();
       pendingSocket.disconnect();
     } catch (err) {

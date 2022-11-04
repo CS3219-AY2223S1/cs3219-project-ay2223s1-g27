@@ -21,10 +21,10 @@ async function findMatches(difficulty) {
   return await redisClient.keys(getPrefix(difficulty) + ':*');
 }
 
-async function createMatch(username, socketId, difficulty) {
+async function createMatch(username, userId, socketId, difficulty) {
   const key = getPrefix(difficulty) + ':' + getPostfix(username);
   return await redisClient.set(key, JSON.stringify({
-    username: username,
+    userId: userId,
     socketId: socketId,
   }), { EX: TIMEOUT })
 }
