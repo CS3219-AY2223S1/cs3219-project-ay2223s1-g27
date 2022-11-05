@@ -5,7 +5,7 @@ metadata:
   labels:
     app: comm-service
 spec:
-  replicas: 2 
+  replicas: 2
   selector:
     matchLabels:
       app: comm-service
@@ -14,6 +14,10 @@ spec:
       labels:
         app: comm-service
     spec:
+      volumes:
+      - name: google-cloud-key
+        secret:
+          secretName: pubsub-key
       containers:
         - name: comm-service-deployment
           image: cs3219g27/comm-service:latest
@@ -22,9 +26,14 @@ spec:
               containerPort: 8004
           resources:
             limits:
-              cpu: 60m
+              cpu: 80m
               memory: 150Mi
-          env: 
+          volumeMounts:
+          - name: google-cloud-key
+            mountPath: /var/secrets/google
+          env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /var/secrets/google/key.json
             - name: JWT_ACCESS_SECRET
               valueFrom:
                 secretKeyRef:

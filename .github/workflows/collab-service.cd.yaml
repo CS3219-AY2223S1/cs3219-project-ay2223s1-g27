@@ -6,10 +6,6 @@ on:
       - "main"
     paths:
       - collab-service/**
-  pull_request:
-    branches: [main]
-    paths:
-      - collab-service/**
 
 jobs:
   build:
