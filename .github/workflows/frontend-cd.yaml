@@ -6,6 +6,10 @@ on:
       - "main"
     paths:
       - frontend/**
+  pull_request:
+    branches: [main]
+    paths:
+      - frontend/**
 
 jobs:
   Deploy:
