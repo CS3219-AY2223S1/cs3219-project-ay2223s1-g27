@@ -27,6 +27,7 @@ import ChatIcon from '@mui/icons-material/Chat';
 import { isUnauthorizedError } from '@thream/socketio-jwt/build/UnauthorizedError.js'
 import { URL_USER_SVC_MESSAGE } from "../configs";
 import axiosApiInstance, { refreshAccessToken } from "../axiosApiInstance";
+import { delay } from "./Timer";
 
 const modalStyle = {
   position: "absolute",
@@ -50,6 +51,8 @@ function RoomPage() {
   const [messages, setMessages] = useState([]);
   const [socketForChat, setSocketForChat] = useState();
   const [codeEditorSocket, setCodeEditorSocket] = useState();
+  const [codeSocketJoinCount, setCodeSocketJoinCount] = useState(false);
+  const [chatSocketJoinCount, setChatSocketJoinCount] = useState(false);
 
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -100,11 +103,33 @@ function RoomPage() {
     });
 
     codeSocket.on('connect', () => {
-      codeSocket.emit('room', { room_id: location.state.room_id });
+      codeSocket.emit('room', { 
+        room_id: location.state.room_id, 
+        username: username, 
+        attempt_idx: 0
+      });
     })
 
+    codeSocket.on("join room fail", async (data) => {
+      const attempt_idx = data.attempt_idx
+      console.log('Join room fail')
+      // wait for 1 second before reattempt room join.
+      await delay(1500)
+      // retries for exactly 4 times
+      if (attempt_idx < 3) {
+        codeSocket.emit('room', { 
+          room_id: location.state.room_id, 
+          username: username, 
+          attempt_idx: attempt_idx + 1 
+        });
+      }
+    });
+
     const sendSocketLeave = () => {
-      codeSocket.emit('leave room', { room_id: location.state.room_id, username: jwtDecode(cookies['refresh_token']).username });
+      codeSocket.emit('leave room', { 
+        room_id: location.state.room_id, 
+        username: jwtDecode(cookies['refresh_token']).username 
+      });
     }
 
     setCodeEditorSocket(codeSocket);
@@ -131,8 +156,23 @@ function RoomPage() {
       chatSocket.emit("join room", {
         room_id: room_id,
         username: username,
+        attempt_idx: 0,
       });
     })
+
+    chatSocket.on("join room fail", async (data) => {
+      const attempt_idx = data.attempt_idx
+      console.log('Join room fail')
+      await delay(1500)
+      // retries for exactly 4 times
+      if (attempt_idx < 3) {
+        chatSocket.emit("join room", {
+          room_id: room_id,
+          username: username,
+          attempt_idx: attempt_idx + 1,
+        });
+      }
+    });
 
     chatSocket.on('user leave', () => {
       console.log("Other user has left")

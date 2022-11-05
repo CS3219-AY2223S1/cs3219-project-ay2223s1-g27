@@ -4,6 +4,8 @@ import cors from 'cors';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import { authorize } from '@thream/socketio-jwt';
+import { initMQ } from './mq.js';
+import { initMatchInfoRedisClient } from './services/redis.js';
 
 const app = express();
 app.use(express.urlencoded({ extended: true }))
@@ -22,7 +24,11 @@ const io = new Server(httpServer, {
 import { createAdapter } from "@socket.io/redis-adapter";
 import { createClient } from "redis";
 
-const redisUrl = 'redis://default:' + process.env.REDIS_PASSWORD + '@' + process.env.REDIS_HOST + ':' + process.env.REDIS_PORT
+const redis_host = process.env.REDIS_HOST;
+const redis_port = process.env.REDIS_PORT;
+const redis_password = process.env.REDIS_PASSWORD;
+
+const redisUrl = 'redis://default:' + redis_password + '@' + redis_host + ':' + redis_port
 
 const pubClient = createClient({ url: redisUrl });
 const subClient = pubClient.duplicate();
@@ -31,6 +37,9 @@ console.log(process.env.REDIS_HOST)
 console.log(process.env.REDIS_PORT)
 console.log(process.env.REDIS_PASSWORD)
 pubClient.on('error', (err) => console.log('Redis Client Error', err));
+
+initMatchInfoRedisClient(redis_host, redis_port, redis_password);
+initMQ();
 
 Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
   console.log(pubClient, subClient);

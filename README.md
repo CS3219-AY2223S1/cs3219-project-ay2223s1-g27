@@ -50,3 +50,10 @@ Refer to this link: https://cloud.google.com/pubsub/docs/publish-receive-message
     # Login with john doe
     gcloud auth application-default set-quota-project <PROJECT_ID>
     # No need to run "gcloud projects add-iam-policy-binding"
+
+    # TO view all gcloud pubsub subscriptions
+    gcloud config set project <PROJECT_ID>
+    gcloud pubsub subscriptions list
+
+    # To create newe subscriptions
+    https://cloud.google.com/pubsub/docs/create-subscription#pubsub_create_pull_subscription-gcloud
