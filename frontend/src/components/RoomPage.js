@@ -51,8 +51,6 @@ function RoomPage() {
   const [messages, setMessages] = useState([]);
   const [socketForChat, setSocketForChat] = useState();
   const [codeEditorSocket, setCodeEditorSocket] = useState();
-  const [codeSocketJoinCount, setCodeSocketJoinCount] = useState(false);
-  const [chatSocketJoinCount, setChatSocketJoinCount] = useState(false);
 
   const [anchorEl, setAnchorEl] = useState(null);
 
