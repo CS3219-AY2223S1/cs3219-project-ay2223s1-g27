@@ -31,14 +31,6 @@ export function registerHandlers(io, socket) {
     const room_id = data.room_id
     socket.broadcast.to(data.room_id).emit('receive leave', data)
     socket.leave(room_id)
-    const deleteMatchSuccess = await deleteMatch(room_id);
-    if (deleteMatchSuccess == 1) {
-      console.log("Successfully deleted match")
-    } else if (deleteMatchSuccess > 1) {
-      console.log("Deleted more than 1 match")
-    } else {
-      console.log("Failed to delete match")
-    }
   });
 
   socket.on('coding event', function(data) {

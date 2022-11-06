@@ -2,6 +2,8 @@ import redis from "redis";
 
 var redisClient = null;
 const match_prefix = "matchdata:"
+// 4 hour timeout
+const entry_timeout = 14400;
 
 async function initMatchInfoRedisClient(host, port, password) {
   const redisUrl = 'redis://default:' + password + '@' + host + ':' + port;
@@ -29,7 +31,7 @@ async function addMatch(room_id, difficulty_level, username1, username2, user_id
     username2: username2,
     user_id1: user_id1,
     user_id2: user_id2,
-  }))
+  }), { EX: entry_timeout })
 }
 
 function appendPrefixToKey(key) {

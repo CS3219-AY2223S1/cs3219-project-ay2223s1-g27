@@ -63,14 +63,6 @@ export function registerChatHandlers(io, clientSocket) {
         if (room_id in roomInterviewers) {
             delete roomInterviewers[room_id]
         }
-        const deleteMatchSuccess = await deleteMatch(room_id);
-        if (deleteMatchSuccess == 1) {
-          console.log("Successfully deleted match")
-        } else if (deleteMatchSuccess > 1) {
-          console.log("Deleted more than 1 match")
-        } else {
-          console.log("Failed to delete match")
-        }
     });
 
 }
