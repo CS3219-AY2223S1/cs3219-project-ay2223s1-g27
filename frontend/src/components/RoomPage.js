@@ -114,9 +114,9 @@ function RoomPage() {
       const attempt_idx = data.attempt_idx
       console.log('Join room fail')
       // wait for 1 second before reattempt room join.
-      await delay(2000)
-      // retries for exactly 4 times
-      if (attempt_idx < 3) {
+      await delay(400)
+      // retries for exactly 16 times
+      if (attempt_idx < 19) {
         codeSocket.emit('room', { 
           room_id: location.state.room_id, 
           username: username, 
@@ -163,9 +163,9 @@ function RoomPage() {
     chatSocket.on("join room fail", async (data) => {
       const attempt_idx = data.attempt_idx
       console.log('Join room fail')
-      await delay(2000)
+      await delay(400)
       // retries for exactly 4 times
-      if (attempt_idx < 3) {
+      if (attempt_idx < 19) {
         chatSocket.emit("join room", {
           room_id: room_id,
           username: username,
