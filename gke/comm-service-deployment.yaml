@@ -5,7 +5,7 @@ metadata:
   labels:
     app: comm-service
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: comm-service
