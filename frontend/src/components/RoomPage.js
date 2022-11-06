@@ -7,7 +7,8 @@ import {
   Modal,
   IconButton,
   Typography,
-  Tooltip
+  Tooltip,
+  CircularProgress
 } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import CloseIcon from '@mui/icons-material/Close';
@@ -51,6 +52,7 @@ function RoomPage() {
   const [messages, setMessages] = useState([]);
   const [socketForChat, setSocketForChat] = useState();
   const [codeEditorSocket, setCodeEditorSocket] = useState();
+  const [chatSocketReady, setChatSocketReady] = useState(false);
 
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -178,6 +180,7 @@ function RoomPage() {
 
     chatSocket.on(INTERVIEWER_SWITCH_EVENT, (data) => {
       const interviewer = data.interviewer;
+      setChatSocketReady(true)
       console.log("Logging interviewer from ChatBody!")
       console.log(data)
       if (interviewer === username) {
@@ -317,6 +320,24 @@ function RoomPage() {
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
               <Box display={"flex"} flexDirection={"row"} justifyContent={"flexStart"} style={{ paddingTop: "5%", marginRight: "5%" }}>
                 <Button variant={"contained"} onClick={handleEndSession}>Back to Homepage</Button>
+              </Box>
+            </div>
+          </Box>
+        </Modal>
+        <Modal
+          open={!chatSocketReady}
+          aria-labelledby="modal-modal-title"
+        >
+          <Box sx={modalStyle}>
+            <Box display={"flex"} flexDirection={"row"} justifyContent={"space-between"}>
+              <CircularProgress sx={{mr: 3}}/>
+              <Typography id="modal-modal-title" variant="h6" component="h2" style={{ paddingTop: '1%', paddingBottom: '1%'  }}>
+                Setting up the Coding Environment...
+              </Typography>
+            </Box>
+            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
+              <Box display={"flex"} flexDirection={"row"} justifyContent={"flexStart"} style={{ paddingTop: "5%", marginRight: "5%" }}>
+                <Button variant={"contained"} onClick={handleEndSession}>Return to Homepage</Button>
               </Box>
             </div>
           </Box>
