@@ -94,7 +94,7 @@ function MatchingPage() {
   };
 
   const handleMatchFound = async (room_id) => {
-    await delay(1500)
+    await delay(2200)
     navigate("/room", {
       state: {
         user: location.state.user,
