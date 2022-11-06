@@ -11,6 +11,7 @@ import {
 import { Box, Button, Modal, Typography } from "@mui/material";
 import { useState } from "react";
 import { refreshAccessToken } from "../axiosApiInstance";
+import { delay } from "./Timer";
 
 const modalStyle = {
   position: "absolute",
@@ -92,7 +93,8 @@ function MatchingPage() {
     );
   };
 
-  const handleMatchFound = (room_id) => {
+  const handleMatchFound = async (room_id) => {
+    await delay(400)
     navigate("/room", {
       state: {
         user: location.state.user,

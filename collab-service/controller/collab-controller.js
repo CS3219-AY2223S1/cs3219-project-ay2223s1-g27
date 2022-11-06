@@ -1,3 +1,6 @@
+import { userBelongsInRoom } from '../services/roomAuthenticator.js';
+import { deleteMatch } from '../services/redis.js';
+
 export function registerHandlers(io, socket) {
 
   console.log('a user connected');
@@ -10,15 +13,24 @@ export function registerHandlers(io, socket) {
     console.log('disconnect', reason)
   })
 
-  socket.on('room', function(data) {
-    console.log(`a user joined room=${data.room_id}`)
-    socket.join(data.room_id);
+  socket.on('room', async function(data) {
+    const room_id = data.room_id;
+    const username = data.username;
+    const attempt_idx = data.attempt_idx;
+    const userAllowedInRoom = await userBelongsInRoom(username, room_id);
+    if (userAllowedInRoom) {
+      console.log(`a user joined room=${room_id}`)
+      socket.join(data.room_id);
+    } else {
+      socket.emit("join room fail", { message: "Username does not belong in the room", attempt_idx: attempt_idx });
+    }
   });
 
-  socket.on('leave room', (data) => {
+  socket.on('leave room', async function(data) {
     console.log("received leaving")
+    const room_id = data.room_id
     socket.broadcast.to(data.room_id).emit('receive leave', data)
-    socket.leave(data.room_id)
+    socket.leave(room_id)
   });
 
   socket.on('coding event', function(data) {

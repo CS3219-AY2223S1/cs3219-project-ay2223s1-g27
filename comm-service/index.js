@@ -4,6 +4,8 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import { registerChatHandlers } from './controller/comm-controller.js';
 import { authorize } from '@thream/socketio-jwt';
+import { initMQ } from './mq.js';
+import { initMatchInfoRedisClient } from './services/redis.js';
 import 'dotenv/config'
 
 const app = express();
@@ -23,10 +25,17 @@ const io = new Server(httpServer, {
 import { createAdapter } from "@socket.io/redis-adapter";
 import { createClient } from "redis";
 
-const redisUrl = 'redis://default:' + process.env.REDIS_PASSWORD + '@' + process.env.REDIS_HOST + ':' + process.env.REDIS_PORT
+const redis_host = process.env.REDIS_HOST;
+const redis_port = process.env.REDIS_PORT;
+const redis_password = process.env.REDIS_PASSWORD;
+
+const redisUrl = 'redis://default:' + redis_password + '@' + redis_host + ':' + redis_port
 
 const pubClient = createClient({ url: redisUrl });
 const subClient = pubClient.duplicate();
+
+initMatchInfoRedisClient(redis_host, redis_port, redis_password);
+initMQ();
 
 Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
   io.adapter(createAdapter(pubClient, subClient));

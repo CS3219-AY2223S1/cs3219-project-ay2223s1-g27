@@ -5,6 +5,8 @@ import SendIcon from '@mui/icons-material/Send';
 const ChatFooter = ({ chatSocket, username, room_id }) => {
   const [message, setMessage] = useState('');
 
+  console.log(chatSocket)
+
   const handleSendMessage = (e) => {
     e.preventDefault();
     if (message.trim()) {
