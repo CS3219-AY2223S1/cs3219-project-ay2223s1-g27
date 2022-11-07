@@ -6,10 +6,6 @@ on:
       - "main"
     paths:
       - comm-service/**
-  pull_request:
-    branches: [main]
-    paths:
-      - comm-service/**
 
 jobs:
   build:
