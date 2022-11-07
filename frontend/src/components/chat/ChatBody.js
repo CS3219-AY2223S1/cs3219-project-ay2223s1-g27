@@ -75,7 +75,11 @@ const ChatBody = ({ chatSocket, username, room_id, isInterviewer, messages }) =>
                     As the Interviewer, you will be able to ask interview questions and select a coding question for your Interviewee.  
                   </Typography>
                 <Box display={"flex"} flexDirection={"row"} justifyContent={"flexStart"} style={{ paddingTop: "5%" }}>
-                  <Button variant={"contained"} onClick={handleSwitchRole}>Confirm</Button>
+                  <Button variant={"contained"} 
+                  onClick={() => {
+                    handleSwitchRole()
+                    setOpen(false)
+                  }}>Confirm</Button>
                 </Box>
               </Box>
             </Modal></>
