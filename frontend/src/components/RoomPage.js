@@ -325,7 +325,7 @@ function RoomPage() {
           </Box>
         </Modal>
         <Modal
-          open={!chatSocketReady}
+          open={!chatSocketReady && location.state.is_live}
           aria-labelledby="modal-modal-title"
         >
           <Box sx={modalStyle}>
