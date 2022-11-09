@@ -45,7 +45,7 @@ Refer to this link: https://cloud.google.com/pubsub/docs/publish-receive-message
 
 Now your local environment can communicate with Google Cloud Pub/Sub. However another caveat is that the deployed services on 
 
-#### Requirement 2
+### Requirement 2
 
 There has to be 1 redis instance each for matching, comm, collab and user service for them to work. Hence you may create them as such:
 
@@ -59,9 +59,9 @@ Inside each service's directory
 2. Fill in values accordingly based on comments in `.env.sample`. Certain fields have to be left empty on the .env.sample file for security reasons, feel free to contact us if they are needed.
 3. Install npm packages
     
-    # For Frontend run the following
+    #For Frontend run the following
     npm i —legacy-peer-deps
-    # For all other services run the following
+    #For all other services run the following
     npm i
 
 4. Run the Service
