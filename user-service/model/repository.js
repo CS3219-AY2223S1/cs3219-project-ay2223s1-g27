@@ -13,25 +13,25 @@ let mongoDB = process.env.ENV == "PROD" ? process.env.DB_CLOUD_URI : process.env
 console.log("MongoDB URL:")
 console.log(mongoDB)
 
-mongoose.connect(mongoDB, { useNewUrlParser: true , useUnifiedTopology: true});
+mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 
 let db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 // Returns the user document, if username does not exist, throws an error
 export async function getUser(username) {
-  let user = await UserModel.findOne({username: username})
+  let user = await UserModel.findOne({ username: username })
   return user
 }
 
 export async function deleteUser(username) {
-  let deletedCountObject = await UserModel.deleteOne({username: username})
+  let deletedCountObject = await UserModel.deleteOne({ username: username })
   const deletedCount = deletedCountObject.deletedCount
   return deletedCount == 1
 }
 
 export async function updatePassword(username, newPassword) {
-  let updatedUser = await UserModel.findOneAndUpdate({username:username}, {password:newPassword})
+  let updatedUser = await UserModel.findOneAndUpdate({ username: username }, { password: newPassword })
   return updatedUser
 }
 
@@ -47,17 +47,17 @@ export async function createPwdResetRequest(params) {
 }
 
 export async function getPwdResetRequest(documentId) {
-  let pwdResetRequest = await PwdResetModel.findOneAndDelete({_id: documentId})
+  let pwdResetRequest = await PwdResetModel.findOneAndDelete({ _id: documentId })
   return pwdResetRequest
 }
 
 export async function getMatchHistory(room_id) {
-  let session = await MatchHistoryModel.findOne({room_id : room_id});
+  let session = await MatchHistoryModel.findOne({ room_id: room_id });
   return session;
 }
 
 export async function createMatchHistory(room_id, user_id1, user_id2, username1, username2, difficulty_level) {
-  let session = new MatchHistoryModel({room_id: room_id, users: [ user_id1, user_id2 ], usernames: [ username1, username2 ], difficulty_level: difficulty_level});
+  let session = new MatchHistoryModel({ room_id: room_id, users: [user_id1, user_id2], usernames: [username1, username2], difficulty_level: difficulty_level });
   await session.save();
   return session;
 }
@@ -71,7 +71,7 @@ export async function createQuestionHistory(room_id, titleSlug, codeSegment, lan
   let questionHistory = new QuestionHistoryModel({
     room_id: room_id,
     questions: [{
-      titleSlug: titleSlug, 
+      titleSlug: titleSlug,
       codeSegment: codeSegment,
       language: language
     }]
@@ -86,7 +86,9 @@ export async function updateQuestionHistory(room_id, questions) {
 }
 
 export async function getRoomsFromUserID(uid, limit, offset) {
-  let matches = await MatchHistoryModel.find({ users: uid }, undefined, {skip: offset, limit: limit}).sort({ createdAt: -1, updatedAt: -1 });
+  let matches = await MatchHistoryModel
+    .find({ users: uid }, undefined, { skip: offset, limit: limit }).sort({ createdAt: -1, updatedAt: -1 })
+    .limit(10);
   return matches;
 }
 
@@ -97,13 +99,13 @@ export async function getRoomsCountFromUserID(uid) {
 
 export async function createMessageHistory(room_id, messages) {
   let message = await MessageHistoryModel.findOneAndUpdate(
-    { room_id: room_id }, 
-    { messages: messages }, 
+    { room_id: room_id },
+    { messages: messages },
     { upsert: true, new: true });
   return message;
 }
 
 export async function getMessageHistory(room_id) {
-  let message = await MessageHistoryModel.findOne({room_id: room_id});
+  let message = await MessageHistoryModel.findOne({ room_id: room_id });
   return message;
 }
