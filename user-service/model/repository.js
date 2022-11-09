@@ -87,8 +87,10 @@ export async function updateQuestionHistory(room_id, questions) {
 
 export async function getRoomsFromUserID(uid, limit, offset) {
   let matches = await MatchHistoryModel
-    .find({ users: uid }, undefined, { skip: offset, limit: limit }).sort({ createdAt: -1, updatedAt: -1 })
-    .limit(10);
+    .find({ users: uid })
+    .offset(offset)
+    .limit(limit)
+    .sort({ createdAt: -1, updatedAt: -1 });
   return matches;
 }
 
