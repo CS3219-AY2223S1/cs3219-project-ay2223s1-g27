@@ -60,7 +60,7 @@ Note that in order to test individual services via command line(without docker-c
 1. Uncomment lines 11-15 and 23-27
 2. Comment away lines 17-21
 
-#### Setting up each service
+#### Setting up & Running each service
 
 Inside each service's directory
 1. Copy `.env.sample` to a new file named `.env`
@@ -78,8 +78,5 @@ Inside each service's directory
 4. Run the Service
     
     Execute the following
-    
+
         npm start
-
-
-You may now run each service individually from the command line.
