@@ -58,10 +58,12 @@ Inside each service's directory
 1. Copy `.env.sample` to a new file named `.env`
 2. Fill in values accordingly based on comments in `.env.sample`. Certain fields have to be left empty on the .env.sample file for security reasons, feel free to contact us if they are needed.
 3. Install npm packages
-    
-    #For Frontend run the following
+For Frontend run the following
+
     npm i —legacy-peer-deps
-    #For all other services run the following
+
+For all other services run the following
+
     npm i
 
 4. Run the Service
