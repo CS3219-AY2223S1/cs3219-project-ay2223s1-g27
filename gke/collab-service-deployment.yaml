@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: collab-service-deployment
+  labels:
+    app: collab-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: collab-service
+  template:
+    metadata:
+      labels:
+        app: collab-service
+    spec:
+      volumes:
+      - name: google-cloud-key
+        secret:
+          secretName: pubsub-key
+      containers:
+        - name: collab-service-deployment
+          image: cs3219g27/collab-service:latest
+          ports:
+            - name: cs-http
+              containerPort: 8003
+          resources:
+            limits:
+              cpu: 150m
+              memory: 200Mi
+          volumeMounts:
+          - name: google-cloud-key
+            mountPath: /var/secrets/google
+          env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /var/secrets/google/key.json
+            - name: JWT_ACCESS_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: user-service-secret
+                  key: JWT_ACCESS_SECRET
+            - name: REDIS_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: collab-service-secret
+                  key: REDIS_HOST
+            - name: REDIS_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: collab-service-secret
+                  key: REDIS_PORT
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: collab-service-secret
+                  key: REDIS_PASSWORD

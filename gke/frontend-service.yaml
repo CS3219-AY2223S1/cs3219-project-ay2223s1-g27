@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: frontend
+  name: frontend-service
+spec:
+  selector:
+    app: frontend
+  type: ClusterIP
+  ports:
+    - name: fe-http
+      port: 3000
+      protocol: TCP
+      targetPort: fe-http

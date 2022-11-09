@@ -1,0 +1,94 @@
+version: '3.8'
+services: 
+  frontend:
+    build: ./frontend
+    volumes:
+      - ./frontend/:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 80:3000
+    restart: always
+
+  user-service-service:
+    build: ./user-service
+    restart: always 
+    depends_on:
+      - mongodb
+      - gateway
+    env_file: 
+      - ./user-service/.env
+
+  matching-service-service:
+    build: ./matching-service
+    restart: always
+    depends_on:
+      - gateway 
+    env_file:
+      - ./user-service/.env
+      - ./matching-service/.env
+
+  question-service-service:
+    build: ./question-service
+    depends_on:
+      - gateway 
+    restart: always
+
+  collab-service-service:
+    build: ./collab-service
+    restart: always
+    depends_on:
+      - gateway 
+    env_file:
+      - ./user-service/.env
+      - ./collab-service/.env
+
+  comm-service-service:
+    build: ./comm-service
+    restart: always
+    depends_on:
+      - gateway 
+    env_file:
+      - ./user-service/.env
+      - ./comm-service/.env
+
+  mongodb:
+    image: mongo:5.0
+    ports:
+      - 27017:27017
+    volumes:
+      - ./user-service/data/db/:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=USERNAME
+      - MONGO_INITDB_ROOT_PASSWORD=PASSWORD
+
+  gateway:
+    build: ./gateway
+    ports: 
+      - 3001:80
+    restart: always
+    env_file:
+      - ./user-service/.env
+
+  redis-token-store-service:
+    command: redis-server --requirepass team27
+    image: redis
+    ports:
+      - 6379:6379
+
+  redis-collab:
+    command: redis-server --requirepass team27
+    image: redis
+    ports:
+      - 6380:6379
+
+  redis-comm:
+    command: redis-server --requirepass team27 
+    image: redis
+    ports:
+      - 6381:6379
+  
+  redis-matching:
+    command: redis-server --requirepass team27 
+    image: redis
+    ports:
+      - 6382:6379

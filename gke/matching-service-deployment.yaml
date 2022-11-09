@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: matching-service-deployment
+  labels:
+    app: matching-service
+spec:
+  replicas: 2 
+  selector:
+    matchLabels:
+      app: matching-service
+  template:
+    metadata:
+      labels:
+        app: matching-service
+    spec:
+      volumes:
+      - name: google-cloud-key
+        secret:
+          secretName: pubsub-key
+      containers:
+        - name: matching-service-deployment
+          image: cs3219g27/matching-service:latest
+          ports:
+            - name: ms-http
+              containerPort: 8001
+          resources:
+            limits:
+              cpu: 60m
+              memory: 150Mi
+          volumeMounts:
+          - name: google-cloud-key
+            mountPath: /var/secrets/google
+          env: 
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /var/secrets/google/key.json
+            - name: JWT_ACCESS_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: user-service-secret
+                  key: JWT_ACCESS_SECRET
+            - name: REDIS_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: matching-service-secret
+                  key: REDIS_HOST
+            - name: REDIS_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: matching-service-secret
+                  key: REDIS_PORT
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: matching-service-secret
+                  key: REDIS_PASSWORD
